@@ -52,4 +52,10 @@ const productList = new ProductManager();
 
 
 //Test
+productList.addProduct({title:'Producto', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123456', stock: '100'});
+productList.addProduct({title:'Producto', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123456', stock: '100'});
+productList.addProduct({title:'Producto2', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123456'});
+productList.addProduct({title:'Producto3', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123457', stock: '100'});
+console.log(productList.getProductById(2));
+productList.getProductById(10);
 console.log(productList.getProducts());
