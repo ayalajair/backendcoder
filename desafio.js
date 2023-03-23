@@ -7,25 +7,23 @@ class ProductManager {
     constructor(path) {
         this.path = path
     }
-
+//Carga de productos desde el JSON
     loadProducts = async ()=> {
         try{
             if(fs.existsSync(path)){
             const products = await fs.promises.readFile (path, 'utf-8');
             return JSON.parse (products);}
             await fs.promises.writeFile (path,'[]','utf-8')
-            return[]
+            return []
         } catch (err) {
             console.log (Error);
         }        
     }
 
     addProduct = async (product)=> {
-        const products = this.loadProducts()
+        try {           
+        const products = await this.loadProducts()
         const { title, description, price, thumbnail, code, stock } = product;
-        try {
-
-            
             //Chequeo que todos los campos hayan sido completados
             if (!title || !description || !price || !thumbnail || !code || !stock) {
                 console.log("Se deben completar todos los compos");
@@ -39,7 +37,7 @@ class ProductManager {
             }
             
             const newProduct = {
-                id: this.products.length + 1,
+                id: products.length + 1,
                 title,
                 description,
                 price,
@@ -47,9 +45,9 @@ class ProductManager {
                 code,
                 stock,
             };
-            
+            //Pusheo el nuevo producto en products y lo escribo en el Json
             products.push(newProduct);
-            await fs.promises.writeFile (path,products,'utf8');
+            await fs.promises.writeFile (this.path,JSON.stringify(products),'utf8');
         }catch (err){
             console.log (Error)
         }
@@ -69,13 +67,12 @@ class ProductManager {
     }
 }
 
-const productList = new ProductManager();
+const productList = new ProductManager(path);
 
 
 //Test
-console.log (productList.products);
 //Agrego producto 
-//productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
+productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
 //Agrego producto con el mismo código
 //productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
 //Agrego producto incompleto
