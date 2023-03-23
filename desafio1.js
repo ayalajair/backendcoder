@@ -1,37 +1,58 @@
 
 
+const fs = require('fs');
+
+const path = './Products.json'
 class ProductManager {
-    constructor(products = []) {
-        this.products = products;
-        this.lastId = 0;
+    constructor(path) {
+        this.path = path
     }
 
-    addProduct(product) {
+    loadProducts = async ()=> {
+        try{
+            if(fs.existsSync(path)){
+            const products = await fs.promises.readFile (path, 'utf-8');
+            return JSON.parse (products);}
+            await fs.promises.writeFile (path,'[]','utf-8')
+            return[]
+        } catch (err) {
+            console.log (Error);
+        }        
+    }
+
+    addProduct = async (product)=> {
+        const products = this.loadProducts()
         const { title, description, price, thumbnail, code, stock } = product;
+        try {
 
-//Chequeo que todos los campos hayan sido completados
-        if (!title || !description || !price || !thumbnail || !code || !stock) {
-            console.log("Se deben completar todos los compos");
-            return;
+            
+            //Chequeo que todos los campos hayan sido completados
+            if (!title || !description || !price || !thumbnail || !code || !stock) {
+                console.log("Se deben completar todos los compos");
+                return;
+            }
+            
+            //Cheque que el código de producto no se repita
+            if (products.find((p) => p.code === code)) {
+                console.log(`Ya se ha ingresado un producto con ese código`);
+                return;
+            }
+            
+            const newProduct = {
+                id: this.products.length + 1,
+                title,
+                description,
+                price,
+                thumbnail,
+                code,
+                stock,
+            };
+            
+            products.push(newProduct);
+            await fs.promises.writeFile (path,products,'utf8');
+        }catch (err){
+            console.log (Error)
         }
-
-//Cheque que el código de producto no se repita
-        if (this.products.find((p) => p.code === code)) {
-            console.log(`Ya se ha ingresado un producto con ese código`);
-            return;
-        }
-
-        const newProduct = {
-            id: ++this.lastId,
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock,
-        };
-
-        this.products.push(newProduct);
     }
 
     getProducts() {
@@ -52,17 +73,18 @@ const productList = new ProductManager();
 
 
 //Test
+console.log (productList.products);
 //Agrego producto 
-productList.addProduct({title:'Producto', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123456', stock: '100'});
+//productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
 //Agrego producto con el mismo código
-productList.addProduct({title:'Producto', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123456', stock: '100'});
+//productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
 //Agrego producto incompleto
-productList.addProduct({title:'Producto2', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123456'});
+//productList.addProduct({title:'Producto2', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456'});
 //Agrego 2do producto
-productList.addProduct({title:'Producto3', description: 'Descripción', price: '100', thumbnail: 'thumbnail', code:'123457', stock: '100'});
+//productList.addProduct({title:'Producto3', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123457', stock: 100});
 //Busco producto con Id 2
-console.log(productList.getProductById(2));
+//console.log(productList.getProductById(2));
 //Busco producto con Id 10
-productList.getProductById(10);
+//productList.getProductById(10);
 //Pido lista completa de productos
-console.log(productList.getProducts());
+//console.log(productList.getProducts());
