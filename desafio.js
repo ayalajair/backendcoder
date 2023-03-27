@@ -128,20 +128,22 @@ const productList = new ProductManager(path);
 
 
 //Test
-//Agrego producto 
-productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
-//Agrego producto con el mismo código
-productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
-//Agrego producto incompleto
-productList.addProduct({title:'Producto2', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456'});
-//Agrego 2do producto
-productList.addProduct({title:'Producto3', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123457', stock: 100});
-//Busco producto con Id 2
-productList.getProductById(2);
-//Busco producto con Id 10
-productList.getProductById(10);
-//Pido lista completa de productos
-productList.getProducts();
+// //Agrego producto 
+// productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
+// //Agrego producto con el mismo código
+// productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
+// //Agrego producto incompleto
+// productList.addProduct({title:'Producto2', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456'});
+// //Agrego 2do producto
+// productList.addProduct({title:'Producto3', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123457', stock: 100});
+// //Busco producto con Id 2
+// productList.getProductById(2);
+// //Busco producto con Id 10
+// productList.getProductById(10);
+// //Pido lista completa de productos
+// productList.getProducts();
 //Modifico un producto
-let newProduct = {title:'Producto4', description: 'Descripción2', price: 200, thumbnail: 'thumbnail', code:'123456', stock: 100}
-productList.updateProduct(2, newProduct )
+// let newProduct = {title:'Producto4', description: 'Descripción2', price: 200, thumbnail: 'thumbnail', code:'123456', stock: 100}
+// productList.updateProduct(2, newProduct )
+//Borro un producto
+//productList.deleteProduct(2)
