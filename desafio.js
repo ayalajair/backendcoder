@@ -129,7 +129,7 @@ const productList = new ProductManager(path);
 
 //Test
 // //Agrego producto 
-// productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
+productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
 // //Agrego producto con el mismo código
 // productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
 // //Agrego producto incompleto
