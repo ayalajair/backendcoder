@@ -87,11 +87,6 @@ class ProductManager {
                 console.log("No se han encontrado productos con ese ID");
                 return;
             }
-            const product = products.find((p) => p.id === id);
-            if (!product) {
-                console.log("No se han encontrado productos con ese ID");
-                return;
-            }
             const updatedProductWhitId = {
                 id: id ,
                 title: updatedProduct.title, 
