@@ -93,10 +93,15 @@ class ProductManager {
                 return;
             }
             const updatedProductWhitId = {
-                id ,
-                ...updatedProduct,
+                id: id ,
+                title: updatedProduct.title, 
+                description: updatedProduct.description, 
+                price: updatedProduct.price, 
+                thumbnail: updatedProduct.thumbnail, 
+                code:updatedProduct.code, 
+                stock: updatedProduct.stock
             }
-            product[productIndex] = updatedProductWhitId;
+            products[productIndex] = updatedProductWhitId;
             console.log (updatedProduct)
             await fs.promises.writeFile (this.path,JSON.stringify(products),'utf8');
         } catch (error) {
@@ -124,26 +129,80 @@ class ProductManager {
     }
 }
 
-const productList = new ProductManager(path);
-
-
 //Test
-// //Agrego producto 
-productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
-// //Agrego producto con el mismo código
-// productList.addProduct({title:'Producto', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456', stock: 100});
-// //Agrego producto incompleto
-// productList.addProduct({title:'Producto2', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123456'});
-// //Agrego 2do producto
-// productList.addProduct({title:'Producto3', description: 'Descripción', price: 100, thumbnail: 'thumbnail', code:'123457', stock: 100});
-// //Busco producto con Id 2
-// productList.getProductById(2);
-// //Busco producto con Id 10
-// productList.getProductById(10);
-// //Pido lista completa de productos
-// productList.getProducts();
-//Modifico un producto
-// let newProduct = {title:'Producto4', description: 'Descripción2', price: 200, thumbnail: 'thumbnail', code:'123456', stock: 100}
-// productList.updateProduct(2, newProduct )
-//Borro un producto
-//productList.deleteProduct(2)
+const test = async ()=> {
+
+    const productList = new ProductManager(path);
+
+    //Muestro los productos
+    await productList.getProducts()
+
+    //Agrego producto 
+    await productList.addProduct({
+        title:'Producto',
+        description: 'Descripción', 
+        price: 100, 
+        thumbnail: 'thumbnail', 
+        code:'123456', 
+        stock: 100});
+
+    //Vuelvo a mostrar los productos
+    await productList.getProducts()
+
+    //Agrego producto con el mismo código
+    await productList.addProduct({
+        title:'Producto', 
+        description: 'Descripción', 
+        price: 100, 
+        thumbnail: 'thumbnail', 
+        code:'123456', 
+        stock: 100});
+
+    //Agrego producto incompleto
+    await productList.addProduct({
+        title:'Producto2',
+        description: 'Descripción', 
+        price: 100, 
+        thumbnail: 'thumbnail', 
+        code:'123456'});
+
+    //Agrego 2do producto
+    await productList.addProduct({
+        title:'Producto3', 
+        description: 'Descripción', 
+        price: 100, 
+        thumbnail: 'thumbnail', 
+        code:'123457', 
+        stock: 100});
+
+    //Vuelvo a mostrar los productos
+    await productList.getProducts()
+
+    //Busco producto con Id 2
+    await productList.getProductById(2);
+
+    //Busco producto con Id 10
+    await productList.getProductById(10);
+
+    //Modifico un producto
+    let newProduct = {
+        title:'Producto4', 
+        description: 'Descripción2', 
+        price: 200, 
+        thumbnail: 'thumbnail', 
+        code:'123456', 
+        stock: 100}
+
+    await productList.updateProduct(2, newProduct )
+
+    //Vuelvo a mostrar los productos
+    await productList.getProducts()
+
+    //Borro un producto
+    await productList.deleteProduct(1)
+
+    //Vuelvo a mostrar los productos
+    await productList.getProducts()
+}
+
+test()
