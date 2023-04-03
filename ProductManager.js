@@ -125,79 +125,97 @@ class ProductManager {
 }
 
 //Test
-const test = async ()=> {
+// const test = async ()=> {
 
-    const productList = new ProductManager(path);
+//     const productList = new ProductManager(path);
 
-    //Muestro los productos
-    await productList.getProducts()
+//     //Muestro los productos
+//     await productList.getProducts()
 
-    //Agrego producto 
-    await productList.addProduct({
-        title:'Producto',
-        description: 'Descripción', 
-        price: 100, 
-        thumbnail: 'thumbnail', 
-        code:'123456', 
-        stock: 100});
+//     //Agrego producto 
+//     await productList.addProduct({
+//         title:'Producto',
+//         description: 'Descripción', 
+//         price: 100, 
+//         thumbnail: 'thumbnail', 
+//         code:'123456', 
+//         stock: 100});
 
     //Vuelvo a mostrar los productos
-    await productList.getProducts()
+    // await productList.getProducts()
 
     //Agrego producto con el mismo código
-    await productList.addProduct({
-        title:'Producto', 
-        description: 'Descripción', 
-        price: 100, 
-        thumbnail: 'thumbnail', 
-        code:'123456', 
-        stock: 100});
+    // await productList.addProduct({
+    //     title:'Producto', 
+    //     description: 'Descripción', 
+    //     price: 100, 
+    //     thumbnail: 'thumbnail', 
+    //     code:'123456', 
+    //     stock: 100});
 
     //Agrego producto incompleto
-    await productList.addProduct({
-        title:'Producto2',
-        description: 'Descripción', 
-        price: 100, 
-        thumbnail: 'thumbnail', 
-        code:'123456'});
+    // await productList.addProduct({
+    //     title:'Producto2',
+    //     description: 'Descripción', 
+    //     price: 100, 
+    //     thumbnail: 'thumbnail', 
+    //     code:'123456'});
 
     //Agrego 2do producto
-    await productList.addProduct({
-        title:'Producto3', 
-        description: 'Descripción', 
-        price: 100, 
-        thumbnail: 'thumbnail', 
-        code:'123457', 
-        stock: 100});
+    // await productList.addProduct({
+    //     title:'Producto2', 
+    //     description: 'Descripción', 
+    //     price: 100, 
+    //     thumbnail: 'thumbnail', 
+    //     code:'123457', 
+    //     stock: 100});
+    // await productList.addProduct({
+    //     title:'Producto3', 
+    //     description: 'Descripción', 
+    //     price: 100, 
+    //     thumbnail: 'thumbnail', 
+    //     code:'123458', 
+    //     stock: 100});
+    // await productList.addProduct({
+    //     title:'Producto4', 
+    //     description: 'Descripción', 
+    //     price: 100, 
+    //     thumbnail: 'thumbnail', 
+    //     code:'123459', 
+    //     stock: 100});
+
+    
 
     //Vuelvo a mostrar los productos
-    await productList.getProducts()
+    // await productList.getProducts()
 
-    //Busco producto con Id 2
-    await productList.getProductById(2);
+//     //Busco producto con Id 2
+//     await productList.getProductById(2);
 
-    //Busco producto con Id 10
-    await productList.getProductById(10);
+//     //Busco producto con Id 10
+//     await productList.getProductById(10);
 
-    //Modifico un producto
-    let newProduct = {
-        title:'Producto4', 
-        description: 'Descripción2', 
-        price: 200, 
-        thumbnail: 'thumbnail', 
-        code:'123456', 
-        stock: 100}
+//     //Modifico un producto
+//     let newProduct = {
+//         title:'Producto4', 
+//         description: 'Descripción2', 
+//         price: 200, 
+//         thumbnail: 'thumbnail', 
+//         code:'123456', 
+//         stock: 100}
 
-    await productList.updateProduct(2, newProduct )
+//     await productList.updateProduct(2, newProduct )
 
-    //Vuelvo a mostrar los productos
-    await productList.getProducts()
+//     //Vuelvo a mostrar los productos
+//     await productList.getProducts()
 
-    //Borro un producto
-    await productList.deleteProduct(1)
+//     //Borro un producto
+//     await productList.deleteProduct(1)
 
-    //Vuelvo a mostrar los productos
-    await productList.getProducts()
-}
+//     //Vuelvo a mostrar los productos
+//     await productList.getProducts()}
 
-test()
+
+//test()
+
+module.exports = ProductManager;
