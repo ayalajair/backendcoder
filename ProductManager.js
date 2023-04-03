@@ -68,10 +68,9 @@ class ProductManager {
             const products = await this.loadProducts()
             const product = products.find((p) => p.id === id);
             if (!product) {
-                console.log("No se han encontrado productos con ese ID");
+                console.log ("No se han encontrado productos con ese ID");
                 return;
             }
-            console.log (product)
             return product;
         }
         catch (error) {

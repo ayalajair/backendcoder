@@ -5,10 +5,20 @@ const app = express ()
 const PORT = 8080
 const products = new ProductManager
 
+app.use(express.urlencoded({extended: true}))
+
 app.get('/products', async (req,res)=>{
     try{
-        let productList = await products.getProducts()
-        res.send(productList)
+        const productList = await products.getProducts()
+        const limit = req.query.limit
+
+        if(!limit){
+            return res.send(productList)
+        }
+        const limitedProductList = productList.slice(0, limit);
+        res.send(limitedProductList);
+
+        
     } catch(error){
         console.log(error)
     }
@@ -18,7 +28,7 @@ app.get('/products/:pid', async (req,res)=>{
     try{
         const productId = req.params.pid
         const productList = await products.getProductById(parseInt(productId))
-        if(!productId) return res.send ('<h1>error, no se encuentra ese Id</h1>')
+        if(!productId) return res.send('Error: no se encuentra ese Id')
         res.send (productList)
         
     } catch(error){
