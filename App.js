@@ -12,7 +12,7 @@ app.get('/products', async (req,res)=>{
         const productList = await products.getProducts()
         const limit = req.query.limit
 
-        if(!limit){
+        if(!limit|| isNaN(limit)){
             return res.send(productList)
         }
         const limitedProductList = productList.slice(0, limit);
