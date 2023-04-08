@@ -2,10 +2,10 @@
   "name": "desafios",
   "version": "1.0.0",
   "description": "",
-  "main": "App.js",
+  "main": "src/App.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon src/App.js"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,4 @@
+[{"id":1,"title":"Producto","description":"Descripción","category":"Categoria","price":100,"thumbnail":[],"code":"123456","stock":100,"status":true},
+{"id":2,"title":"Producto2","description":"Descripción","category":"Categoria","price":100,"thumbnail":[],"code":"123457","stock":100,"status":true},
+{"id":3,"title":"Producto3","description":"Descripción","category":"Categoria","price":100,"thumbnail":[],"code":"123458","stock":100,"status":true},
+{"id":4,"title":"Producto4","description":"Descripción","category":"Categoria","price":100,"thumbnail":[],"code":"123459","stock":100,"status":true}]
