@@ -39,38 +39,46 @@ router.get('/:pid', async (req,res)=>{
 router.post('/', async (req, res)=> {
     try{
         const toAddProduct = req.body
-
-        //Validamos que cada el objeto tenga todas las propiedades
-        if (!toAddProduct.hasOwnProperty('title') ||
-            !toAddProduct.hasOwnProperty('description') ||
-            !toAddProduct.hasOwnProperty('code') ||
-            !toAddProduct.hasOwnProperty('price') ||
-            !toAddProduct.hasOwnProperty('stock') ||
-            !toAddProduct.hasOwnProperty('category')) {
-            return res.status(400).send('El producto no tiene todas las propiedades requeridas');
-        }
-        // Validamos el tipo de cada propiedad
-        if (typeof toAddProduct.title !== 'string' ||
-            typeof toAddProduct.description !== 'string' ||
-            typeof toAddProduct.code !== 'string' ||
-            typeof toAddProduct.price !== 'number' ||
-            typeof toAddProduct.stock !== 'number' ||
-            typeof toAddProduct.category !== 'string'||
-            !Array.isArray(producto.thumbnails)) {
-            return res.status(422).send('El producto tiene una o más propiedades con un tipo incorrecto');
-        }
-
-        const success = await products.addProduct(toAddProduct)
         
-        //Si devuelve falso, el producto ya existe en la BD
-        if(success) return res.status(409).send({status:'conflict',message:'Ya existe un producto con ese codigo'})
+        const respuesta = await products.addProduct(toAddProduct)
+        
+        //Si devuelve falso, hay algún problema con el producto
+        if(!respuesta.succes) return res.status(400).send(respuesta)
 
-        res.status(200).send({status:'success', message: 'Se ha creado un nuevo producto'})
+        //Si devuelve verdadero, se ha creado el nuevo producto
+        res.status(200).send(respuesta)
 
     } catch (error) {
         res.status(400).send({status:'Router error', error})
     }
 
+})
+//----------------------PUT--------------------------------------
+router.put('/:pid', async (req , res)=>{
+    const {pid} = req.params
+    const toChangeProduct = req.body
+
+    const updatedProduct = await products.updateProduct(pid, toChangeProduct)
+
+    //Sí devuelve falso, hay algún problema con la actualización
+    if(!updatedProduct.succes) {
+        return res.status(400).send(updatedProduct)
+    }
+    //Si devuelve verdadero, quiere decir que se hizo la actualización
+    res.status(200).send(updatedProduct)
+
+})
+
+//---------------------DELETE-----------------------------------------
+router.delete('/:pid', async (req,res)=>{
+    const {pid} = req.params
+    const deletedProduct = await products.deleteProduct(pid)
+    //Sí devuelve falso, hay algún problema con el borrado
+    if(!deletedProduct.success){
+        return res.status(400).send(deletedProduct)
+    }
+    //Si devuelve verdadero, quiere decir que se borró el producto
+    res.status(200).send(deletedProduct)
 })
 
 module.exports = router

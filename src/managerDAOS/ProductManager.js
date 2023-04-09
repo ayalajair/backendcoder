@@ -7,7 +7,7 @@ class ProductManager {
     constructor(path) {
         this.path = path
     }
-//Carga de productos desde el JSON
+    //Carga de productos desde el JSON
     loadProducts = async ()=> {
         try{
             if(fs.existsSync(path)){
@@ -23,28 +23,65 @@ class ProductManager {
     addProduct = async (product)=> {
         try {           
         const products = await this.loadProducts()
-        const { title, description, category, price, thumbnail, code, stock } = product;
-            //Chequeo que el código de producto no se repita
-            if (products.find((p) => p.code === code)) {
-                console.log(`Ya se ha ingresado un producto con ese código`);
-                return false;
+
+         //Validamos que cada el objeto tenga todas las propiedades
+        if (!product.hasOwnProperty('title') ||
+        !product.hasOwnProperty('description') ||
+        !product.hasOwnProperty('code') ||
+        !product.hasOwnProperty('price') ||
+        !product.hasOwnProperty('stock') ||
+        !product.hasOwnProperty('category')) {
+        const respuesta = {
+            status: 'error',
+            message: 'El producto no tiene todas las propiedades requeridas',
+            success: false};
+        return respuesta
+    }
+
+        // Validamos el tipo de cada propiedad
+        if (typeof product.title !== 'string' ||
+            typeof product.description !== 'string' ||
+            typeof product.code !== 'string' ||
+            typeof product.price !== 'number' ||
+            typeof product.stock !== 'number' ||
+            typeof product.category !== 'string'
+            //||!Array.isArray(product.thumbnails)
+            ) {
+            const respuesta = {
+                status: 'error',
+                message: 'El producto tiene una o más propiedades con un tipo incorrecto',
+                succes:false}
+            return respuesta
+            }   
+
+        //Chequeo que el código de producto no se repita
+        if (products.find((p) => p.code === product.code)) {
+            const respuesta = {
+                status: 'error',
+                message: 'Ya se ha ingresado un producto con ese código',
+                success: false};
+            return respuesta
             }
 
-            const newProduct = {
-                id: products[products.length()].id+2,
-                title,
-                description,
-                category,
-                price,
-                thumbnail,
-                code,
-                stock,
-                status: true
+        const newProduct = {
+            id: products[products.length-1].id+1,
+            title: product.title,
+            description: product.description,
+            category: product.category,
+            price: product.price,
+            thumbnail: product.thumbnail,
+            code: product.code,
+            stock: product.stock,
+            status: true
             };
             //Pusheo el nuevo producto en products y lo escribo en el Json
-            products.push(newProduct);
-            await fs.promises.writeFile (this.path,JSON.stringify(products),'utf8');
-            return true
+        products.push(newProduct);
+        await fs.promises.writeFile (path,JSON.stringify(products),'utf8');
+        const respuesta = {
+            status: 'success',
+            message: 'Se ha creado un nuevo producto',
+            succes: true}
+        return respuesta
         }catch (error){
             console.log (error);
         }
@@ -78,23 +115,49 @@ class ProductManager {
     updateProduct = async (id, updatedProduct) => {
         try {
             const products = await this.loadProducts();
-            const productIndex = products.findIndex((product) => product.id === id);
+            if(isNaN(Number(id))) {
+            const respuesta = {
+                message:'No es un ID válido',
+                success:false
+            }
+            return respuesta }
+            const productIndex = products.findIndex((p) => p.id === Number(id));
             if (productIndex === -1) {
-                console.log("No se han encontrado productos con ese ID");
-                return;
+                const respuesta = {
+                    status:'error',
+                    message:'No se han encontrado productos con ese ID',
+                    success:false
+                }
+                return respuesta;
             }
-            const updatedProductWhitId = {
-                id: id ,
-                title: updatedProduct.title, 
-                description: updatedProduct.description, 
-                price: updatedProduct.price, 
-                thumbnail: updatedProduct.thumbnail, 
-                code:updatedProduct.code, 
-                stock: updatedProduct.stock
+            const updatedProductWithId = Object.assign(products[productIndex],updatedProduct)
+            //me aseguro que no se modifique el ID
+            updatedProductWith.id = Number(id)
+
+            // Validamos el tipo de cada propiedad
+            if (typeof updatedProductWithId.title !== 'string' ||
+            typeof updatedProductWithId.description !== 'string' ||
+            typeof updatedProductWithId.code !== 'string' ||
+            typeof updatedProductWithId.price !== 'number' ||
+            typeof updatedProductWithId.stock !== 'number' ||
+            typeof updatedProductWithId.category !== 'string'
+            //||!Array.isArray(updatedProductWhitId.thumbnails)
+            ) {
+            const respuesta = {
+                        status: 'error',
+                        message: 'El producto tiene una o más propiedades con un tipo incorrecto',
+                        succes:false}
+            return respuesta
             }
-            products[productIndex] = updatedProductWhitId;
-            console.log (updatedProduct)
-            await fs.promises.writeFile (this.path,JSON.stringify(products),'utf8');
+
+            products[productIndex] = updatedProductWithId;
+            await fs.promises.writeFile (path,JSON.stringify(products),'utf8');
+            const respuesta = {
+                status: 'success',
+                message: 'Se ha modificado el producto con éxito',
+                success: true
+            }
+            return respuesta
         } catch (error) {
             console.log (error)
         }
@@ -102,17 +165,31 @@ class ProductManager {
 
     deleteProduct = async (id) => {
         try {
-
+            if(isNaN(Number(id))) {
+                const respuesta = {
+                    status:'error',
+                    message:'No es un ID válido',
+                    success:false
+                }}
             const products = await this.loadProducts();
-            const productIndex = products.findIndex((product) => product.id === id);
+            const productIndex = products.findIndex((product) => product.id === Number(id));
             if (productIndex === -1) {
-                console.log ("No se han encontrados productos con ese ID")
-                return null;
-            }
+                const respuesta = {
+                    status: 'error',
+                    messagge:'No se han encontrados productos con ese ID',
+                    success: false
+                }
+                return respuesta}
+
             const deletedProduct = products.splice(productIndex, 1)[0];
-            await fs.promises.writeFile (this.path,JSON.stringify(products),'utf8');
-            console.log ("El producto ha sido borrado con éxito")
-            return deletedProduct;
+            await fs.promises.writeFile (path,JSON.stringify(products),'utf8');
+            const respuesta = {
+                status: 'success',
+                messagge:'Se ha borrado el producto',
+                success: true,
+                payload: deletedProduct
+            }
+            return respuesta;
         } catch (error) {
             console.log (error)
         }
@@ -120,98 +197,5 @@ class ProductManager {
     }
 }
 
-//Test
-// const test = async ()=> {
-
-//     const productList = new ProductManager(path);
-
-//     //Muestro los productos
-//     await productList.getProducts()
-
-//     //Agrego producto 
-//     await productList.addProduct({
-//         title:'Producto',
-//         description: 'Descripción', 
-//         price: 100, 
-//         thumbnail: 'thumbnail', 
-//         code:'123456', 
-//         stock: 100});
-
-    //Vuelvo a mostrar los productos
-    // await productList.getProducts()
-
-    //Agrego producto con el mismo código
-    // await productList.addProduct({
-    //     title:'Producto', 
-    //     description: 'Descripción', 
-    //     price: 100, 
-    //     thumbnail: 'thumbnail', 
-    //     code:'123456', 
-    //     stock: 100});
-
-    //Agrego producto incompleto
-    // await productList.addProduct({
-    //     title:'Producto2',
-    //     description: 'Descripción', 
-    //     price: 100, 
-    //     thumbnail: 'thumbnail', 
-    //     code:'123456'});
-
-    //Agrego 2do producto
-    // await productList.addProduct({
-    //     title:'Producto2', 
-    //     description: 'Descripción', 
-    //     price: 100, 
-    //     thumbnail: 'thumbnail', 
-    //     code:'123457', 
-    //     stock: 100});
-    // await productList.addProduct({
-    //     title:'Producto3', 
-    //     description: 'Descripción', 
-    //     price: 100, 
-    //     thumbnail: 'thumbnail', 
-    //     code:'123458', 
-    //     stock: 100});
-    // await productList.addProduct({
-    //     title:'Producto4', 
-    //     description: 'Descripción', 
-    //     price: 100, 
-    //     thumbnail: 'thumbnail', 
-    //     code:'123459', 
-    //     stock: 100});
-
-    
-
-    //Vuelvo a mostrar los productos
-    // await productList.getProducts()
-
-//     //Busco producto con Id 2
-//     await productList.getProductById(2);
-
-//     //Busco producto con Id 10
-//     await productList.getProductById(10);
-
-//     //Modifico un producto
-//     let newProduct = {
-//         title:'Producto4', 
-//         description: 'Descripción2', 
-//         price: 200, 
-//         thumbnail: 'thumbnail', 
-//         code:'123456', 
-//         stock: 100}
-
-//     await productList.updateProduct(2, newProduct )
-
-//     //Vuelvo a mostrar los productos
-//     await productList.getProducts()
-
-//     //Borro un producto
-//     await productList.deleteProduct(1)
-
-//     //Vuelvo a mostrar los productos
-//     await productList.getProducts()}
-
-
-//test()
 
 module.exports = ProductManager;
