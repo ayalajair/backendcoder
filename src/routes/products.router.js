@@ -2,7 +2,7 @@ const { Router } =  require('express')
 const ProductManager = require ('../managerDAOS/ProductManager')
 
 const router = Router();
-const products = new ProductManager
+const products = new ProductManager ('./src/Products.json')
 
 
 //-----------------GET------------------------------------------
@@ -25,8 +25,8 @@ router.get('/', async (req,res)=>{
 
 router.get('/:pid', async (req,res)=>{
     try{
-        const productId = req.params.pid
-        const productList = await products.getProductById(parseInt(productId))
+        const {pid} = req.params
+        const productList = await products.getProductById(parseInt(pid))
         if(!productList) return res.status(404).send('Error: no se encuentra ese Id')
         res.status(200).send ({status:'success',payload:productList})
         

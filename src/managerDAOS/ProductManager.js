@@ -1,5 +1,3 @@
-
-
 const fs = require('fs');
 
 const path = './src/Products.json'
@@ -11,12 +9,12 @@ class ProductManager {
     loadProducts = async ()=> {
         try{
             if(fs.existsSync(path)){
-            const products = await fs.promises.readFile (path, 'utf-8');
-            return JSON.parse (products);}
+            const products = await fs.promises.readFile (path, 'utf-8')
+            return JSON.parse (products)}
             await fs.promises.writeFile (path,'[]','utf-8')
             return []
-        } catch (err) {
-            console.log (Error);
+        } catch (error) {
+            console.log (error);
         }        
     }
 
@@ -64,7 +62,7 @@ class ProductManager {
             }
 
         const newProduct = {
-            id: products[products.length-1].id+1,
+            id: products.length === 0 ? 1:products[products.length-1].id+1,
             title: product.title,
             description: product.description,
             category: product.category,
@@ -80,7 +78,8 @@ class ProductManager {
         const respuesta = {
             status: 'success',
             message: 'Se ha creado un nuevo producto',
-            succes: true}
+            succes: true,
+            payload:newProduct}
         return respuesta
         }catch (error){
             console.log (error);
@@ -100,14 +99,13 @@ class ProductManager {
     getProductById = async (id) => {
         try {
             const products = await this.loadProducts()
-            const product = products.find((p) => p.id === id);
+            const product = products.find((p) => p.id === Number(id))
             if (!product) {
                 console.log ("No se han encontrado productos con ese ID");
                 return;
             }
-            return product;
-        }
-        catch (error) {
+            return product
+        } catch (error) {
             console.log (error)
         }
     }
