@@ -69,6 +69,48 @@ class CartManager {
         }
     }
 
+    addToCart = async (cart, id)=>{
+        try{
+            if (isNaN(id)){
+                const respuesta = {
+                    status: 'error',
+                    message: 'El id no es un Número',
+                    succes: false
+                }
+                return respuesta
+            }
+            const carts = await this.loadCarts()
+            const cartIndex = carts.findIndex((c) => c.id === cart.id)
+            const productIndex = cart.products.findIndex((p)=>p.id === Number(id))
+            //si no se encuentra el id en el carrito, se genera un nuevo producto con cantida 1
+            if(productIndex === -1) {
+                cart.products.push({id: parseInt(id) ,quantity:1})
+                carts[cartIndex] = cart
+                await fs.promises.writeFile (this.path,JSON.stringify(carts),'utf8')
+                const respuesta = {
+                    status:'succes',
+                    message: 'Se ha agregado un nuevo producto al carrito',
+                    succes: true,
+                    payload: cart
+                }
+                return respuesta
+            }
+            //si se encuentra el id en el carrito, se le suma 1 a la cantidad de este producto
+            cart.products[productIndex].quantity +=1
+            carts[cartIndex] = cart
+            await fs.promises.writeFile (this.path,JSON.stringify(carts),'utf8')
+            const respuesta = {
+                status:'succes',
+                message: 'Se ha agregado el producto al carrito',
+                succes: true,
+                payload: cart
+            }
+            return respuesta
+        } catch (error) {
+            console.log (error)
+        }
+    }
+
 }
 
 module.exports = CartManager;
