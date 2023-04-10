@@ -43,7 +43,7 @@ router.post('/', async (req, res)=> {
         const respuesta = await products.addProduct(toAddProduct)
         
         //Si devuelve falso, hay algún problema con el producto
-        if(!respuesta.succes) return res.status(400).send(respuesta)
+        if(!respuesta.success) return res.status(400).send(respuesta)
 
         //Si devuelve verdadero, se ha creado el nuevo producto
         res.status(200).send(respuesta)
@@ -61,7 +61,7 @@ router.put('/:pid', async (req , res)=>{
     const updatedProduct = await products.updateProduct(pid, toChangeProduct)
 
     //Sí devuelve falso, hay algún problema con la actualización
-    if(!updatedProduct.succes) {
+    if(!updatedProduct.success) {
         return res.status(400).send(updatedProduct)
     }
     //Si devuelve verdadero, quiere decir que se hizo la actualización

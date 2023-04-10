@@ -130,7 +130,7 @@ class ProductManager {
             }
             const updatedProductWithId = Object.assign(products[productIndex],updatedProduct)
             //me aseguro que no se modifique el ID
-            updatedProductWith.id = Number(id)
+            updatedProductWithId.id = Number(id)
 
             // Validamos el tipo de cada propiedad
             if (typeof updatedProductWithId.title !== 'string' ||
@@ -144,7 +144,7 @@ class ProductManager {
             const respuesta = {
                         status: 'error',
                         message: 'El producto tiene una o más propiedades con un tipo incorrecto',
-                        succes:false}
+                        success:false}
             return respuesta
             }
 
