@@ -43,7 +43,7 @@ router.post('/', async (req, res)=> {
         const respuesta = await products.addProduct(toAddProduct)
         
         //Si devuelve falso, hay algún problema con el producto
-        if(!respuesta.success) return res.status(400).send(respuesta)
+        if(!respuesta.success) {return res.status(400).send(respuesta)}
 
         //Si devuelve verdadero, se ha creado el nuevo producto
         res.status(200).send(respuesta)
