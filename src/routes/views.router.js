@@ -20,7 +20,7 @@ router.get('/', async (req,res)=>{
 
 //Vista realTimeProducts
 router.get('/realtimeproducts', async (req,res)=>{
-    res.render ('realtimeproducts',products)
+    res.render ('realTimeProducts',products)
 })
 
 module.exports = router;
