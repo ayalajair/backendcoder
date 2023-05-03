@@ -2,6 +2,8 @@ const express = require('express')
 const handlebars = require ('express-handlebars')
 const cookieParser = require('cookie-parser')
 const {Server} = require ('socket.io')
+const logger = require('morgan')
+const {connectDB} = require('./config/configServer')
 
 
 
@@ -12,9 +14,9 @@ const { socketProducts } = require('./utils/socketProducts')
 
 const app = express ()
 const PORT = 8080
-
+connectDB()
 const httpServer = app.listen (PORT, ()=>{
-    console.log('Escuchando al puerto 8080')
+    console.log('Listening on port 8080')
 })
 
 //Setear motor de plantillas Handlebars
@@ -43,5 +45,7 @@ app.use('/api/products', productsRouter)
 
 // httP://localhost:8080/api/carts
 app.use('/api/carts', cartsRouter)
+
+app.use(logger('dev'))
 
 

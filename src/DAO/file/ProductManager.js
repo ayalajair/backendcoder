@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const fs = require('fs');
 
-const path = './src/Products.json'
+const path = './data/Products.json'
 class ProductManager {
     constructor(path) {
         this.path = path

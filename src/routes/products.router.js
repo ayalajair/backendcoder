@@ -1,24 +1,17 @@
 const { Router } =  require('express')
-const ProductManager = require ('../managerDAOS/ProductManager')
+const ProductManager = require ('../DAO/db/products.Manager.Mongo')
 
 const router = Router();
-const products = new ProductManager ('./src/Products.json')
+const products = new ProductManager()
 
 
 //-----------------GET------------------------------------------
 router.get('/', async (req,res)=>{
     try{
-        const productList = await products.getProducts()
         const limit = req.query.limit
-
-        if(!limit|| isNaN(limit)){
-            return res.status(200).send({status:'success', payload:productList})
-        }
-        const limitedProductList = productList.slice(0, limit);
-        res.status(200).send({status:'success',payload:limitedProductList});
-
-        
-    } catch(error){
+        const productList = await products.getProducts(limit)
+        res.status(200).send ({status:'success', payload:productList})        
+    }catch(error){
         res.status(400).send({status:'Router error', error})
     }
 })
@@ -26,9 +19,9 @@ router.get('/', async (req,res)=>{
 router.get('/:pid', async (req,res)=>{
     try{
         const {pid} = req.params
-        const productList = await products.getProductById(parseInt(pid))
+        const productList = await products.getProductById(pid)
         if(!productList) return res.status(404).send('Error: no se encuentra ese Id')
-        res.status(200).send ({status:'success',payload:productList})
+        res.status(200).send ({status:'success', payload:productList})
         
     } catch(error){
         res.status(400).send({status:'Router error', error})
