@@ -1,15 +1,23 @@
 const { Router } = require('express');
-const CartManager = require ('../DAO/file/CartManager')
+const {cartsManagerMongo} = require ('../DAO/db/carts.Manager.Mongo')
+
 const router = Router();
-const carts = new CartManager ('./data/Carts.json')
+const carts = new cartsManagerMongo()
 
 //--------------------GET-----------------------------
+router.get('/', async (req,res)=>{
+    try {
+        const allCarts = await carts.getCarts()
+        res.send({status:'Success',payload:allCarts})
+    } catch (error) {
+        res.status(400).send({status:'Router error',error})
+    }
+})
+
 router.get('/:cid', async (req,res)=>{
     try{
         const {cid} = req.params
         const cart = await carts.getCartById(cid)
-        if(!cart.success) {
-            return res.status(404).send(cart)}
         res.status(200).send(cart)
     }catch(error){
         res.status(400).send({status:'Router error',error})
@@ -20,10 +28,8 @@ router.get('/:cid', async (req,res)=>{
 
 router.post('/',async (req,res)=>{
     try{
-        const cart = req.body
-        const respuesta = await carts.newCart(cart)
-        if(!respuesta.succes) return res.status(400).send(respuesta) 
-        res.status(200).send(respuesta)
+        const cart = await carts.addCart() 
+        res.send({status: 'Success', payload: cart})
     } catch(error){
         res.status(400).send({status:'Router error',error})
     }
@@ -32,14 +38,8 @@ router.post('/',async (req,res)=>{
 router.post('/:cid/product/:pid',async (req,res)=>{
     try{
         const {cid,pid} = req.params 
-        const cart = await carts.getCartById(cid)
-        if(!cart.success) {
-            return res.status(404).send(cart)}
-        const updatedCart = await carts.addToCart(cart.payload, pid)
-        if(!updatedCart.success) {
-            return res.status(400).send(updatedCart)
-        }
-        res.status(200).send(uptdatedCart)
+        const updatedCart = await carts.addToCart(cid, pid, 1)
+        res.send(uptdatedCart)
     }catch (error){
         res.status(400).send({status:'Router',error})
     }
