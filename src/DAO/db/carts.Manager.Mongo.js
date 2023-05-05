@@ -75,7 +75,7 @@ class cartsManagerMongo {
             
             
             
-            if (toAddProductIndex >= 0) {
+            if (toAddProductIndex === -1) {
                 cart.products.push({
                     product:productId,
                     quantity:quantity})
