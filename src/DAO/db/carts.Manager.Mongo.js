@@ -50,7 +50,8 @@ class cartsManagerMongo {
 
     async addToCart (cartId, productId,quantity) {
         try {
-            const cart = await cartModel.findById(cartId)
+            const cart = await cartModel.findOne({_id:cartId})
+            
             if(!cart){ 
                 const respuesta = {
                     status:'not found',
@@ -59,8 +60,8 @@ class cartsManagerMongo {
                 }
                 return respuesta
             }
-            const product = await productModel.findById(productId)
-
+            const product = await productModel.findOne({_id:productId})
+            
             if(!product){
                 const respuesta = {
                     status:'not found',
@@ -70,11 +71,29 @@ class cartsManagerMongo {
                 return respuesta
             }
 
-            const toAddProduct = cart.products.find((p) => p.product.toString() === productId.toString())
-            if (toAddProduct) {
-                toAddProduct.quantity += quantity
-            }
-            cart.products.push({productId,quantity})
+            const toAddProductIndex = cart.products.findIndex((p) => p.product.toString() === productId.toString())
+            
+            
+            
+            if (toAddProductIndex >= 0) {
+                cart.products.push({
+                    product:productId,
+                    quantity:quantity})
+                console.log(cart)
+                const respuesta = {
+                    status: 'succes',
+                    message: 'Producto agregado al carrito',
+                    success: true,
+                    payload: cart
+                }
+                await cart.save()
+    
+                return respuesta }
+
+            const toAddProduct = cart.products[toAddProductIndex]
+            toAddProduct.quantity += quantity
+            cart.products[toAddProductIndex] = toAddProduct
+            
             await cart.save()
             const respuesta = {
                 status: 'succes',
@@ -82,12 +101,11 @@ class cartsManagerMongo {
                 success: true,
                 payload: cart
             }
+            console.log(cart)
             return respuesta
         }
-
-        
         catch (error) {
-            
+            return new Error(error)
         }
     }
 
