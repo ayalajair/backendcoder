@@ -1,11 +1,9 @@
-const EventEmitter = require('events');
 const fs = require('fs');
 
 const path = './data/Products.json'
 class ProductManager {
     constructor(path) {
         this.path = path
-        this.events = new EventEmitter
     }
     //Carga de productos desde el JSON
     loadProducts = async ()=> {
@@ -82,7 +80,6 @@ class ProductManager {
             message: 'Se ha creado un nuevo producto',
             succes: true,
             payload:newProduct}
-        this.events.emit('addProduct', newProduct)
         return respuesta
         }catch (error){
             console.log (error);
@@ -190,7 +187,6 @@ class ProductManager {
                 success: true,
                 payload: deletedProduct
             }
-            this.events.emit('deleteProduct', id)
             return respuesta;
         } catch (error) {
             console.log (error)

@@ -1,16 +1,16 @@
 const {Router} = require('express')
-const ProductManager = require('../DAO/file/ProductManager')
+const ProductManagerMongo = require('../DAO/db/products.Manager.Mongo')
 
 
 const router = Router();
-const products = new ProductManager ('./src/Products.json')
+const products = new ProductManagerMongo ()
 
 //GET
 
 //Vista Home
 router.get('/', async (req,res)=>{
-
-    let productList = await products.getProducts()
+    let limit = req.query.limit
+    let productList = await products.getProducts(limit)
     let data = {
         dataProducts: productList,
         style: 'home.css'
@@ -20,7 +20,14 @@ router.get('/', async (req,res)=>{
 
 //Vista realTimeProducts
 router.get('/realtimeproducts', async (req,res)=>{
-    res.render ('realTimeProducts',products)
+    let productList = await products.getProducts(limit)
+    res.render ('realTimeProducts',productList)
 })
+
+//Vista chat
+router.get('/chat', (req,res)=>{
+    
+    res.render('chat',{})
+    })
 
 module.exports = router;

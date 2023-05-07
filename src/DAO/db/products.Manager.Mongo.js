@@ -1,7 +1,9 @@
+const EventEmitter = require('events');
 const {productModel} = require('./models/product.model')
 
 class ProductManagerMongo {
     constructor() {
+        this.events = new EventEmitter
     }
 
 //-------------GET PRODUCTS----------------
@@ -60,7 +62,7 @@ class ProductManagerMongo {
                 success: false};
             return respuesta
             }
-            
+            this.events.emit('addProduct', product).setMaxListeners()
             return await productModel.create(product)
         } catch (error) {
             return new Error(error)
@@ -78,7 +80,9 @@ class ProductManagerMongo {
 //-------------DELETE PRODUCT-------------
     async deleteProduct(id){
         try {
-            return await productModel.findOneAndDelete({_id: id})
+            deletedProduct = await productModel.findOneAndDelete({_id: id})
+            this.events.emit('deleteProduct', id).setMaxListeners()
+            return deletedProduct
         }catch (error) {
             return new Error(error)
         }

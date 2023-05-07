@@ -8,8 +8,8 @@ const {connectDB} = require('./config/configServer')
 
 
 const productsRouter = require ('./routes/products.router')
-const cartsRouter = require ('./routes/carts.router')
 const viewsRouter = require ('./routes/views.router')
+const cartsRouter = require ('./routes/carts.router')
 const { socketProducts } = require('./utils/socketProducts')
 
 const app = express ()
