@@ -11,6 +11,9 @@ const productsRouter = require ('./routes/products.router')
 const viewsRouter = require ('./routes/views.router')
 const cartsRouter = require ('./routes/carts.router')
 const { socketProducts } = require('./utils/socketProducts')
+const { socketChat } = require('./utils/socketChat')
+
+const products = []
 
 const app = express ()
 const PORT = 8080
@@ -35,6 +38,7 @@ app.use(cookieParser())
 //Setear socket.io
 const io = new Server (httpServer)
 socketProducts(io)
+socketChat(io)
 
 
 // http://localhost:8080

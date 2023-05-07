@@ -11,4 +11,4 @@ const messagesSchema = new Schema({
 
 const messagesModel = model(collection, messagesSchema);
 
-module.exports = messagesModel;
+module.exports = {messagesModel};

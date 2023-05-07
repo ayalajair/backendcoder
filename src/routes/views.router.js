@@ -20,6 +20,7 @@ router.get('/', async (req,res)=>{
 
 //Vista realTimeProducts
 router.get('/realtimeproducts', async (req,res)=>{
+    let limit = req.query.limit
     let productList = await products.getProducts(limit)
     res.render ('realTimeProducts',productList)
 })

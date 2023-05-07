@@ -1,9 +1,9 @@
-const ProductManager = require("../DAO/file/ProductManager")
+const ProductManagerMongo = require("../DAO/db/products.Manager.Mongo")
 
-const productList = new ProductManager()
+const productList = new ProductManagerMongo()
 const socketProducts = (io) => {
     io.on('connection', async socket => {
-        console.log('cliente conectado')
+        console.log('Usuario conectado')
         products = await productList.getProducts()
         io.emit('products', products)
 
