@@ -2,13 +2,11 @@ const {Schema, model} = require('mongoose');
 
 const collection = 'messages'
 
-const messagesSchema = new Schema({
-    messages: [{
+const messageSchema = new Schema({
         message: String, 
         user: String
-    }]
 })
 
-const messagesModel = model(collection, messagesSchema);
+const messageModel = model(collection, messageSchema);
 
-module.exports = {messagesModel};
+module.exports = {messageModel};
