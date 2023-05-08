@@ -10,6 +10,7 @@ const {connectDB} = require('./config/configServer')
 const productsRouter = require ('./routes/products.router')
 const viewsRouter = require ('./routes/views.router')
 const cartsRouter = require ('./routes/carts.router')
+const uploadsRouter = require ('./routes/uploads.router')
 const { socketProducts } = require('./utils/socketProducts')
 const { socketChat } = require('./utils/socketChat')
 
@@ -49,6 +50,9 @@ app.use('/api/products', productsRouter)
 
 // httP://localhost:8080/api/carts
 app.use('/api/carts', cartsRouter)
+
+// http://localhost:8080/uploads
+app.use('/uploads', uploadsRouter)
 
 app.use(logger('dev'))
 
