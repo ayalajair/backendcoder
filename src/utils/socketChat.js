@@ -16,6 +16,9 @@ const socketChat = (io) => {
             chat = messages
             io.emit('messageLogs', chat)
         })
+        socket.on('user', data =>{
+            socket.broadcast.emit('newUserConnected', data)
+        })
         socket.on('message', async (data)=>{
             console.log(data)
             try {

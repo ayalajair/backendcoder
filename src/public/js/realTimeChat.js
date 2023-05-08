@@ -13,7 +13,10 @@ Swal.fire({
     allowOutsideClick: false,
 }).then(result => {
     user = result.value
+    socket.emit('user', user)
 })
+
+
 
 chatBox.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
@@ -24,6 +27,21 @@ chatBox.addEventListener('keyup', (e) => {
             })
             chatBox.value = ''
     }
+
+})
+
+socket.on('newUserConnected', data => {
+    if(!data){
+        return
+    }
+    Swal.fire({
+        toast: true,
+        position: 'top-right',
+        showConfirmButton: false,
+        timer:  3000,
+        title: `${data} se ha conectado`,
+        icon:  'success'
+    })
 
 })
 
