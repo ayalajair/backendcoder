@@ -108,7 +108,31 @@ class cartsManagerMongo {
             return new Error(error)
         }
     }
+//-------------DELETE CART--------------
 
+    async deleteCart (id) {
+        try {
+            const deleteCart = await cartModel.findByIdAndDelete(id)
+            if(!deleteCart){
+                const respuesta = {
+                    status:'not found',
+                    message:'No se ha encontrado un carrito con ese ID',
+                    success: false
+                }
+                return respuesta
+            }
+
+            const respuesta = {
+                status: 'succes',
+                message: 'Carrito eliminado',
+                payload: deleteCart,
+                success: true}
+            return respuesta
+
+        } catch (error) {
+            return new Error(error)
+        }
+    }
 
 }
 
