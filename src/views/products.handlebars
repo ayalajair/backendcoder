@@ -1,0 +1,31 @@
+<div>
+    <h1>Productos</h1>
+    <div class="container">
+        {{#each dataProducts.payload}}
+            <div class="product">
+                <p>ID: {{this._id}}</p>
+                <p>Producto: {{this.title}}</p>
+                <p>Descripción: {{this.description}}</p>
+                <p>Categoría: {{this.category}}</p>
+                <p>Precio: ${{this.price}}</p>
+                <p>Imagen: {{this.thumbnail}}</p>
+                <p>Código de producto: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <form method="POST" action="/cart">
+                    <input type="hidden" name="productId" value="this.product._id>">
+                    <button type="submit">Agregar al carrito</button>
+                </form>
+            </div>
+        {{/each}}
+    </div>
+    {{#if dataproducts.hasPrev}}
+        <button><a href={{dataProducts.prevLink}}>Anterior</a></button>
+    {{/if}}
+    {{#if dataproducts.hasNext}}
+        <button><a href={{dataProducts.nextLink}}>Siguiente</a></button>
+    {{/if}}
+
+
+
+
+</div>

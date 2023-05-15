@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const ProductManagerMongo = require('../DAO/db/products.Manager.Mongo')
+const {validate} = require ('../utils/validateProductsQuery')
 
 
 const router = Router();
@@ -22,6 +23,15 @@ router.get('/products', async (req,res)=>{
         }
 
         let sort = priceSort ? { price: priceSort === 'asc' ? 1 : -1 } : null;
+
+        if (!validate(req.query)) {
+            return res.send(400).send({
+              status: 'error',
+              message: 'Parametros inválidos',
+              details: validate.errors
+            });
+        }
+
         let productList = await products.getProducts(limit, page, query, sort)
         let data = {
             dataProducts: productList,

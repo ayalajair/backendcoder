@@ -1,23 +1,10 @@
 const { Router } =  require('express')
 const ProductManager = require ('../DAO/db/products.Manager.Mongo')
-const Ajv = require('ajv')
+const {validate} = require ('../utils/validateProductsQuery')
+
 
 const router = Router();
 const products = new ProductManager()
-const ajv = new Ajv()
-
-const schema = {
-    type: 'object',
-    properties: {
-        limit: { type: 'integer', minimum: 1, maximum: 100 },
-        page: { type: 'integer', minimum: 1, maximum: 100 },
-        priceSort: { type: 'string', enum: ['asc', 'desc'] },
-        category: { type: 'string'},
-        availability: { type: 'string'}
-    }
-}
-
-const validate = ajv.compile(schema);
 
 //-----------------GET------------------------------------------
 router.get('/', async (req,res)=>{
@@ -40,7 +27,7 @@ router.get('/', async (req,res)=>{
         if (!validate(req.query)) {
             return res.status(400).send({
               status: 'error',
-              message: 'Invalid query parameters',
+              message: 'Parámeros inválidos',
               details: validate.errors
             });
         }
