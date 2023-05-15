@@ -47,6 +47,19 @@ router.post('/:cid/product/:pid',async (req,res)=>{
 
 //----------------PUT-------------------------------
 
+router.put('/:cid', async (req,res)=>{
+    try {
+        const {cid} = req.params
+        const cart = req.body
+        const updatedCart = await carts.updateCart(cid, cart)
+        if(!updatedCart.succes) return res.status(404).send(updatedCart)
+        res.status(200).send(updatedCart)
+    } catch (error) {
+        res.status(400).send({status:'Router',error})
+    }
+
+})
+
 //----------------DELETE-------------------------------
 
 router.delete('/:cid',async (req,res)=>{

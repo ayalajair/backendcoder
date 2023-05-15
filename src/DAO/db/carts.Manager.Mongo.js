@@ -156,6 +156,31 @@ class cartsManagerMongo {
             return new Error(error)
         }
     }
+
+    //-----------UPDATE CART-------------
+
+    async updateCart (id, cart) {
+        try {
+            const updateCart = await cartModel.findByIdAndUpdate(id, cart)
+            if(!updateCart){
+                const respuesta = {
+                    status:'not found',
+                    message:'No se ha encontrado un carrito con ese ID',
+                    success: false
+                }
+                return respuesta
+            }
+            const respuesta = {
+                status: 'succes',
+                message: 'Carrito actualizado',
+                payload: updateCart,
+                success: true}
+            return respuesta
+        } catch (error) {
+            return new Error(error)
+        }
+    
+    }
 }
 
 module.exports = {cartsManagerMongo}
