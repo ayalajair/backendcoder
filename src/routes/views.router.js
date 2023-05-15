@@ -6,7 +6,10 @@ const router = Router();
 const products = new ProductManagerMongo ()
 
 //GET
-
+//Vista Products
+router.get('/products', async (req,res)=>{
+    
+}
 //Vista Home
 router.get('/', async (req,res)=>{
     let limit = req.query.limit
