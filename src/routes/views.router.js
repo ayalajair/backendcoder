@@ -8,8 +8,27 @@ const products = new ProductManagerMongo ()
 //GET
 //Vista Products
 router.get('/products', async (req,res)=>{
-    
-}
+    let {limit} = req.query || 10
+        let {page} = req.query || 1
+        let {priceSort} = req.query || null
+        let {category} = req.query || null
+        let {availability} = req.query || null
+        let query = {}
+        if(category){
+            query = {...query, category}
+        }
+        if(availability){
+            query = {...query, availability}
+        }
+
+        let sort = priceSort ? { price: priceSort === 'asc' ? 1 : -1 } : null;
+        let productList = await products.getProducts(limit, page, query, sort)
+        let data = {
+            dataProducts: productList,
+            style: 'products.css'
+        }
+        res.render('products',data)
+    })
 //Vista Home
 router.get('/', async (req,res)=>{
     let limit = req.query.limit

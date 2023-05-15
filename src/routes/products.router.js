@@ -22,12 +22,12 @@ const validate = ajv.compile(schema);
 //-----------------GET------------------------------------------
 router.get('/', async (req,res)=>{
     try{
-        const {limit} = req.query || 10
-        const {page} = req.query || 1
-        const {priceSort} = req.query || null
-        const {category} = req.query || null
-        const {availability} = req.query || null
-        const query = {}
+        let {limit} = req.query || 10
+        let {page} = req.query || 1
+        let {priceSort} = req.query || null
+        let {category} = req.query || null
+        let {availability} = req.query || null
+        let query = {}
         if(category){
             query = {...query, category}
         }
@@ -35,7 +35,7 @@ router.get('/', async (req,res)=>{
             query = {...query, availability}
         }
 
-        const sort = priceSort ? { price: priceSort === 'asc' ? 1 : -1 } : null;
+        let sort = priceSort ? { price: priceSort === 'asc' ? 1 : -1 } : null;
 
         if (!validate(req.query)) {
             return res.status(400).send({
