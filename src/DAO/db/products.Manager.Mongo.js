@@ -4,14 +4,39 @@ const {productModel} = require('./models/product.model')
 class ProductManagerMongo {
     constructor() {
         this.events = new EventEmitter
+        this.events.setMaxListeners(50)
     }
 
 //-------------GET PRODUCTS----------------
-    async getProducts(limit = null) {
+    async getProducts(limit,page,sort,query) {
         try {
-            return await productModel.find().limit(limit)
+
+            let products = await productModel.paginate(query, {limit, page, sort, lean:true})
+            
+            const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages}= products
+
+            if (!docs || docs.length === 0) {
+                throw new Error("No se encontraron productos")
+            }
+
+            const prevLink = hasPrevPage ? `http://localhost:8080/api/products?page=${prevPage}&limit=${limit}`: null;
+            const nextLink = hasNextPage ? `http://localhost:8080/api/products?page=${nextPage}&limit=${limit}`: null;
+
+            return {
+                status: 'success',
+                payload: products,
+                totalPages,
+                prevPage,
+                nextPage,
+                page,
+                hasPrevPage,
+                hasNextPage,
+                prevLink,
+                nextLink
+            }
+
         } catch (error) {
-            return new Error(error)
+            throw new Error(error)
         }
     }
 //--------------GET PRODUCT BY ID-------------
@@ -62,7 +87,7 @@ class ProductManagerMongo {
                 success: false};
             return respuesta
             }
-            this.events.emit('addProduct', product).setMaxListeners()
+            this.events.emit('addProduct', product)
             return await productModel.create(product)
         } catch (error) {
             return new Error(error)
@@ -81,7 +106,7 @@ class ProductManagerMongo {
     async deleteProduct(id){
         try {
             deletedProduct = await productModel.findOneAndDelete({_id: id})
-            this.events.emit('deleteProduct', id).setMaxListeners()
+            this.events.emit('deleteProduct', id)
             return deletedProduct
         }catch (error) {
             return new Error(error)

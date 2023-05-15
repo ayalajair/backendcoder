@@ -1,0 +1,18 @@
+<div>
+    {{#each products}}
+        <div class="product">
+                <p>ID: {{this.id}}</p>
+                <p>Producto: {{this.title}}</p>
+                <p>Descripción: {{this.description}}</p>
+                <p>Categoría: {{this.category}}</p>
+                <p>Precio: ${{this.price}}</p>
+                <p>Imagen: {{this.thumbnail}}</p>
+                <p>Código de producto: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+        </div>
+    {{/each}}
+</div>
+<div>
+    <button><a href={{prevLink}}>Anterior</a></button>
+    <button><a href={{nextLing}}>Siguiente</a></button>
+</div>

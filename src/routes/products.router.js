@@ -1,16 +1,48 @@
 const { Router } =  require('express')
 const ProductManager = require ('../DAO/db/products.Manager.Mongo')
+const { query, validationResult } = require('express-validator');
 
 const router = Router();
 const products = new ProductManager()
 
 
 //-----------------GET------------------------------------------
-router.get('/', async (req,res)=>{
+router.get('/',[
+    query('limit').optional().isInt({ min: 1 }).toInt(),
+    query('page').optional().isInt({ min: 1 }).toInt(),
+    query('availability').optional().isBoolean().toBoolean()
+    ],async (req,res)=>{
     try{
-        const limit = req.query.limit
-        const productList = await products.getProducts(limit)
-        res.status(200).send ({status:'success', payload:productList})        
+        const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(422).json({ errors: errors.array() });
+            }
+        
+        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
+        const sortPrice = req.query.sortPrice || null;
+        let sort = null;
+    
+        if (sortPrice === "asc") {
+            sort = { price: 1 };
+        } else if (sortPrice === "desc") {
+            sort = { price: -1 };
+        }
+    
+        let query = {};
+        if (req.query.category) {
+            query = { ...query, category: req.query.category };
+        }
+        if (req.query.availability) {
+            query = { ...query, status: req.query.availability};
+        }
+        console.log({limit,page,sort,query})
+        const productList = await products.getProducts(limit,page,sort,query)
+        
+        res.status(200).send({productList})
+        res.render('products',{productList})
+    
+
     }catch(error){
         res.status(400).send({status:'Router error', error})
     }
