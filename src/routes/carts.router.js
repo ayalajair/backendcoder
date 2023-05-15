@@ -45,4 +45,19 @@ router.post('/:cid/product/:pid',async (req,res)=>{
     }
 })
 
+//----------------PUT-------------------------------
+
+//----------------DELETE-------------------------------
+
+router.delete('/:cid',async (req,res)=>{
+    try {
+        const {cid} = req.params
+        const deletedCart = await carts.deleteCart(cid)
+        res.status(200).send(deletedCart)
+    }
+     catch (error) {
+        res.status(400).send({status:'Router',error})
+    }
+})
+
 module.exports = router
