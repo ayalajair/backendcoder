@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const ProductManagerMongo = require('../DAO/db/products.Manager.Mongo')
-const {validate} = require ('../utils/validateProductsQuery')
+
 
 
 const router = Router();
@@ -9,11 +9,7 @@ const products = new ProductManagerMongo ()
 //GET
 //Vista Products
 router.get('/products', async (req,res)=>{
-    let {limit} = req.query || 10
-        let {page} = req.query || 1
-        let {priceSort} = req.query || null
-        let {category} = req.query || null
-        let {availability} = req.query || null
+        const {limit = 10, page = 1, priceSort = null, category = null, availability = null} = req.query
         let query = {}
         if(category){
             query = {...query, category}
@@ -24,19 +20,13 @@ router.get('/products', async (req,res)=>{
 
         let sort = priceSort ? { price: priceSort === 'asc' ? 1 : -1 } : null;
 
-        if (!validate(req.query)) {
-            return res.send(400).send({
-              status: 'error',
-              message: 'Parametros inválidos',
-              details: validate.errors
-            });
-        }
-
         let productList = await products.getProducts(limit, page, query, sort)
         let data = {
             dataProducts: productList,
-            style: 'products.css'
+
+            style: 'home.css'
         }
+        console.log(data)
         res.render('products',data)
     })
 //Vista Home

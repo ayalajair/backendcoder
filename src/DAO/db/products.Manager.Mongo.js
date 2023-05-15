@@ -9,6 +9,8 @@ class ProductManagerMongo {
 //-------------GET PRODUCTS----------------
     async getProducts(limit, page, sort, query) {
         try {
+            console.log(query)
+            
             const products = await productModel.paginate(query, {limit, page, sort, lean:true})
             if(products.docs.length === 0) {
                 return {
@@ -18,8 +20,8 @@ class ProductManagerMongo {
                 }
             }
             const {docs, totalPages, prevPage, nextPage, hasPrevPage, hasNextPage, totalDocs} = products
-            const prevLink = hasPrevPage ? `http://localhost:8080/api/products?limit=${limit}&page=${prevPage}` : null
-            const nextLink = hasNextPage ? `http://localhost:8080/api/products?limit=${limit}&page=${nextPage}` : null
+            const prevLink = hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${prevPage}` : null
+            const nextLink = hasNextPage ? `http://localhost:8080/products?limit=${limit}&page=${nextPage}` : null
             const respuesta = {
                 status: 'success',
                 payload: docs,

@@ -1,6 +1,6 @@
-const { Router } =  require('express')
+const { Router, query } =  require('express')
 const ProductManager = require ('../DAO/db/products.Manager.Mongo')
-const {validate} = require ('../utils/validateProductsQuery')
+
 
 
 const router = Router();
@@ -9,31 +9,18 @@ const products = new ProductManager()
 //-----------------GET------------------------------------------
 router.get('/', async (req,res)=>{
     try{
-        let {limit} = req.query || 10
-        let {page} = req.query || 1
-        let {priceSort} = req.query || null
-        let {category} = req.query || null
-        let {availability} = req.query || null
-        let query = {}
-        if(category){
-            query = {...query, category}
-        }
-        if(availability){
-            query = {...query, availability}
-        }
+        const {limit = 10, page = 1, priceSort = null, category = null, availability = null} = req.query
 
+        filter = {}
+        if(category) {
+            filter.category = category
+        }
+        if(availability) {
+            filter.availability = availability
+        }
         let sort = priceSort ? { price: priceSort === 'asc' ? 1 : -1 } : null;
 
-        if (!validate(req.query)) {
-            return res.status(400).send({
-              status: 'error',
-              message: 'Parámeros inválidos',
-              details: validate.errors
-            });
-        }
-
-        
-        const productList = await products.getProducts(limit, page, sort, query)
+        const productList = await products.getProducts(limit, page, sort, filter)
         if(!productList) return res.status(404).send('No se encuentran productos en la base de datos')
         res.status(200).send (productList)  
 

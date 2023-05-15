@@ -12,20 +12,16 @@
                 <p>Código de producto: {{this.code}}</p>
                 <p>Stock: {{this.stock}}</p>
                 <form method="POST" action="/cart">
-                    <input type="hidden" name="productId" value="this.product._id>">
+                    <input type="hidden" name="productId" value="this._id>">
                     <button type="submit">Agregar al carrito</button>
                 </form>
             </div>
         {{/each}}
     </div>
-    {{#if dataproducts.hasPrev}}
+    {{#if dataProducts.hasPrevPage}}
         <button><a href={{dataProducts.prevLink}}>Anterior</a></button>
     {{/if}}
-    {{#if dataproducts.hasNext}}
+    {{#if dataProducts.hasNextPage}}
         <button><a href={{dataProducts.nextLink}}>Siguiente</a></button>
     {{/if}}
-
-
-
-
 </div>

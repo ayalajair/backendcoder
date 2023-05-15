@@ -153,7 +153,7 @@ class cartsManagerMongo {
                 success: true}
             return respuesta
         }
-         catch (error) {
+        catch (error) {
             return new Error(error)
         }
     }
@@ -162,7 +162,7 @@ class cartsManagerMongo {
 
     async updateCart (id, cart) {
         try {
-            const updateCart = await cartModel.findByIdAndUpdate(id, cart)
+            const updateCart = await cartModel.findByIdAndUpdate({_id:id}, cart)
             if(!updateCart){
                 const respuesta = {
                     status:'not found',
