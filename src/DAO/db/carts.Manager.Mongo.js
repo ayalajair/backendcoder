@@ -133,7 +133,29 @@ class cartsManagerMongo {
             return new Error(error)
         }
     }
+//-------------DELETE PRODUCT--------------
 
+    async deleteProduct (cartId, productId) {
+        try {
+            const cart = await cartModel.findOne({_id:cartId})
+            if(!cart){return new Error('No se ha encontrado un carrito con ese ID')}
+            const product = await productModel.findOne({_id:productId})
+            if(!product){return new Error('No se ha encontrado un producto con ese ID')}
+            const toDeleteProductIndex = cart.products.findIndex((p) => p.product.toString() === productId.toString())
+            if (toDeleteProductIndex === -1) {return new Error('No se ha encontrado ese producto en el carrito')}
+            cart.products.splice(toDeleteProductIndex,1)
+            await cart.save()
+            const respuesta = {
+                status: 'succes',
+                message: 'Producto eliminado del carrito',
+                payload: cart,
+                success: true}
+            return respuesta
+        }
+         catch (error) {
+            return new Error(error)
+        }
+    }
 }
 
 module.exports = {cartsManagerMongo}
