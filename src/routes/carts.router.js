@@ -60,6 +60,22 @@ router.put('/:cid', async (req,res)=>{
 
 })
 
+router.put('/:cid/product/:pid',async (req,res)=>{
+    try {
+        const {cid,pid} = req.params
+        const {quantity} = req.body
+        if(!quantity) return res.status(400).send({status:'Router',error:'No quantity'})
+        const cart = await carts.getCartById(cid)
+        if(!cart.succes) return res.status(404).send(cart)
+        const updatedCart = await carts.updateCartProduct(cid,pid,quantity)
+        if(!updatedCart.succes) return res.status(404).send(updatedCart)
+        res.status(200).send(updatedCart)
+    } catch (error) {
+        res.status(400).send({status:'Router',error})
+    }
+
+})
+
 //----------------DELETE-------------------------------
 
 router.delete('/:cid',async (req,res)=>{

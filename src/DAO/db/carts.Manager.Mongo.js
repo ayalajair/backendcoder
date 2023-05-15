@@ -18,7 +18,7 @@ class cartsManagerMongo {
 
     async getCarts () {
         try {
-            return await cartModel.find()
+            return await cartModel.find().populate('products.product')
         } catch (error) {
             return new Error(error)
         }
@@ -26,7 +26,8 @@ class cartsManagerMongo {
 //-------------GET CART BY ID--------------
     async getCartById (id) {
         try {
-            const cart = await cartModel.findById(id)
+            const cart = await cartModel.findById(id).populate('products.product')
+            
             if(!cart){
                 const respuesta = {
                     status:'not found',
@@ -47,10 +48,10 @@ class cartsManagerMongo {
             return new Error(error)
         }
     }
-
+//------------- ADD  PRODUCT TO CART--------------
     async addToCart (cartId, productId,quantity) {
         try {
-            const cart = await cartModel.findOne({_id:cartId})
+            const cart = await cartModel.findOne({_id:cartId}).populate('products.product')
             
             if(!cart){ 
                 const respuesta = {
@@ -71,7 +72,7 @@ class cartsManagerMongo {
                 return respuesta
             }
 
-            const toAddProductIndex = cart.products.findIndex((p) => p.product.toString() === productId.toString())
+            const toAddProductIndex = cart.products.findIndex((p) => p.product._id.toString() === productId.toString())
             
             
             
@@ -105,7 +106,7 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
-            return new Error(error)
+            throw new Error(error)
         }
     }
 //-------------DELETE CART--------------
