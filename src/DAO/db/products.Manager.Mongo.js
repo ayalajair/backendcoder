@@ -7,9 +7,34 @@ class ProductManagerMongo {
     }
 
 //-------------GET PRODUCTS----------------
-    async getProducts(limit = null) {
+    async getProducts(limit, page, sort, query) {
         try {
-            return await productModel.find().limit(limit)
+            const products = await productModel.paginate(query, {limit, page, sort, lean:true})
+            if(products.docs.length === 0) {
+                return {
+                    status: 'error',
+                    message: 'No se encontraron productos',
+                    success: false
+                }
+            }
+            const {docs, totalPages, prevPage, nextPage, hasPrevPage, hasNextPage, totalDocs} = products
+            const prevLink = hasPrevPage ? `http://localhost:8080/api/products?limit=${limit}&page=${prevPage}` : null
+            const nextLink = hasNextPage ? `http://localhost:8080/api/products?limit=${limit}&page=${nextPage}` : null
+            const respuesta = {
+                status: 'success',
+                payload: docs,
+                totalPages,
+                prevPage,
+                nextPage,
+                hasPrevPage,
+                hasNextPage,
+                prevLink,
+                nextLink,
+                totalDocs,
+                success: true
+            }
+            return respuesta
+
         } catch (error) {
             return new Error(error)
         }

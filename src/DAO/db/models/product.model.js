@@ -1,5 +1,6 @@
 /// Esquema
 const {Schema, model} = require ('mongoose')
+const moongosePaginate = require('mongoose-paginate-v2')
 
 const collection = 'products'
 
@@ -11,7 +12,10 @@ const  productSchema = new Schema({
     thumbnail: {type: [String]},
     stock: {type: Number, required: true},
     code: {type: String, required: true, unique: true},
+    status: {type: Boolean, default: true}
 })
+
+productSchema.plugin(moongosePaginate)
 
 const productModel = model(collection, productSchema)
 

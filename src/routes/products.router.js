@@ -8,10 +8,32 @@ const products = new ProductManager()
 //-----------------GET------------------------------------------
 router.get('/', async (req,res)=>{
     try{
-        const limit = req.query.limit
-        const productList = await products.getProducts(limit)
-        res.status(200).send ({status:'success', payload:productList})        
-    }catch(error){
+        const {limit} = req.query || 10
+        const {page} = req.query || 1
+        const {priceSort} = req.query || null
+        const {category} = req.query || null
+        const {availability} = req.query || null
+        const query = {}
+        if(category){
+            query = {...query, category}
+        }
+        if(availability){
+            query = {...query, availability}
+        }
+        const sort = null
+        if(priceSort==='asc'){
+            sort = {price:1}
+        }    
+        if(priceSort==='desc'){
+            sort = {price:-1}
+        }
+
+        
+        const productList = await products.getProducts(limit, page, sort, query)
+        if(!productList) return res.status(404).send('No se encuentran productos en la base de datos')
+        res.status(200).send (productList)  
+
+    } catch(error){
         res.status(400).send({status:'Router error', error})
     }
 })
