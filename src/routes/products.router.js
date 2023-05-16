@@ -23,14 +23,22 @@ router.get('/',[
         }
         const {limit = 10, page = 1, priceSort = null, category = null, availability = null} = req.query
 
-        filter = {}
+        const filter = {}
         if(category) {
             filter.category = category
         }
         if(availability) {
-            filter.availability = availability
+            filter.status = availability
         }
-        let sort = priceSort ? { price: priceSort === 'asc' ? 1 : -1 } : null;
+        
+        let sort = null
+
+        if(priceSort==='asc'){
+            sort = {price: 1}
+        }
+        if(priceSort==='desc'){
+            sort = {price: -1}
+        }
 
         const productList = await products.getProducts(limit, page, sort, filter)
         if(!productList) return res.status(404).send('No se encuentran productos en la base de datos')

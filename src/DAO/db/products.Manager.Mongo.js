@@ -20,7 +20,7 @@ class ProductManagerMongo {
                 }
             }
             const {docs, totalPages, prevPage, nextPage, hasPrevPage, hasNextPage, totalDocs} = products
-
+            console.log(query)
             const prevLink = hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${prevPage}` : null
             const nextLink = hasNextPage ? `http://localhost:8080/products?limit=${limit}&page=${nextPage}` : null
             const respuesta = {
