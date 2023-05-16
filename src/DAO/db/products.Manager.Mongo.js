@@ -9,9 +9,9 @@ class ProductManagerMongo {
 //-------------GET PRODUCTS----------------
     async getProducts(limit, page, sort, query) {
         try {
-            console.log(query)
             
             const products = await productModel.paginate(query, {limit, page, sort, lean:true})
+            //Validamos que el producto exista
             if(products.docs.length === 0) {
                 return {
                     status: 'error',
@@ -24,10 +24,6 @@ class ProductManagerMongo {
             let sortQuery = !sort ? "" : `&sort=${sort}`;
             let categoryQuery = !query.category ? "" : `&category=${query.category}`;
             let availableQuery = !query.available ? "" : `&available=${query.available}`;
-            
-            
-            if(!)
-
 
             const prevLink = hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${prevPage}${sortQuery}${categoryQuery}${availableQuery}` : null
             const nextLink = hasNextPage ? `http://localhost:8080/products?limit=${limit}&page=${nextPage}${sortQuery}${categoryQuery}${availableQuery}` : null
