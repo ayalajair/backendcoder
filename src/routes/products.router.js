@@ -1,5 +1,7 @@
-const { Router, query } =  require('express')
+const { Router} =  require('express')
 const ProductManager = require ('../DAO/db/products.Manager.Mongo')
+const { query, validationResult } = require('express-validator');
+
 
 
 
@@ -7,8 +9,18 @@ const router = Router();
 const products = new ProductManager()
 
 //-----------------GET------------------------------------------
-router.get('/', async (req,res)=>{
+router.get('/',[
+    query('limit').optional().isInt().toInt(),
+    query('page').optional().isInt().toInt(),
+    query('priceSort').optional().isIn(['asc', 'desc']),
+    query('category').optional(),
+    query('availability').optional()
+    ],async (req,res)=>{
     try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         const {limit = 10, page = 1, priceSort = null, category = null, availability = null} = req.query
 
         filter = {}
