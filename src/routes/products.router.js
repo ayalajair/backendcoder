@@ -10,8 +10,8 @@ const products = new ProductManager()
 
 //-----------------GET------------------------------------------
 router.get('/',[
-    query('limit').optional().isInt().toInt(),
-    query('page').optional().isInt().toInt(),
+    query('limit').optional().isInt().toInt().isInt({ min: 1 }).isInt({ max: 100 }),
+    query('page').optional().isInt().toInt().isInt({ min: 1 }).isInt({ max: 100 }),
     query('priceSort').optional().isIn(['asc', 'desc']),
     query('category').optional(),
     query('availability').optional()
@@ -19,7 +19,7 @@ router.get('/',[
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).send({message: 'Error en los parametros de entrada', errors});
         }
         const {limit = 10, page = 1, priceSort = null, category = null, availability = null} = req.query
 
