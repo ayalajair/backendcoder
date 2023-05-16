@@ -11,10 +11,7 @@
                 <p>Imagen: {{this.thumbnail}}</p>
                 <p>Código de producto: {{this.code}}</p>
                 <p>Stock: {{this.stock}}</p>
-                <form method="POST" action="/cart">
-                    <input type="hidden" name="productId" value="this._id>">
-                    <button type="submit">Agregar al carrito</button>
-                </form>
+                    <button>Agregar al carrito</button>
             </div>
         {{/each}}
     </div>

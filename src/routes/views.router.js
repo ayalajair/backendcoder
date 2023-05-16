@@ -1,10 +1,12 @@
 const {Router} = require('express')
 const ProductManagerMongo = require('../DAO/db/products.Manager.Mongo')
+const {cartsManagerMongo} = require ('../DAO/db/carts.Manager.Mongo')
 
 
 
 const router = Router();
 const products = new ProductManagerMongo ()
+const carts = new cartsManagerMongo ()
 
 //GET
 //Vista Products
@@ -23,12 +25,23 @@ router.get('/products', async (req,res)=>{
         let productList = await products.getProducts(limit, page, query, sort)
         let data = {
             dataProducts: productList,
-
             style: 'home.css'
         }
         console.log(data)
         res.render('products',data)
     })
+
+//Vista Cart
+router.get('/carts/:cid', async (req,res)=>{
+    let {cid} = req.params
+    let cart = await carts.getCartById(cid)
+    let data = {
+        dataCart: cart
+    }
+    res.render('cart',data)
+})
+
+
 //Vista Home
 router.get('/', async (req,res)=>{
     let limit = req.query.limit

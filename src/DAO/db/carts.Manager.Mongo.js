@@ -18,7 +18,7 @@ class cartsManagerMongo {
 
     async getCarts () {
         try {
-            return await cartModel.find().populate('products.product')
+            return await cartModel.find().populate('products.product').lean()
         } catch (error) {
             return new Error(error)
         }
@@ -26,7 +26,7 @@ class cartsManagerMongo {
 //-------------GET CART BY ID--------------
     async getCartById (id) {
         try {
-            const cart = await cartModel.findById(id).populate('products.product')
+            const cart = await cartModel.findById(id).populate('products.product').lean()
             
             if(!cart){
                 const respuesta = {

@@ -24,6 +24,7 @@ const httpServer = app.listen (PORT, ()=>{
 })
 
 //Setear motor de plantillas Handlebars
+
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set ('view engine', 'handlebars')
