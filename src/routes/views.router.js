@@ -40,7 +40,7 @@ router.get('/products',[
             sort = {price: -1}
         }
 
-        let productList = await products.getProducts(limit, page, filter, sort)
+        let productList = await products.getProducts(limit, page, sort, filter)
         let data = {
             dataProducts: productList,
             style: 'home.css'
