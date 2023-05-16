@@ -20,8 +20,17 @@ class ProductManagerMongo {
                 }
             }
             const {docs, totalPages, prevPage, nextPage, hasPrevPage, hasNextPage, totalDocs} = products
-            const prevLink = hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${prevPage}` : null
-            const nextLink = hasNextPage ? `http://localhost:8080/products?limit=${limit}&page=${nextPage}` : null
+
+            let sortQuery = !sort ? "" : `&sort=${sort}`;
+            let categoryQuery = !query.category ? "" : `&category=${query.category}`;
+            let availableQuery = !query.available ? "" : `&available=${query.available}`;
+            
+            
+            if(!)
+
+
+            const prevLink = hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${prevPage}${sortQuery}${categoryQuery}${availableQuery}` : null
+            const nextLink = hasNextPage ? `http://localhost:8080/products?limit=${limit}&page=${nextPage}${sortQuery}${categoryQuery}${availableQuery}` : null
             const respuesta = {
                 status: 'success',
                 payload: docs,
