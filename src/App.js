@@ -6,6 +6,7 @@ const {Server} = require ('socket.io')
 const logger = require('morgan')
 const {connectDB} = require('./config/configServer')
 const {create} = require('connect-mongo') 
+const session = require('express-session')
 
 const productsRouter = require ('./routes/products.router')
 const viewsRouter = require ('./routes/views.router')
@@ -37,16 +38,18 @@ app.use(express.urlencoded({extended: true}))
 
 //Setear static
 app.use('/static', express.static(__dirname + '/public'))
-app.use(cookieParser('P@l@braS3cr3t0'))
+app.use(cookieParser('secretWord'))
 
 //Setear session
 app.use(session({
     store: create ({
-        mongoUrl: 'mongodb://localhost:27017/ecommerce',
-        mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true},
+        mongoUrl: 'mongodb+srv://jairayala:coder123456@cluster0.aa9hemg.mongodb.net/ecommerce?retryWrites=true&w=majority',
+        collectionName: 'sessions',
+        mongoOptions: {useNewUrlParser: true,
+            useUnifiedTopology: true},
         ttl: 1000000*6000
     }),
-    secret: 'SecretWord',
+    secret: 'secretWord',
     resave: false,
     saveUninitialized: false,
 }))

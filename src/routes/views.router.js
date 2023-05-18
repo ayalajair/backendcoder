@@ -75,7 +75,9 @@ router.get('/chat', (req,res)=>{
 
 //Vista login
 router.get('/', async (req,res)=>{
-    res.render('login',data)
+    res.render('login',{
+        style: 'home.css'
+    })
 })
 
 module.exports = router;
