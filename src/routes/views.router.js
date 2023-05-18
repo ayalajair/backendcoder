@@ -59,18 +59,6 @@ router.get('/carts/:cid', async (req,res)=>{
     res.render('cart',data)
 })
 
-
-//Vista Home
-router.get('/', async (req,res)=>{
-    let limit = req.query.limit
-    let productList = await products.getProducts(limit)
-    let data = {
-        dataProducts: productList,
-        style: 'home.css'
-    }
-    res.render('home',data)
-})
-
 //Vista realTimeProducts
 router.get('/realtimeproducts', async (req,res)=>{
     let limit = req.query.limit
@@ -83,5 +71,11 @@ router.get('/chat', (req,res)=>{
     
     res.render('chat',{})
     })
+    
+
+//Vista login
+router.get('/', async (req,res)=>{
+    res.render('login',data)
+})
 
 module.exports = router;
