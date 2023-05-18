@@ -182,6 +182,33 @@ class cartsManagerMongo {
         }
     
     }
+
+    //-----------UPDATE CART PRODUCT-------------
+    async updateCartProduct (cartId, productId, quantity) {
+        try {
+            //Validamos que el carrito exista
+            const cart = await cartModel.findOne({_id:cartId})
+            if(!cart) {return new Error('No se ha encontrado un carrito con ese ID')}
+            //Validamos que el producto exista
+            const product = await productModel.findOne({_id:productId})
+            if(!product){return new Error('No se ha encontrado un producto con ese ID')}
+            //Validamos que el producto este en el carrito
+            const toUpdateProductIndex = cart.products.findIndex((p) => p.product.toString() === productId.toString())
+            if (toUpdateProductIndex === -1) {return new Error('No se ha encontrado ese producto en el carrito')}
+            cart.products[toUpdateProductIndex].quantity = quantity
+            await cart.save()
+            const respuesta = {
+                status: 'succes',
+                message: 'Producto actualizado',
+                payload: cart,
+                success: true
+            }
+            return respuesta    
+
+        } catch (error) {
+            return new Error(error)
+        }
+    }
 }
 
 module.exports = {cartsManagerMongo}

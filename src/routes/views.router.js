@@ -80,4 +80,12 @@ router.get('/', async (req,res)=>{
     })
 })
 
+//Vista register
+router.get('/register', async (req,res)=>{
+    res.render('register',{
+        style: 'home.css'
+    })
+}
+
+
 module.exports = router;
