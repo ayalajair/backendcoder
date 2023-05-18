@@ -39,8 +39,8 @@ class ProductManagerMongo {
                 prevLink += `&category=${query.category}`
                 nextLink += `&category=${query.category}`
             } if(query.status){
-                prevLink += `&available=${query.available}`
-                nextLink += `&available=${query.available}`
+                prevLink += `&available=${query.status}`
+                nextLink += `&available=${query.status}`
             }
             //Creamos el objeto de respuesta
             const respuesta = {
