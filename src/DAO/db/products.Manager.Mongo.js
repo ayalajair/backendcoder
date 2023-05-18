@@ -21,8 +21,28 @@ class ProductManagerMongo {
             }
             const {docs, totalPages, prevPage, nextPage, hasPrevPage, hasNextPage, totalDocs} = products
             console.log(query)
+
+            //Creamos las urls para la paginación
             const prevLink = hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${prevPage}` : null
             const nextLink = hasNextPage ? `http://localhost:8080/products?limit=${limit}&page=${nextPage}` : null
+            
+            if(sort===1){
+                prevLink += `&priceSort=asc`
+                nextLink += `&priceSort=asc`
+            }
+            if(sort===-1){
+                prevLink += `&priceSort=desc`
+                nextLink += `&priceSort=desc`
+            }
+
+            if(query.category){
+                prevLink += `&category=${query.category}`
+                nextLink += `&category=${query.category}`
+            } if(query.status){
+                prevLink += `&available=${query.available}`
+                nextLink += `&available=${query.available}`
+            }
+            //Creamos el objeto de respuesta
             const respuesta = {
                 status: 'success',
                 payload: docs,
