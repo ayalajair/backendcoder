@@ -85,7 +85,7 @@ router.get('/register', async (req,res)=>{
     res.render('register',{
         style: 'home.css'
     })
-}
+})
 
 
 module.exports = router;
