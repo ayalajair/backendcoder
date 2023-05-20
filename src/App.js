@@ -12,6 +12,7 @@ const productsRouter = require ('./routes/products.router')
 const viewsRouter = require ('./routes/views.router')
 const cartsRouter = require ('./routes/carts.router')
 const uploadsRouter = require ('./routes/uploads.router')
+const sessionsRouter = require ('./routes/sessions.router')
 const { socketProducts } = require('./utils/socketProducts')
 const { socketChat } = require('./utils/socketChat')
 
@@ -71,6 +72,11 @@ app.use('/api/carts', cartsRouter)
 
 // http://localhost:8080/uploads
 app.use('/uploads', uploadsRouter)
+
+// http://localhost:8080/api/sessions
+app.use('/api/sessions', sessionsRouter)
+
+//Middlewares
 
 app.use(logger('dev'))
 

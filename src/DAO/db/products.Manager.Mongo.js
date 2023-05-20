@@ -4,6 +4,7 @@ const {productModel} = require('./models/product.model')
 class ProductManagerMongo {
     constructor() {
         this.events = new EventEmitter
+        this.events.setMaxListeners(50)
     }
 
 //-------------GET PRODUCTS----------------
