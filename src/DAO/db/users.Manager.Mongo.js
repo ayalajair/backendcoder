@@ -10,30 +10,18 @@ class UsersManagerMongo {
                 const respuesta = {
                     status: 'error',
                     message: 'Faltan datos',
-                    success: 'false'
+                    success: false
                 }
                 return respuesta
             } 
-
-            //Chequeamos que la fecha de nacimiento sea valida
-            const date = new Date(user.date_of_birth)
-            if (isNaN(date.getTime())||date.getFullYear() > new Date().getFullYear() || date.getFullYear() < 1900) {
-                const respuesta = {
-                    status: 'error',
-                    message: 'La fecha de nacimiento es invalida',
-                    success: 'false'
-                }
-                return respuesta
             
-            }
-
             //Validamos que el usuario no exista
             const userExist = await userModel.findOne({email: user.email})
             if (userExist) {
                 const respuesta = {
                     status: 'error',
                     message: 'El usuario ya existe',
-                    success: 'false'
+                    success: false
                 }
                 return respuesta
             }
@@ -44,24 +32,25 @@ class UsersManagerMongo {
             } else {
                 user.role = 'user'
             }
-
+            
             //Validamos que la contraseña sea correcta para el admin
             if (user.email === 'adminCoder@coder.com' && user.password !== 'adminCod3r123') {
                 const respuesta = {
                     status: 'error',
                     message: 'La contraseña es incorrecta',
-                    success: 'false'
+                    success: false
                 }
                 return respuesta
             }
             //Creamos el usuario
+            console.log(user)
             const newUser = await userModel.create(user)
 
             const respuesta = {
                 status: 'success',
                 message: 'Usuario creado correctamente',
                 payload: newUser,
-                success: 'true'
+                success: true
             }
 
             return respuesta
