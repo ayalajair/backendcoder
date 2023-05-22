@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const {Server} = require ('socket.io')
 const logger = require('morgan')
 const {connectDB} = require('./config/configServer')
-const {create} = require('connect-mongo') 
+const MongoStore = require('connect-mongo') 
 const session = require('express-session')
 
 const productsRouter = require ('./routes/products.router')
@@ -43,7 +43,7 @@ app.use(cookieParser('secretWord'))
 
 //Setear session
 app.use(session({
-    store: create ({
+    store: MongoStore.create ({
         mongoUrl: 'mongodb+srv://jairayala:coder123456@cluster0.aa9hemg.mongodb.net/ecommerce?retryWrites=true&w=majority',
         collectionName: 'sessions',
         mongoOptions: {useNewUrlParser: true,
