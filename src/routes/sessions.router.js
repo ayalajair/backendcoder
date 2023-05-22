@@ -5,6 +5,15 @@ const router = Router();
 
 const users = new UsersManagerMongo();
 
+//----------GET------------
+router.get('/logout', (req, res) => {
+    // Limpiar la sesión
+    req.session.destroy();
+
+    // Redirigir al usuario a la página de inicio de sesión u otra página
+    return res.redirect('/');
+});
+
 //---------POST------------
 router.post('/register', async (req, res)=>{
     try {
@@ -14,7 +23,7 @@ router.post('/register', async (req, res)=>{
         if(!result.success){
             return res.status(400).send(result)
         }     
-        return res.redirect('/login')
+        return res.redirect('/')
         
     }catch (error) {
         return res.status(400).send(error)
@@ -34,16 +43,15 @@ router.post('/login', async (req, res)=>{
             }
             req.session.user = user
             return res.redirect('/products')
-            // return res.status(200).send({payload:  user, message: 'Bienvenido admin'})
         }
 
         const user = await users.authenticateUser(email, password);
+        
+        
         if(!user){
-            return res.status(400).send({message: 'Credenciales incorrectas'})
-        }
-
+            return res.redirect('/failedlogin')
+        } else {user.role = 'user'}
         req.session.user = user;
-        // res.status(200).json({ message: 'Inicio de sesión exitoso' })
         res.redirect('/products')
 
     } catch (error) {

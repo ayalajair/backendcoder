@@ -68,29 +68,19 @@ class UsersManagerMongo {
             return user
 
         }
-         catch (error) {
-           throw new Error(error) 
+        catch (error) {
+            throw new Error(error) 
         }
     } 
 
     async authenticateUser (email, password) {
         const user =  await this.findUserByEmail(email)
         if(!user){
-            repuesta = {
-                status: 'error',
-                message: 'El usuario no existe',
-                success: false
-            }
-            return respuesta
+            return res.status(401).send({ message: 'Credenciales inválidas' });
         }
          // Verificar la contraseña
         if (user.password !== password) {
-            respuesta = {
-                status: 'error',
-                message: 'La contraseña es incorrecta',
-                success: false
-            }
-            return respuesta
+            return res.status(401).send({ message: 'Credenciales inválidas' });
         }
         return user
         

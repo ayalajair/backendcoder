@@ -17,6 +17,12 @@ router.get('/products',[
     query('category').optional(),
     query('availability').optional()
     ] ,async (req,res)=>{
+        // Verificar si el usuario ha iniciado sesión
+        const user = req.session.user
+        if (!req.session.user) {
+        // Redirigir al usuario a la página de inicio de sesión si no está autenticado
+            return res.redirect('/login');
+        }
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).send({message: 'Error en los parametros de entrada', errors});
@@ -43,6 +49,7 @@ router.get('/products',[
         let productList = await products.getProducts(limit, page, sort, filter)
         let data = {
             dataProducts: productList,
+            dataUser: user,
             style: 'home.css'
         }
         console.log(data)
@@ -86,6 +93,7 @@ router.get('/register', async (req,res)=>{
         style: 'home.css'
     })
 })
+
 
 
 module.exports = router;
