@@ -83,6 +83,16 @@ class UsersManagerMongo {
             }
             return respuesta
         }
+         // Verificar la contraseña
+        if (user.password !== password) {
+            respuesta = {
+                status: 'error',
+                message: 'La contraseña es incorrecta',
+                success: false
+            }
+            return respuesta
+        }
+        return user
         
     }
 }
