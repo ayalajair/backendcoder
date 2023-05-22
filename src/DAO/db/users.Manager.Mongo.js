@@ -42,9 +42,18 @@ class UsersManagerMongo {
                 }
                 return respuesta
             }
+            // const nuevoUsuario = {
+            //     first_name: "lucas",
+            //     last_name: "garcia",
+            //     email: "lugar@gmail.com",
+            //     date_of_birth: "1990-10-01",
+            //     password: "123456",
+            //     role: "user"
+            // }
             //Creamos el usuario
-            console.log(user)
-            const newUser = await userModel.create(user)
+            const newUser = new userModel(user)
+            console.log(newUser)
+            await newUser.save()
 
             const respuesta = {
                 status: 'success',
