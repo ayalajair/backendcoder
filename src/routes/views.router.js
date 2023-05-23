@@ -21,7 +21,7 @@ router.get('/products',[
         const user = req.session.user
         if (!req.session.user) {
         // Redirigir al usuario a la página de inicio de sesión si no está autenticado
-            return res.redirect('/login');
+            return res.redirect('/');
         }
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
