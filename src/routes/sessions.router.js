@@ -49,7 +49,7 @@ router.post('/login', async (req, res)=>{
         
         
         if(!user){
-            return res.redirect('/failedlogin')
+            return res.status(401).send('Usuario o contraseña incorrectos')
         } else {user.role = 'user'}
         req.session.user = user;
         res.redirect('/products')
