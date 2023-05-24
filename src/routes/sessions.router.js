@@ -1,5 +1,6 @@
 const {Router} = require('express');
-const {UsersManagerMongo} = require('../DAO/db/users.Manager.Mongo')
+const {UsersManagerMongo} = require('../DAO/db/users.Manager.Mongo');
+const { createHash } = require('../utils/bcryptHash');
 
 const router = Router();
 
@@ -17,7 +18,14 @@ router.get('/logout', (req, res) => {
 //---------POST------------
 router.post('/register', async (req, res)=>{
     try {
-        const newUser = req.body
+        const {first_name, last_name, email, password} = req.body
+
+        const newUser = {
+            first_name,
+            last_name,
+            email,
+            password: createHash(password)
+        }
         const result = await users.addUser(newUser); 
         
         if(!result.success){

@@ -1,3 +1,4 @@
+const { isValidPassword } = require('../../utils/bcryptHash')
 const {userModel} = require('./models/user.model')
 
 class UsersManagerMongo {
@@ -79,7 +80,7 @@ class UsersManagerMongo {
             return res.status(401).send({ message: 'Credenciales inválidas' });
         }
          // Verificar la contraseña
-        if (user.password !== password) {
+        if (!isValidPassword(password, user)) {
             return res.status(401).send({ message: 'Credenciales inválidas' });
         }
         return user
