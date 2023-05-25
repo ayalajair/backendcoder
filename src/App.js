@@ -7,6 +7,7 @@ const logger = require('morgan')
 const {connectDB} = require('./config/configServer')
 const MongoStore = require('connect-mongo') 
 const session = require('express-session')
+const passport = require('passport')
 
 const productsRouter = require ('./routes/products.router')
 const viewsRouter = require ('./routes/views.router')
@@ -15,6 +16,7 @@ const uploadsRouter = require ('./routes/uploads.router')
 const sessionsRouter = require ('./routes/sessions.router')
 const { socketProducts } = require('./utils/socketProducts')
 const { socketChat } = require('./utils/socketChat')
+const { initPassport } = require('./config/configPassport')
 
 
 //Inicializaciones
@@ -41,6 +43,7 @@ app.use(express.urlencoded({extended: true}))
 app.use('/static', express.static(__dirname + '/public'))
 app.use(cookieParser('secretWord'))
 
+
 //Setear session
 app.use(session({
     store: MongoStore.create ({
@@ -48,12 +51,17 @@ app.use(session({
         collectionName: 'sessions',
         mongoOptions: {useNewUrlParser: true,
             useUnifiedTopology: true},
-        ttl: 1000000*6000
-    }),
-    secret: 'secretWord',
-    resave: false,
-    saveUninitialized: false,
-}))
+            ttl: 1000000*6000
+        }),
+        secret: 'secretWord',
+        resave: false,
+        saveUninitialized: false,
+    }))
+    
+//Setear passport
+initPassport()
+passport.use(passport.initialize())
+passport.use(passport.session())
 
 //Setear socket.io
 const io = new Server (httpServer)

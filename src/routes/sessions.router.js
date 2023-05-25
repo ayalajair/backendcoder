@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const {UsersManagerMongo} = require('../DAO/db/users.Manager.Mongo');
 const { createHash } = require('../utils/bcryptHash');
+const passport = require('passport');
 
 const router = Router();
 
@@ -15,27 +16,36 @@ router.get('/logout', (req, res) => {
     return res.redirect('/');
 });
 
-//---------POST------------
-router.post('/register', async (req, res)=>{
-    try {
-        const {first_name, last_name, email, password} = req.body
 
-        const newUser = {
-            first_name,
-            last_name,
-            email,
-            password: createHash(password)
-        }
-        const result = await users.addUser(newUser); 
+router.get('/failRegister', (req, res) => {
+    console.log('Registro fallido')
+    res.send({status: 'error', error: 'Registro fallido'})
+})
+//---------POST------------
+// router.post('/register', async (req, res)=>{
+//     try {
+//         const {first_name, last_name, email, password} = req.body
+
+//         const newUser = {
+//             first_name,
+//             last_name,
+//             email,
+//             password: createHash(password)
+//         }
+//         const result = await users.addUser(newUser); 
         
-        if(!result.success){
-            return res.status(400).send(result)
-        }     
-        return res.redirect('/')
+//         if(!result.success){
+//             return res.status(400).send(result)
+//         }     
+//         return res.redirect('/')
         
-    }catch (error) {
-        return res.status(400).send(error)
-    }
+//     }catch (error) {
+//         return res.status(400).send(error)
+//     }
+// })
+
+router.post('/register', passport.authenticate('register', {failureRedirect: '/failRegister',  successRedirect: '/products'}), async (req, res)=>{
+    res.send({status: 'success',  message: 'Registro exitoso'})
 })
 
 router.post('/login', async (req, res)=>{
