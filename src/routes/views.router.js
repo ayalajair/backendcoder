@@ -1,0 +1,87 @@
+const {Router} = require('express')
+const ProductManagerMongo = require('../DAO/db/products.Manager.Mongo')
+const {cartsManagerMongo} = require ('../DAO/db/carts.Manager.Mongo')
+const { query, validationResult } = require('express-validator');
+
+
+const router = Router();
+const products = new ProductManagerMongo ()
+const carts = new cartsManagerMongo ()
+
+//GET
+//Vista Products
+router.get('/products',[
+    query('limit').optional().isInt().toInt().isInt({ min: 1 }).isInt({ max: 100 }),
+    query('page').optional().isInt().toInt().isInt({ min: 1 }).isInt({ max: 100 }),
+    query('priceSort').optional().isIn(['asc', 'desc']),
+    query('category').optional(),
+    query('availability').optional()
+    ] ,async (req,res)=>{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send({message: 'Error en los parametros de entrada', errors});
+        }
+        const {limit = 10, page = 1, priceSort = null, category = null, availability = null} = req.query
+        
+        const filter = {}
+        if(category) {
+            filter.category = category
+        }
+        if(availability) {
+            filter.availability = availability
+        }
+
+        let sort = null
+
+        if(priceSort==='asc'){
+            sort = {price: 1}
+        }
+        if(priceSort==='desc'){
+            sort = {price: -1}
+        }
+
+        let productList = await products.getProducts(limit, page, sort, filter)
+        let data = {
+            dataProducts: productList,
+            style: 'home.css'
+        }
+        console.log(data)
+        res.render('products',data)
+    })
+
+//Vista Cart
+router.get('/carts/:cid', async (req,res)=>{
+    let {cid} = req.params
+    let cart = await carts.getCartById(cid)
+    let data = {
+        dataCart: cart
+    }
+    res.render('cart',data)
+})
+
+
+//Vista Home
+router.get('/', async (req,res)=>{
+    let limit = req.query.limit
+    let productList = await products.getProducts(limit)
+    let data = {
+        dataProducts: productList,
+        style: 'home.css'
+    }
+    res.render('home',data)
+})
+
+//Vista realTimeProducts
+router.get('/realtimeproducts', async (req,res)=>{
+    let limit = req.query.limit
+    let productList = await products.getProducts(limit)
+    res.render ('realTimeProducts',productList)
+})
+
+//Vista chat
+router.get('/chat', (req,res)=>{
+    
+    res.render('chat',{})
+    })
+
+module.exports = router;
