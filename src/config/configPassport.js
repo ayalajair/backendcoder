@@ -5,6 +5,8 @@ const {createHash, isValidPassword} = require('../utils/bcryptHash')
 
 const localStrategy = local.Strategy
 
+
+//Inicializamos passport
 const initPassport = () => {
     // Configuramos el registro de  passport
     passport.use('register', new localStrategy({
@@ -32,5 +34,36 @@ const initPassport = () => {
         }
     }))
 }
+
+//------Se configura las sesiones de passport-------//
+passport.serializeUser((user, done) => {
+    done(null, user._id)
+
+})
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await userModel.findById(id)
+        done(null, user)
+    } catch (error) {
+        done(error)
+    }
+
+})
+
+//
+
+passport.use('login', new localStrategy({
+    usernameField: 'email'
+}, async (username, password, done) => {
+    try {
+        const user = await userModel.findOne({email: username})
+        if (!user) return done(null, false, {message: 'Usuario no encontrado'})
+        if (!isValidPassword(password, user)) return done(null, false, {message: 'Contraseña incorrecta'})
+        return done(null, user)
+    } catch (error) {
+        return done(error)
+    }
+}))
 
 module.exports = {initPassport}
