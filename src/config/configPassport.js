@@ -50,8 +50,8 @@ const initPassportGithub = () => {
             let user = await userModel.findOne({email: profile._json.email})
             if (!user) {
                 let newUser = {
-                    first_name: profile.username,
-                    last_name: profile.username,
+                    first_name: profile._json.name,
+                    last_name: profile._json.name,
                     email: profile._json.email,
                     password:''
                 }
