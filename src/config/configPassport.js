@@ -48,12 +48,13 @@ const initPassportGithub = () => {
         
         try {
             let user = await userModel.findOne({email: profile._json.email})
+            console.log(profile)
             if (!user) {
                 let newUser = {
                     first_name: profile._json.name,
                     last_name: profile._json.name,
                     email: profile._json.email,
-                    password:''
+                    password:profile._json.node_id
                 }
                 console.log('newUser',newUser)
                 let result = await userModel.create(newUser)
@@ -61,7 +62,7 @@ const initPassportGithub = () => {
             }
             return done (null, user)
         } catch (error) {
-            return done('Error la obtener el usuario'+error)
+            return done('Error al obtener el usuario'+error)
         }
             }
         )
