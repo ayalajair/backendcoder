@@ -1,5 +1,6 @@
 const passport = require ('passport');
 const local = require ('passport-local')
+const GitHubStrategy = require('passport-github2')
 const {userModel} = require('../DAO/db/models/user.model')
 const {createHash, isValidPassword} = require('../utils/bcryptHash')
 
@@ -35,6 +36,38 @@ const initPassport = () => {
     }))
 }
 
+
+//Configuramos el login de passport y Github
+
+const initPassportGithub = () => {
+    passport.use('github', new GitHubStrategy({
+        clientID: 'Iv1.2d156ce38e0d6c72',//process.env.GITHUB_CLIENT_ID,
+        clientSecret:  '62104768d62339f20eea822068a7e88fbee4b81e',//process.env.GITHUB_CLIENT_SECRET,
+        callBackURL: 'http://localhost:8080/api/sessions/githubcallback'//process.env.GITHUB_CALLBACK_URL    
+    }, async (accessToken, refreshToken, profile, done) => {
+        
+        try {
+            let user = await userModel.findOne({email: profile._json.email})
+            if (!user) {
+                let newUser = {
+                    first_name: profile.username,
+                    last_name: profile.username,
+                    email: profile._json.email,
+                    password:''
+                }
+                console.log('newUser',newUser)
+                let result = await userModel.create(newUser)
+                return done(null, result)
+            }
+            return done (null, user)
+        } catch (error) {
+            return done('Error la obtener el usuario'+error)
+        }
+            }
+        )
+    )
+}
+
 //------Se configura las sesiones de passport-------//
 passport.serializeUser((user, done) => {
     done(null, user._id)
@@ -66,4 +99,7 @@ passport.use('login', new localStrategy({
     }
 }))
 
-module.exports = {initPassport}
+module.exports = {
+    initPassport,
+    initPassportGithub
+}

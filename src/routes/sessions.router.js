@@ -7,7 +7,7 @@ const router = Router();
 
 const users = new UsersManagerMongo();
 
-//----------GET------------
+//------Logout-------
 router.get('/logout', (req, res) => {
     // Limpiar la sesión
     req.session.destroy();
@@ -37,6 +37,7 @@ router.post('/login', passport.authenticate('login', {failureRedirect: '/failLog
         return res.status(401).send('Usuario o contraseña incorrectos')
     }
     req.session.user = req.user
+    console.log('Login exitoso')
     res.send({status: 'success',  message: 'Login exitoso'})
 })
 
@@ -44,6 +45,17 @@ router.post('/login', passport.authenticate('login', {failureRedirect: '/failLog
 router.get('/failLogin', (req, res) => {
     console.log('Login fallido')
     res.send({status: 'error', error: 'Login fallido'})
+})
+
+//------Login with GitHub-------
+router.get('/github', passport.authenticate('github', {scope:['user: email']}))
+
+
+router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/failLogin', successRedirect: '/products'}), async (req, res)=>{
+    req.session.user = req.user
+    console.log('Login exitoso')
+    res.send({status: 'success',  message: 'Login exitoso'})
+
 })
 
 module.exports = router

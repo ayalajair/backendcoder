@@ -16,7 +16,7 @@ const uploadsRouter = require ('./routes/uploads.router')
 const sessionsRouter = require ('./routes/sessions.router')
 const { socketProducts } = require('./utils/socketProducts')
 const { socketChat } = require('./utils/socketChat')
-const { initPassport } = require('./config/configPassport')
+const { initPassport, initPassportGithub } = require('./config/configPassport')
 
 
 //Inicializaciones
@@ -60,6 +60,7 @@ app.use(session({
     
 //Setear passport
 initPassport()
+initPassportGithub()
 passport.use(passport.initialize())
 passport.use(passport.session())
 

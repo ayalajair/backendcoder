@@ -24,7 +24,7 @@ router.get('/products',[
     query('availability').optional()
     ] ,async (req,res)=>{
         // Verificar si el usuario ha iniciado sesión
-        let user = req.session.passport.user
+        let user = req.session.passport
         if (!user) {
         // Redirigir al usuario a la página de inicio de sesión si no está autenticado
             return res.redirect('/');
@@ -53,14 +53,15 @@ router.get('/products',[
         }
 
         let productList = await products.getProducts(limit, page, sort, filter)
-        user = await userModel.findById(req.session.passport.user)
-        console.log(user)
+        
+        user = await userModel.findById(req.session.passport.user).lean()
+
         let data = {
             dataProducts: productList,
             dataUser: user,
             style: 'home.css'
         }
-        console.log(data)
+
         res.render('products',data)
     })
 
