@@ -31,14 +31,13 @@ router.get('/failRegister', (req, res) => {
 
 //------Succesfull login-------
 
-router.post('/login', passport.authenticate('login', {failureRedirect: '/failLogin',  successRedirect: '/products'
-}), async (req, res)=>{
+router.post('/login', passport.authenticate('login', {failureRedirect: '/failLogin'}), async (req, res)=>{
     if(!req.user){
         return res.status(401).send('Usuario o contraseña incorrectos')
     }
     req.session.user = req.user
     console.log('Login exitoso')
-    res.send({status: 'success',  message: 'Login exitoso'})
+    res.redirect('/products')
 })
 
 //------Failed login-------
@@ -51,11 +50,11 @@ router.get('/failLogin', (req, res) => {
 router.get('/github', passport.authenticate('github', {scope:['user: email']}))
 
 
-router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/failLogin', successRedirect: '/products'}), async (req, res)=>{
+router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/failLogin'}), async (req, res)=>{
     req.session.user = req.user
     console.log('Login exitoso')
-    res.send({status: 'success',  message: 'Login exitoso'})
-
+    res.redirect('/products')
 })
+
 
 module.exports = router
