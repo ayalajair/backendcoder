@@ -1,11 +1,12 @@
 const {Router} = require('express');
+const {login, register} = require ('../controllers/sessions.controller')
 const {UsersManagerMongo} = require('../DAO/db/users.Manager.Mongo');
-const { createHash } = require('../utils/bcryptHash');
 const passport = require('passport');
+const {generateToken} = require('../utils/generateTokenJWT')
 
 const router = Router();
 
-const users = new UsersManagerMongo();
+
 
 //------Logout-------
 router.get('/logout', (req, res) => {
@@ -17,10 +18,11 @@ router.get('/logout', (req, res) => {
 });
 
 //------Succesfull register-------
-router.post('/register', passport.authenticate('register', {failureRedirect: '/failRegister',  successRedirect: '/products'
-}), async (req, res)=>{
-    res.send({status: 'success',  message: 'Registro exitoso'})
-})
+router.post('/register', register)
+
+//------Succesfull login-------
+
+router.post('/login', login)
 
 //------Failed register-------
 
@@ -29,16 +31,6 @@ router.get('/failRegister', (req, res) => {
     res.send({status: 'error', error: 'Registro fallido'})
 })
 
-//------Succesfull login-------
-
-router.post('/login', passport.authenticate('login', {failureRedirect: '/failLogin'}), async (req, res)=>{
-    if(!req.user){
-        return res.status(401).send('Usuario o contraseña incorrectos')
-    }
-    req.session.user = req.user
-    console.log('Login exitoso')
-    res.redirect('/products')
-})
 
 //------Failed login-------
 router.get('/failLogin', (req, res) => {
@@ -51,9 +43,11 @@ router.get('/github', passport.authenticate('github', {scope:['user: email']}))
 
 
 router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/failLogin'}), async (req, res)=>{
-    req.session.user = req.user
+    console.log(req.user)
+    const token = generateToken(req.user)
     console.log('Login exitoso')
-    res.redirect('/products')
+    res.cookie('cookieToken',token,{"maxAge": 3600000, httpOnly: true}).send({status: 'success', token})
+    // res.redirect('/products')
 })
 
 

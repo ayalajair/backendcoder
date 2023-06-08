@@ -6,7 +6,7 @@ const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
 //Funcion para comparar el hash con la contraseña
 
-const isValidPassword = (password,  user) => bcrypt.compareSync(password, user.password);
+const isValidPassword = (password,  user) => bcrypt.compareSync(password, user);
 
 module.exports = {
     createHash,

@@ -7,8 +7,9 @@ class cartsManagerMongo {
 //-------------ADD CART-------------------
     async addCart () {
         try {
-            newCart = await cartModel.create({})
-            return newCart
+            let newCart = await cartModel.create({})
+            console.log(newCart)
+            return newCart._id
         } catch (error) {
             return new Error(error)
             
