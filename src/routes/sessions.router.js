@@ -20,10 +20,11 @@ router.post('/login', login)
 
 //------Current-----------------
 
-router.get('/current', passportAuth('jwt'), (req, res) => {
+router.get('/current',
+    passportAuth('jwt'),
+    authorization('user'),
+    (req, res) => {
     user = req.user
-    console.log(user)
-    
     res.send(user)
 })
 
