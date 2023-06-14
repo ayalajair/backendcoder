@@ -8,6 +8,7 @@ const {connectDB} = require('./config/configServer')
 const MongoStore = require('connect-mongo')
 const session = require('express-session')
 const passport = require('passport')
+require('dotenv').config()
 
 const productsRouter = require ('./routes/products.router')
 const viewsRouter = require ('./routes/views.router')
@@ -19,9 +20,10 @@ const { socketChat } = require('./utils/socketChat')
 const { initPassportGithub, initPassportJwt } = require('./config/configPassport')
 
 
+
 //Inicializaciones
 const app = express ()
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 
 connectDB()
 

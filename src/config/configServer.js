@@ -1,8 +1,10 @@
 const{connect} = require ('mongoose')
+require('dotenv').config()
+
 module.exports = {
-    privateKey: 'claveSecreta',
+    privateKey: process.env.JWT_SECRET_KEY,
     connectDB: ()=>{
-        connect('mongodb+srv://jairayala:coder123456@cluster0.aa9hemg.mongodb.net/ecommerce?retryWrites=true&w=majority')
+        connect(process.env.MONGO_URL)
         console.log('Database connected')
     }
 }

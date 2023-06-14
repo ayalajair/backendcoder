@@ -1,4 +1,5 @@
 const passport = require ('passport');
+require('dotenv').config()
 // const local = require ('passport-local')
 const GitHubStrategy = require('passport-github2')
 const {Strategy, ExtractJwt} = require('passport-jwt')
@@ -69,9 +70,9 @@ const initPassportJwt = () => {
 
 const initPassportGithub = () => {
     passport.use('github', new GitHubStrategy({
-        clientID: 'Iv1.2d156ce38e0d6c72',//process.env.GITHUB_CLIENT_ID,
-        clientSecret:  '62104768d62339f20eea822068a7e88fbee4b81e',//process.env.GITHUB_CLIENT_SECRET,
-        callBackURL: 'http://localhost:8080/api/sessions/githubcallback'//process.env.GITHUB_CALLBACK_URL    
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret:  process.env.GITHUB_CLIENT_SECRET,
+        callBackURL: process.env.GITHUB_CALLBACK_URL    
     }, async (accessToken, refreshToken, profile, done) => {
         
         try {
