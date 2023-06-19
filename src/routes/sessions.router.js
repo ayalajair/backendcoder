@@ -1,8 +1,6 @@
 const { Router } = require('express');
-const { login, register } = require ('../controllers/sessions.controller')
-const { UsersManagerMongo } = require('../DAO/db/users.Manager.Mongo');
+const { login, register, gitHubCallBack, logout, failLogin, failRegister } = require ('../controllers/sessions.controller')
 const passport = require('passport');
-const { generateToken } = require('../utils/generateTokenJWT')
 const { passportAuth } = require('../config/passport.JWT/passport.auth')
 const { authorization,
 } = require('../config/passport.JWT/passport.authorization')
@@ -31,35 +29,30 @@ router.get(
     '/current',
     passportAuth('jwt'),
     authorization('user'),
-    (req, res) => {
+    async (req, res) => {
     user = req.user
     res.send(user)
 })
 
 //------Logout-------
 
-router.post('/logout', (req, res) => {
-    // Eliminar la cookie que contiene el token
-    res.clearCookie('cookieToken').redirect('/')
-})
+router.post('/logout',
+    logout,
+)
 
 //------Failed register-------
 
 router.get(
     '/failRegister', 
-    (req, res) => {
-    console.log('Registro fallido')
-    res.send({status: 'error', error: 'Registro fallido'})
-})
+    failRegister,
+    )
 
 
 //------Failed login-------
 router.get(
     '/failLogin',
-    (req, res) => {
-    console.log('Login fallido')
-    res.send({ status: 'error', error: 'Login fallido' })
-})
+    failLogin,
+)
 
 //------Login with GitHub-------
 router.get(
@@ -71,18 +64,8 @@ router.get(
     '/githubcallback',
     passport.authenticate('github',{
         failureRedirect:'/failLogin'}), 
-    async (req, res)=>{
-        if (req.user) {
-            console.log('req.user', req.user)
-            const token = generateToken(req.user)
-            res.cookie('cookieToken', token, { 
-                maxAge: 3600000,
-                httpOnly: true,
-        })
-    }
-    console.log('Login exitoso')
-    res.redirect('/products')
-})
+    gitHubCallBack,
+)
 
 
 

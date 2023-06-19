@@ -69,7 +69,7 @@ const initPassportGithub = () => {
                         })
 
                     
-                    if (!isValidPassword(password, username)) 
+                    if (!isValidPassword(password, user.password)) 
                     return done(null, false, {
                         message: 'Contraseña incorrecta',
                     })
