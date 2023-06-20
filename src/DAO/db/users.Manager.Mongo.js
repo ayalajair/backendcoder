@@ -54,9 +54,6 @@ class UsersManagerMongo {
             }
 
             return respuesta
-    
-    
-           
         } catch (error) {
 
             throw new Error(error)

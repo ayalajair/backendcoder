@@ -10,7 +10,6 @@ class ProductManagerMongo {
 //-------------GET PRODUCTS----------------
     async getProducts(limit, page, sort, query) {
         try {
-            
             const products = await productModel.paginate(query, {limit, page, sort, lean:true})
             //Validamos que el producto exista
             if(products.docs.length === 0) {
