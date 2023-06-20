@@ -19,6 +19,7 @@ router.get('/',[
     query('availability').optional()
     ], getProducts)
 
+
 router.get('/:pid', getProductsById)
 
 //---------------------POST----------------------------------------------

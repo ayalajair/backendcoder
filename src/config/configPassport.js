@@ -7,7 +7,7 @@ const { userModel } = require('../DAO/db/models/user.model')
 const { createHash, isValidPassword } = require('../utils/bcryptHash')
 const { privateKey } = require('../config/configServer')
 const { cartsManagerMongo } = require('../DAO/db/carts.Manager.Mongo')
-
+const { usersService } = require('../service/index')
 const localStrategy = local.Strategy
 
 //Inicializamos passport-Jwt
@@ -61,13 +61,8 @@ const initPassportGithub = () => {
                                     role:'admin'}
                         return done(null, user)
                     }
-                    let user = await userModel
-                        .findOne({email: username})
-                        .lean()
-                    if (!user) return done(null, false,
-                        {message: 'Usuario no encontrado',
-                        })
-
+                    let user = await usersService.findUserByEmail (username)
+                    if(!user) return done(null, false, {message: 'Usuario no encontrado'})
                     
                     if (!isValidPassword(password, user.password)) 
                     return done(null, false, {
@@ -92,7 +87,7 @@ const initPassportGithub = () => {
         async (req, username, password, done) => {
             const { first_name, last_name, age } = req.body
             try {
-                const user = await userModel.findOne({email: username})
+                const user = await usersService.findUserByEmail (username)
 
                 //Si el usuario se informa que ya existe
                 if (user) {

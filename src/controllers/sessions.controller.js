@@ -37,8 +37,8 @@ class  SessionController {
                 httpOnly: true,
         })
     }
-    console.log('Login exitoso')
-    res.redirect('/products')
+        console.log('Login exitoso')
+        res.redirect('/products')
     }
 
     logout = async (req, res) => {

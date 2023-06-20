@@ -1,6 +1,6 @@
 const {cartsManagerMongo} = require('../DAO/db/carts.Manager.Mongo')
 const ProductsManagerMongo = require('../DAO/db/products.Manager.Mongo')	
-const {UsersManagerMongo} = require('../DAO/db/users.Manager.Mongo')
+const { UsersManagerMongo } = require('../DAO/db/users.Manager.Mongo')
 
 const cartsService = new cartsManagerMongo()
 

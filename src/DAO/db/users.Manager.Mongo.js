@@ -8,7 +8,7 @@ class UsersManagerMongo {
         try {
             
             //Validamos que el usuario tenga todas sus propiedades
-            if (!user.email || !user.password || !user.first_name || !user.last_name) {
+            if (!user.email || !user.password || !user.first_name || !user.last_name || !user.age) {
                 const respuesta = {
                     status: 'error',
                     message: 'Faltan datos',
@@ -62,7 +62,7 @@ class UsersManagerMongo {
 
     async findUserByEmail (email) {
         try {
-            const user = await userModel.findOne({email: email})
+            const user = await userModel.findOne({email: email}).lean()
             return user
 
         }
@@ -71,18 +71,7 @@ class UsersManagerMongo {
         }
     } 
 
-    async authenticateUser (email, password) {
-        const user =  await this.findUserByEmail(email)
-        if(!user){
-            return res.status(401).send({ message: 'Credenciales inválidas' });
-        }
-         // Verificar la contraseña
-        if (!isValidPassword(password, user)) {
-            return res.status(401).send({ message: 'Credenciales inválidas' });
-        }
-        return user
-        
-    }
+    
 }
 
 module.exports = {UsersManagerMongo}

@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const ProductManager = require('../DAO/db/products.Manager.Mongo')
+const { productsService } = require('../service/')
 
 
 class ProductController {
@@ -12,7 +12,7 @@ class ProductController {
             if (!errors.isEmpty()) {
                 return res.status(400).send({message: 'Error en los parametros de entrada', errors});
             }
-    
+            
             //Si no hay errores, se ejecuta la consulta
             const {limit = 10, page = 1, priceSort = null, category = null, availability = null} = req.query
             //Se crea un objeto con los filtros
@@ -25,7 +25,7 @@ class ProductController {
             }
             //Se crea un objeto con los ordenamientos
             let sort = null
-    
+            
             if(priceSort==='asc'){
                 sort = {price: 1}
             }
@@ -33,7 +33,7 @@ class ProductController {
                 sort = {price: -1}
             }
             //Se ejecuta la consulta
-            const productList = await products.getProducts(limit, page, sort, filter)
+            const productList = await productsService.getProducts(limit, page, sort, filter)
             //Si devuelve falso, hay algón problema con la consulta
             if(!productList) return res.status(404).send('No se encuentran productos en la base de datos')
             //Si devuelve verdadero, Se envía el producto encontrado como respuesta al cliente
@@ -47,7 +47,7 @@ class ProductController {
     getProductsById = async (req,res)=>{
         try{
             const {pid} = req.params
-            const productList = await products.getProductById(pid)
+            const productList = await productsService.getProductById(pid)
             //Si devuelve falso, hay algón problema con el Id
             if(!productList) return res.status(404).send('Error: no se encuentra ese Id')
             //Si devuelve verdadero, se ha encontrado el producto
@@ -62,7 +62,7 @@ class ProductController {
         try{
             const toAddProduct = req.body
             
-            const respuesta = await products.addProduct(toAddProduct)
+            const respuesta = await productsService.addProduct(toAddProduct)
             
             //Si devuelve falso, hay algún problema con el producto
             if(!respuesta.success) {return res.status(400).send(respuesta)}
@@ -80,7 +80,7 @@ class ProductController {
         const {pid} = req.params
         const toChangeProduct = req.body
     
-        const updatedProduct = await products.updateProduct(pid, toChangeProduct)
+        const updatedProduct = await productsService.updateProduct(pid, toChangeProduct)
     
         //Sí devuelve falso, hay algún problema con la actualización
         if(!updatedProduct.success) {
@@ -93,7 +93,7 @@ class ProductController {
 
     deleteProduct = async (req,res)=>{
         const {pid} = req.params
-        const deletedProduct = await products.deleteProduct(pid)
+        const deletedProduct = await productsService.deleteProduct(pid)
         //Sí devuelve falso, hay algún problema con el borrado
         if(!deletedProduct.success){
             return res.status(400).send(deletedProduct)
