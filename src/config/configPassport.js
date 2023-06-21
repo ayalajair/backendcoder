@@ -6,8 +6,7 @@ const { Strategy, ExtractJwt } = require('passport-jwt')
 const { userModel } = require('../DAO/db/models/user.model')
 const { createHash, isValidPassword } = require('../utils/bcryptHash')
 const { privateKey } = require('../config/configServer')
-const { cartsManagerMongo } = require('../DAO/db/carts.Manager.Mongo')
-const { usersService } = require('../service/index')
+const { usersService, cartsService } = require('../service/index')
 const localStrategy = local.Strategy
 
 //Inicializamos passport-Jwt
@@ -40,7 +39,7 @@ const initPassportJwt = () => {
 
 
 //Configuramos el login de passport y Github
-const carts = new cartsManagerMongo()
+
 
 const initPassportGithub = () => {
 
@@ -55,9 +54,9 @@ const initPassportGithub = () => {
                     if(username === process.env.ADMIN_EMAIL || password === process.env.ADMIN_PASS) {
                         let user = {first_name: 'Admin',
                                     last_name: 'Coder',
-                                    email: 'adminCoder@coder.com',
+                                    email: process.env.ADMIN_EMAIL,
                                     age: '99',
-                                    password: 'adminCod3r123',
+                                    password: process.env.ADMIN_PASS,
                                     role:'admin'}
                         return done(null, user)
                     }
@@ -101,10 +100,10 @@ const initPassportGithub = () => {
                     last_name,
                     email: username,
                     age: age,
-                    cart: await carts.addCart(),
+                    cart: await cartsService.addCart(),
                     password: await createHash(password),
                 }
-                const userCreated = await userModel.create(newUser)
+                const userCreated = await usersService.addUser(newUser)
                 return done(null, userCreated)
             
                 } catch (error) {
@@ -125,9 +124,8 @@ const initPassportGithub = () => {
             async (accessToken, refreshToken, profile, done) => {
         
         try {
-            let user = await userModel
-                .findOne({email: profile._json.email})
-                .lean()
+            let user = await usersService.findUserByEmail(profile._json.email)
+
             console.log(profile)
             if (!user) {
                 let newUser = {
@@ -136,10 +134,10 @@ const initPassportGithub = () => {
                     email: profile._json.email,
                     password:profile._json.node_id,
                     age:0,
-                    cart: await carts.addCart(),
+                    cart: await cartsService.addCart(),
                 }
                 console.log('newUser',newUser)
-                let result = await userModel.create(newUser)
+                let result = await usersService.addUser(newUser)
                 return done(null, result)
             }
             return done (null, user)

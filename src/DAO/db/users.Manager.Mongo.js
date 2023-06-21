@@ -17,16 +17,7 @@ class UsersManagerMongo {
                 return respuesta
             } 
             
-            //Validamos que el usuario no exista
-            const userExist = await userModel.findOne({email: user.email})
-            if (userExist) {
-                const respuesta = {
-                    status: 'error',
-                    message: 'El usuario ya existe',
-                    success: false
-                }
-                return respuesta
-            }
+            
             
             //Si email es igual adminCoder@coder.com y contraseña es igual a adminCod3r123
             //El usuario es administrador
@@ -46,14 +37,7 @@ class UsersManagerMongo {
             console.log(newUser)
             await newUser.save()
 
-            const respuesta = {
-                status: 'success',
-                message: 'Usuario creado correctamente',
-                payload: newUser,
-                success: true
-            }
-
-            return respuesta
+            return newUser
         } catch (error) {
 
             throw new Error(error)
