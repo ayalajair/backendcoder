@@ -1,6 +1,4 @@
 const { Router} =  require('express')
-const ProductManager = require ('../DAO/db/products.Manager.Mongo')
-
 const { query } = require('express-validator');
 const { getProducts, getProductsById, addProduct, updateProduct, deleteProduct } = require('../controllers/products.controller');
 
@@ -8,7 +6,7 @@ const { getProducts, getProductsById, addProduct, updateProduct, deleteProduct }
 
 
 const router = Router();
-const products = new ProductManager()
+
 
 //-----------------GET------------------------------------------
 router.get('/',[
