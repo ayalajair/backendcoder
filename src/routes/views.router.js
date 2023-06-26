@@ -1,6 +1,4 @@
 const { Router } = require('express')
-const ProductManagerMongo = require('../DAO/db/products.Manager.Mongo')
-const { cartsManagerMongo } = require('../DAO/db/carts.Manager.Mongo')
 const { query } = require('express-validator');
 const { passportAuth } = require('../config/passport.JWT/passport.auth');
 const { showProducts, showCart, showRealTime, showChat, showLogin, showRegister } = require('../controllers/views.controller');

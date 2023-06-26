@@ -43,7 +43,7 @@ class  SessionController {
 
     logout = async (req, res) => {
         // Eliminar la cookie que contiene el token
-        res.clearCookie('cookieToken').redirect('/')
+        res.clearCookie('cookieToken', { expires: new Date(0)} ).redirect('/')
     }
 
     failLogin = async (req, res) => {

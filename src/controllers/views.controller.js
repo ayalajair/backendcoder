@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator')
-const { productsService, cartsService } = require('../service')
+const { productsService, cartsService, usersService } = require('../service')
 
 class ViewsController {
     
@@ -43,7 +43,7 @@ class ViewsController {
 
         let productList = await productsService.getProducts(limit, page, sort, filter)
         
-        user = await userModel.findById(req.user._id).lean()
+        user = await usersService.findUserByEmail(req.user.email)
 
         let data = {
             dataProducts: productList,
