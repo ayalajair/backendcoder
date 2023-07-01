@@ -1,14 +1,10 @@
+const UserDTO = require('../DTO/user.dto')
+const { usersService } = require("../service");
 const { generateToken } = require('../utils/generateTokenJWT')
-const { UsersManagerMongo } = require('../DAO/db/users.Manager.Mongo')
-const { cartsManagerMongo }  = require('../DAO/db/carts.Manager.Mongo')
 
-
-const carts = new cartsManagerMongo()
-const users = new UsersManagerMongo()
 
 class  SessionController {
     constructor() {}
-
 
     login = async (req, res) =>{   
             if (req.user){
@@ -56,7 +52,17 @@ class  SessionController {
         res.send({status: 'error', error: 'Registro fallido'})
     }
 
+    toUser = async (req, res) => {
+        let user = await usersService.findUserByEmail(req.user.email)
+        const userDTO = new UserDTO(user)
+        console.log('userDTO', userDTO)
+        let toUser = userDTO.toUser()
+        res.send(toUser)
     }
+
+    }
+
+
 
 
 

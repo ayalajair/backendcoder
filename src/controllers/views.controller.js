@@ -8,7 +8,7 @@ class ViewsController {
         let user = req.user
         // Redirigir al usuario a la página de inicio de sesión si no está autenticado
         if (!user) {
-            return res.redirect('/')
+            res.redirect('/')
         }
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
@@ -41,7 +41,7 @@ class ViewsController {
             sort = { price: -1 }
         }
 
-        let productList = await productsService.getProducts(limit, page, sort, filter)
+        let productList = await productsService.getAll(limit, page, sort, filter)
         
         user = await usersService.findUserByEmail(req.user.email)
 
@@ -65,7 +65,7 @@ class ViewsController {
 
     showRealTime = async (req, res) => {
         let limit = req.query.limit
-        let productList = await productsService.getProducts(limit)
+        let productList = await productsService.getAll(limit)
         res.render('realTimeProducts',productList)
     }
 
@@ -74,9 +74,13 @@ class ViewsController {
         }
 
     showLogin = async (req, res) => {
-        res.render('login',{
-            style: 'home.css'
-        })
+        let user = req.user
+        if (!user) {
+            return res.render('login',{
+                style: 'home.css'
+            })            
+        }
+        return res.redirect('/products')
     }
 
     showRegister = async (req, res) => {

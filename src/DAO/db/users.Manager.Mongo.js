@@ -1,4 +1,3 @@
-const { isValidPassword } = require('../../utils/bcryptHash')
 const {userModel} = require('./models/user.model')
 
 class UsersManagerMongo {
@@ -44,7 +43,7 @@ class UsersManagerMongo {
         }
     }
 
-    async findUserByEmail (email) {
+    async getUserByEmail (email) {
         try {
             const user = await userModel.findOne({email: email}).lean()
             return user

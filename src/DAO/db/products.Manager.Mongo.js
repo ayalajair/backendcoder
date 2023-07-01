@@ -8,7 +8,7 @@ class ProductManagerMongo {
     }
 
 //-------------GET PRODUCTS----------------
-    async getProducts(limit, page, sort, query) {
+    async getAll(limit, page, sort, query) {
         try {
             const products = await productModel.paginate(query, {limit, page, sort, lean:true})
             //Validamos que el producto exista
@@ -63,7 +63,7 @@ class ProductManagerMongo {
         }
     }
 //--------------GET PRODUCT BY ID-------------
-    async getProductById(id){
+    async getById(id){
         try {
             return await productModel.findById(id)
         } catch (error) {
@@ -72,7 +72,7 @@ class ProductManagerMongo {
     }
 
 //-------------ADD PRODUCT----------------
-    async addProduct(product){
+    async create(product){
         try {
             //Validamos que cada el objeto tenga todas las propiedades
             if (!product.hasOwnProperty('title') ||
@@ -117,7 +117,7 @@ class ProductManagerMongo {
         }
     }
 //-------------UPDATE PRODUCT-------------
-    async  updateProduct(id, product){
+    async  update(id, product){
         try {
             return await productModel.findOneAndUpdate({_id: id}, product)
         }catch (error) {
@@ -126,7 +126,7 @@ class ProductManagerMongo {
     }
 
 //-------------DELETE PRODUCT-------------
-    async deleteProduct(id){
+    async delete(id){
         try {
             deletedProduct = await productModel.findOneAndDelete({_id: id})
             this.events.emit('deleteProduct', id).setMaxListeners()
@@ -138,4 +138,4 @@ class ProductManagerMongo {
 
 }
 
-module.exports = ProductManagerMongo;
+module.exports = ProductManagerMongo

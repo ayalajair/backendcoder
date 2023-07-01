@@ -1,10 +1,10 @@
 const { Router } = require('express');
-const { login, register, gitHubCallBack, logout, failLogin, failRegister } = require ('../controllers/sessions.controller')
+const { login, register, gitHubCallBack, logout, failLogin, failRegister, toUser } = require ('../controllers/sessions.controller')
 const passport = require('passport');
 const { passportAuth } = require('../config/passport.JWT/passport.auth')
 const { authorization,
 } = require('../config/passport.JWT/passport.authorization')
-
+const UserDTO = require('../DTO/user.dto')
 const router = Router();
 
 
@@ -29,14 +29,11 @@ router.get(
     '/current',
     passportAuth('jwt'),
     authorization('user'),
-    async (req, res) => {
-    user = req.user
-    res.send(user)
-})
+    toUser)
 
 //------Logout-------
 
-router.post('/logout',
+router.get('/logout',
     logout,
 )
 
