@@ -2,6 +2,7 @@ const { Router } = require('express')
 const { query } = require('express-validator');
 const { passportAuth } = require('../config/passport.JWT/passport.auth');
 const { showProducts, showCart, showRealTime, showChat, showLogin, showRegister } = require('../controllers/views.controller');
+const { authorization } = require('../config/passport.JWT/passport.authorization');
 
 
 
@@ -52,6 +53,7 @@ router.get(
 router.get(
     '/chat',
     passportAuth('jwt', { session: false }),
+    authorization('user'),
     showChat)
     
 

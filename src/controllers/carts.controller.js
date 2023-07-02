@@ -79,10 +79,10 @@ class CartsController {
         }
     }
 
-    deleteCartProduct = async (req,res)=>{
+    deleteFromCart = async (req,res)=>{
         try {
             const {cid,pid} = req.params
-            const deletedProduct = await cartsService.deleteProduct(cid,pid)
+            const deletedProduct = await cartsService.deleteFromCart(cid,pid)
             res.status(200).send(deletedProduct)
         } catch (error) {
             res.status(400).send({status:'Router',error})

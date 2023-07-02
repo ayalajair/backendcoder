@@ -137,7 +137,7 @@ class cartsManagerMongo {
     }
 //-------------DELETE PRODUCT--------------
 
-    async deleteProduct (cartId, productId) {
+    async deleteFromCart (cartId, productId) {
         try {
             const cart = await cartModel.findOne({_id:cartId})
             if(!cart){return new Error('No se ha encontrado un carrito con ese ID')}

@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { productsService } = require('../service/')
+const { productsService } = require('../service/index')
 
 
 class ProductController {
@@ -20,6 +20,7 @@ class ProductController {
             if(category) {
                 filter.category = category
             }
+            
             if(availability) {
                 filter.status = availability
             }
@@ -32,12 +33,15 @@ class ProductController {
             if(priceSort==='desc'){
                 sort = {price: -1}
             }
-            //Se ejecuta la consulta
+
+            
             const productList = await productsService.getAll(limit, page, sort, filter)
+            console.log('list',productList)
+            
             //Si devuelve falso, hay algón problema con la consulta
             if(!productList) return res.status(404).send('No se encuentran productos en la base de datos')
             //Si devuelve verdadero, Se envía el producto encontrado como respuesta al cliente
-            res.status(200).send (productList)  
+            res.status(200).send(productList)  
     
         } catch(error){
             res.status(400).send({status:'Router error', error})
@@ -91,7 +95,7 @@ class ProductController {
     
     }
 
-    delete = async (req,res)=>{
+    deleteProduct = async (req,res)=>{
         const {pid} = req.params
         const deletedProduct = await productsService.delete(pid)
         //Sí devuelve falso, hay algún problema con el borrado

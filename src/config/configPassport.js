@@ -60,7 +60,7 @@ const initPassportGithub = () => {
                                     role:'admin'}
                         return done(null, user)
                     }
-                    let user = await usersService.findUserByEmail (username)
+                    let user = await usersService.getUserByEmail (username)
                     if(!user) return done(null, false, {message: 'Usuario no encontrado'})
                     
                     if (!isValidPassword(password, user.password)) 

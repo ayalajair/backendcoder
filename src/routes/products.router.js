@@ -1,7 +1,7 @@
 const { Router} =  require('express')
 const { query } = require('express-validator');
-const { getProducts, getProductsById, addProduct, updateProduct, deleteProduct } = require('../controllers/products.controller');
-
+const { getAll, getById, create, update, deleteProduct  } = require('../controllers/products.controller');
+const { authorization } = require('../config/passport.JWT/passport.authorization')
 
 
 
@@ -15,17 +15,27 @@ router.get('/',[
     query('priceSort').optional().isIn(['asc', 'desc']),
     query('category').optional(),
     query('availability').optional()
-    ], getProducts)
+    ], getAll)
 
 
-router.get('/:pid', getProductsById)
+router.get('/:pid', getById)
 
 //---------------------POST----------------------------------------------
-router.post('/', addProduct)
+router.post('/',
+    authorization('admin'),
+    create
+    )
 //----------------------PUT--------------------------------------
-router.put('/:pid', updateProduct)
+router.put('/:pid',
+    authorization('admin'),
+    update,
+    )
 
 //---------------------DELETE-----------------------------------------
-router.delete('/:pid', deleteProduct)
+router.delete('/:pid', 
+    authorization('admin'),
+    deleteProduct,
+    
+    )
 
 module.exports = router

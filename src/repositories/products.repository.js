@@ -5,8 +5,8 @@ class ProductRepository {
         this.dao = dao    
     }
 
-    getAll = async () => {
-        return this.dao.getAll()
+    getAll = async (limit, page, sort, query) => {
+        return this.dao.getAll(limit, page, sort, query)
     }
 
     getById = async (id) => {

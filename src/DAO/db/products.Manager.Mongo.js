@@ -10,9 +10,18 @@ class ProductManagerMongo {
 //-------------GET PRODUCTS----------------
     async getAll(limit, page, sort, query) {
         try {
-            const products = await productModel.paginate(query, {limit, page, sort, lean:true})
-            //Validamos que el producto exista
-            if(products.docs.length === 0) {
+            console.log('limit',limit)
+            console.log('page',page)
+            console.log('sort',sort)
+            console.log('query',query)
+            //Creamos la query para la paginación
+            const products = await productModel.paginate(
+                query, {limit, page, sort, lean:true}
+                )
+            
+            console.log('products', products)
+            //Validamos haya productos
+            if(products.totalDocs === 0) {
                 return {
                     status: 'error',
                     message: 'No se encontraron productos',
@@ -20,7 +29,6 @@ class ProductManagerMongo {
                 }
             }
             const {docs, totalPages, prevPage, nextPage, hasPrevPage, hasNextPage, totalDocs} = products
-            console.log(query)
 
             //Creamos las urls para la paginación
             const prevLink = hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${prevPage}` : null
@@ -46,16 +54,17 @@ class ProductManagerMongo {
             const respuesta = {
                 status: 'success',
                 payload: docs,
-                totalPages,
-                prevPage,
-                nextPage,
-                hasPrevPage,
-                hasNextPage,
-                prevLink,
-                nextLink,
-                totalDocs,
+                totalPages: totalPages,
+                prevPage: prevPage,
+                nextPage: nextPage,
+                hasPrevPage: hasPrevPage,
+                hasNextPage: hasNextPage,
+                prevLink: prevLink,
+                nextLink: nextLink,
+                totalDocs: totalDocs,
                 success: true
             }
+
             return respuesta
 
         } catch (error) {

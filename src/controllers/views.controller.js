@@ -6,6 +6,7 @@ class ViewsController {
     showProducts = async (req,res)=>{
         // Verificar si el usuario ha iniciado sesión
         let user = req.user
+        console.log(user)
         // Redirigir al usuario a la página de inicio de sesión si no está autenticado
         if (!user) {
             res.redirect('/')
@@ -43,7 +44,7 @@ class ViewsController {
 
         let productList = await productsService.getAll(limit, page, sort, filter)
         
-        user = await usersService.findUserByEmail(req.user.email)
+        user = await usersService.getUserByEmail(req.user.email)
 
         let data = {
             dataProducts: productList,

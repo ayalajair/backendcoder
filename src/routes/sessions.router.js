@@ -1,11 +1,9 @@
-const { Router } = require('express');
+const { Router } = require('express')
 const { login, register, gitHubCallBack, logout, failLogin, failRegister, toUser } = require ('../controllers/sessions.controller')
-const passport = require('passport');
+const passport = require('passport')
 const { passportAuth } = require('../config/passport.JWT/passport.auth')
-const { authorization,
-} = require('../config/passport.JWT/passport.authorization')
-const UserDTO = require('../DTO/user.dto')
-const router = Router();
+const { authorization } = require('../config/passport.JWT/passport.authorization')
+const router = Router()
 
 
 

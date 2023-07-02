@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const {cartsManagerMongo} = require ('../DAO/db/carts.Manager.Mongo');
-const { getCarts, getCartById, addCart, addToCart, updateCart, updateCartProduct, deleteCart, deleteCartProduct } = require('../controllers/carts.controller');
+const { getCarts, getCartById, addCart, addToCart, updateCart, updateCartProduct, deleteCart, deleteFromCart } = require('../controllers/carts.controller');
 
 
 const router = Router();
@@ -27,6 +27,6 @@ router.put('/:cid/product/:pid', updateCartProduct)
 
 router.delete('/:cid', deleteCart)
 
-router.delete('/:cid/product/:pid', deleteCartProduct)
+router.delete('/:cid/product/:pid', deleteFromCart)
 
 module.exports = router
