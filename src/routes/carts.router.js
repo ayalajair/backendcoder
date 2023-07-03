@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const {cartsManagerMongo} = require ('../DAO/db/carts.Manager.Mongo');
-const { getCarts, getCartById, addCart, addToCart, updateCart, updateCartProduct, deleteCart, deleteFromCart } = require('../controllers/carts.controller');
+const { getCarts, getCartById, addCart, addToCart, updateCart, updateCartProduct, deleteCart, deleteFromCart, purchase } = require('../controllers/carts.controller');
 
 
 const router = Router();
@@ -16,6 +16,8 @@ router.get('/:cid', getCartById)
 router.post('/', addCart)
 
 router.post('/:cid/product/:pid', addToCart)
+
+router.post('/:cid/purchase', purchase)
 
 //----------------PUT-------------------------------
 

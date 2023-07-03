@@ -1,4 +1,4 @@
-const {cartsService} = require('../service/index')
+const {cartsService, productsService} = require('../service/index')
 
 class CartsController {
 
@@ -84,6 +84,46 @@ class CartsController {
             const {cid,pid} = req.params
             const deletedProduct = await cartsService.deleteFromCart(cid,pid)
             res.status(200).send(deletedProduct)
+        } catch (error) {
+            res.status(400).send({status:'Router',error})
+        }
+    }
+
+    purchase = async (req,res)=>{
+        try {
+            const {cid} = req.params
+            
+            const cart = await cartsService.getCartById(cid)
+            
+            if(!cart.success) {
+                res.status(404).send(cart)
+            }
+
+            
+
+            const productsNotPurchased = []
+            const productsPurchased = []
+            console.log('products',cart.payload.products)
+            for (const item of cart.payload.products){
+                const product = item.product
+                console.log(product)
+                const quantity = item.quantity
+                const stock = item.product.stock
+                if(stock < quantity){
+                productsNotPurchased.push(product)
+                } else {
+                    const response = await productsService.update(product._id,{stock: stock - quantity})
+                    if(!response.success) productsNotPurchased.push(product)
+                    else {
+                        productsPurchased.push(product)
+                    }
+                }
+            }
+            
+            const ticket = await ticketsService.createTicket(productsPurchased,req.user.email)
+            
+
+            res.status(200).send(ticket)
         } catch (error) {
             res.status(400).send({status:'Router',error})
         }

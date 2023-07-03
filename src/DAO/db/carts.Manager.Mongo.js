@@ -28,7 +28,6 @@ class cartsManagerMongo {
     async getCartById (id) {
         try {
             const cart = await cartModel.findById(id).populate('products.product').lean()
-            
             if(!cart){
                 const respuesta = {
                     status:'not found',
