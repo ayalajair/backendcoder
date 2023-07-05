@@ -1,4 +1,4 @@
-const {cartsService, productsService} = require('../service/index')
+const {cartsService, productsService, ticketsService} = require('../service/index')
 
 class CartsController {
 
@@ -94,36 +94,48 @@ class CartsController {
             const {cid} = req.params
             
             const cart = await cartsService.getCartById(cid)
-            
             if(!cart.success) {
                 res.status(404).send(cart)
             }
-
+            //const user = req.user
+            const user = {
+                first_name: 'Juan',
+                last_name: 'Lopez',
+                email: 'juanlo@gmail.com',
+            }
             
-
             const productsNotPurchased = []
             const productsPurchased = []
-            console.log('products',cart.payload.products)
             for (const item of cart.payload.products){
                 const product = item.product
-                console.log(product)
                 const quantity = item.quantity
                 const stock = item.product.stock
                 if(stock < quantity){
-                productsNotPurchased.push(product)
+                    productsNotPurchased.push({
+                        quantity: quantity,
+                        product: product
+                    })
                 } else {
-                    const response = await productsService.update(product._id,{stock: stock - quantity})
-                    if(!response.success) productsNotPurchased.push(product)
-                    else {
-                        productsPurchased.push(product)
+                    await productsService.update(product._id,{stock: stock - quantity})
+                    productsPurchased.push({
+                        quantity: quantity,
+                        product: product})
                     }
-                }
             }
-            
-            const ticket = await ticketsService.createTicket(productsPurchased,req.user.email)
-            
-
-            res.status(200).send(ticket)
+            console.log('carrito antes de actualizar',cart)
+            console.log('productos no vendidos',productsNotPurchased)
+            console.log('productos vendidos',productsPurchased)
+            const ticket = await ticketsService.createTicket(productsPurchased,user.email)
+            const updatedCart = {
+                ...cart.payload,
+                products: productsNotPurchased.map(item => ({
+                    product: item.product._id,
+                    quantity: item.quantity
+                }))
+            };
+            await cartsService.updateCart(cart.payload._id, updatedCart)
+            console.log('carrito nuevo',updatedCart)
+            res.status(200).send({status:'Success',payload:{ticket, updatedCart}})
         } catch (error) {
             res.status(400).send({status:'Router',error})
         }

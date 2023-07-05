@@ -95,14 +95,16 @@ class cartsManagerMongo {
             toAddProduct.quantity += quantity
             cart.products[toAddProductIndex] = toAddProduct
             
-            await cart.save()
+            savedCart = await cart.save()
+
+            const populatedCart = await cartModel.findOne({ _id: savedCart._id }).populate('products.product')
             const respuesta = {
                 status: 'succes',
                 message: 'Producto agregado al carrito',
                 success: true,
-                payload: cart
+                payload: populatedCart
             }
-            console.log(cart)
+
             return respuesta
         }
         catch (error) {

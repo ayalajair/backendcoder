@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { query } = require('express-validator');
-const { passportAuth } = require('../config/passport.JWT/passport.auth');
+const { passportAuth } = require('../config/passport.JWT/passport.auth')
 const { showProducts, showCart, showRealTime, showChat, showLogin, showRegister } = require('../controllers/views.controller');
 const { authorization } = require('../config/passport.JWT/passport.authorization');
 

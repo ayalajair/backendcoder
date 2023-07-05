@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const {cartsManagerMongo} = require ('../DAO/db/carts.Manager.Mongo');
 const { getCarts, getCartById, addCart, addToCart, updateCart, updateCartProduct, deleteCart, deleteFromCart, purchase } = require('../controllers/carts.controller');
-
+const { passportAuth } = require('../config/passport.JWT/passport.auth');
 
 const router = Router();
 const carts = new cartsManagerMongo()
@@ -17,7 +17,9 @@ router.post('/', addCart)
 
 router.post('/:cid/product/:pid', addToCart)
 
-router.post('/:cid/purchase', purchase)
+router.post('/:cid/purchase',
+    //passportAuth('jwt', {session: false}),
+    purchase)
 
 //----------------PUT-------------------------------
 
