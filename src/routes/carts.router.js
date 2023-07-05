@@ -18,7 +18,7 @@ router.post('/', addCart)
 router.post('/:cid/product/:pid', addToCart)
 
 router.post('/:cid/purchase',
-    //passportAuth('jwt', {session: false}),
+    passportAuth('jwt', {session: false}),
     purchase)
 
 //----------------PUT-------------------------------

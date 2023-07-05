@@ -97,13 +97,14 @@ class CartsController {
             if(!cart.success) {
                 res.status(404).send(cart)
             }
-            //const user = req.user
-            const user = {
-                first_name: 'Juan',
-                last_name: 'Lopez',
-                email: 'juanlo@gmail.com',
+
+            if(!cart.payload.products.length) {
+                res.status(404).send({status:'Router',error:'Cart is empty'})
             }
-            
+
+            const user = req.user
+            console.log('usuario',user)
+
             const productsNotPurchased = []
             const productsPurchased = []
             for (const item of cart.payload.products){
