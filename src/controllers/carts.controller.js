@@ -99,7 +99,7 @@ class CartsController {
             }
 
             if(!cart.payload.products.length) {
-                res.status(404).send({status:'Router',error:'Cart is empty'})
+                res.status(404).send({status:'Router',error:'El carrito está vacío'})
             }
 
             const user = req.user
