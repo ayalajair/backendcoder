@@ -16,6 +16,7 @@ const {
     initPassportGithub, 
     initPassportJwt 
 } = require('./config/configPassport')
+const { errorHandler } = require('./middlewares/error.middleware')
 
 
 
@@ -60,6 +61,7 @@ socketChat(io)
 //Llamada a las rutas
 app.use(router)
 
+app.use(errorHandler)
 
 //Middlewares
 app.use(logger('dev'))
