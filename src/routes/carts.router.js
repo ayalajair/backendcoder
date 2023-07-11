@@ -4,7 +4,7 @@ const { getCarts, getCartById, addCart, addToCart, updateCart, updateCartProduct
 const { passportAuth } = require('../config/passport.JWT/passport.auth');
 
 const router = Router();
-const carts = new cartsManagerMongo()
+
 
 //--------------------GET-----------------------------
 router.get('/', getCarts)

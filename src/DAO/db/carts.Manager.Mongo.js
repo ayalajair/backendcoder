@@ -1,3 +1,6 @@
+const CustomError = require('../../utils/CustomError/CustomError')
+const { EError } = require('../../utils/CustomError/EErrors')
+const { findCartErrorInfo } = require('../../utils/CustomError/info')
 const {cartModel} = require ('./models/cart.model')
 const {productModel} = require ('./models/product.model')
 
@@ -29,12 +32,12 @@ class cartsManagerMongo {
         try {
             const cart = await cartModel.findById(id).populate('products.product').lean()
             if(!cart){
-                const respuesta = {
-                    status:'not found',
-                    message:'No se ha encontrado un carrito con ese ID',
-                    success: false
-                }
-                return respuesta
+                CustomError.createError({
+                    name: 'Find cart error'
+                    cause: findCartErrorInfo(id)
+                    message: 'Error trying to find Cart'
+                    code: EError.FILE_NOT_FOUND
+                })
             }
             const respuesta = {
                 status: 'succes',
