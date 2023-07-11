@@ -2,22 +2,22 @@ const {cartsService, productsService, ticketsService} = require('../service/inde
 
 class CartsController {
 
-    getCarts = async (req,res)=>{
+    getCarts = async (req,res,next)=>{
         try {
             const allCarts = await cartsService.getCarts()
             res.send({status:'Success',payload:allCarts})
         } catch (error) {
-            res.status(400).send({status:'Router error',error})
+            next (error)
         }
     }
 
-    getCartById = async (req,res)=>{
+    getCartById = async (req,res,next)=>{
         try{
             const {cid} = req.params
             const cart = await cartsService.getCartById(cid)
             res.status(200).send(cart)
         }catch(error){
-            res.status(400).send({status:'Router error',error})
+            next (error)
         }
     }
 

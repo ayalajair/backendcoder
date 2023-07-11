@@ -1,6 +1,6 @@
 const CustomError = require('../../utils/CustomError/CustomError')
 const { EError } = require('../../utils/CustomError/EErrors')
-const { findCartErrorInfo } = require('../../utils/CustomError/info')
+const { findCartErrorInfo, findCartsErrorInfo, findProductErrorInfo } = require('../../utils/CustomError/info')
 const {cartModel} = require ('./models/cart.model')
 const {productModel} = require ('./models/product.model')
 
@@ -22,7 +22,17 @@ class cartsManagerMongo {
 
     async getCarts () {
         try {
-            return await cartModel.find().populate('products.product').lean()
+            const carts = await cartModel.find().populate('products.product').lean()
+            if(!carts){
+                CustomError.createError({
+                    name: 'Find carts error'
+                    cause: findCartsErrorInfo()
+                    message: 'Error trying to find Carts'
+                    code: EError.NOT_FOUND
+                })
+            
+            }
+            return 
         } catch (error) {
             return new Error(error)
         }
@@ -33,10 +43,10 @@ class cartsManagerMongo {
             const cart = await cartModel.findById(id).populate('products.product').lean()
             if(!cart){
                 CustomError.createError({
-                    name: 'Find cart error'
-                    cause: findCartErrorInfo(id)
-                    message: 'Error trying to find Cart'
-                    code: EError.FILE_NOT_FOUND
+                    name: 'Find cart error',
+                    cause: findCartErrorInfo(id),
+                    message: 'Error trying to find Cart',
+                    code: EError.NOT_FOUND,
                 })
             }
             const respuesta = {
@@ -57,22 +67,22 @@ class cartsManagerMongo {
             const cart = await cartModel.findOne({_id:cartId}).populate('products.product')
             
             if(!cart){ 
-                const respuesta = {
-                    status:'not found',
-                    message:'No se ha encontrado un carrito con ese ID',
-                    success: false
-                }
-                return respuesta
+                CustomError.createError({
+                    name: 'Find cart error',
+                    cause: findCartErrorInfo(id),
+                    message: 'Error trying to find Cart',
+                    code: EError.NOT_FOUND,
+                })
             }
             const product = await productModel.findOne({_id:productId})
             
             if(!product){
-                const respuesta = {
-                    status:'not found',
-                    message:'No se ha encontrado un producto con ese ID',
-                    success: false
-                }
-                return respuesta
+                CustomError.createError({
+                    name: 'Find product error',
+                    cause: findProductErrorInfo(productId)
+                    message: 'Error trying to find Product',
+                    code: EError.NOT_FOUND,
+                })
             }
 
             const toAddProductIndex = cart.products.findIndex((p) => p.product._id.toString() === productId.toString())
@@ -121,12 +131,12 @@ class cartsManagerMongo {
         try {
             const deleteCart = await cartModel.findByIdAndDelete(id)
             if(!deleteCart){
-                const respuesta = {
-                    status:'not found',
-                    message:'No se ha encontrado un carrito con ese ID',
-                    success: false
-                }
-                return respuesta
+                CustomError.createError({
+                    name: 'Delete cart error',
+                    cause: findCartErrorInfo(id)
+                    message: 'Error trying to delete Cart',
+                    code: EError.NOT_FOUND,
+                })
             }
 
             const respuesta = {
