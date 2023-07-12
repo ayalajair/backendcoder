@@ -4,6 +4,7 @@ const viewsRouter = require('./views.router')
 const cartsRouter = require('./carts.router')
 const uploadsRouter = require('./uploads.router')
 const sessionsRouter = require('./sessions.router')
+const mockingProductsRouter = require('./mockingProducts.router')
 
 const router = Router();
 
@@ -21,5 +22,8 @@ router.use('/api/sessions', sessionsRouter)
 
 // http://localhost:8080/uploads
 router.use('/uploads', uploadsRouter)
+
+// http://localhost:8080/mockingproducts
+router.use('/mockingproducts', mockingProductsRouter)
 
 module.exports = router

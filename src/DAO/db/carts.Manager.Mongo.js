@@ -25,10 +25,10 @@ class cartsManagerMongo {
             const carts = await cartModel.find().populate('products.product').lean()
             if(!carts){
                 CustomError.createError({
-                    name: 'Find carts error'
-                    cause: findCartsErrorInfo()
-                    message: 'Error trying to find Carts'
-                    code: EError.NOT_FOUND
+                    name: 'Find carts error',
+                    cause: findCartsErrorInfo(),
+                    message: 'Error trying to find Carts',
+                    code: EError.NOT_FOUND,
                 })
             
             }
@@ -79,7 +79,7 @@ class cartsManagerMongo {
             if(!product){
                 CustomError.createError({
                     name: 'Find product error',
-                    cause: findProductErrorInfo(productId)
+                    cause: findProductErrorInfo(productId),
                     message: 'Error trying to find Product',
                     code: EError.NOT_FOUND,
                 })
@@ -133,7 +133,7 @@ class cartsManagerMongo {
             if(!deleteCart){
                 CustomError.createError({
                     name: 'Delete cart error',
-                    cause: findCartErrorInfo(id)
+                    cause: findCartErrorInfo(id),
                     message: 'Error trying to delete Cart',
                     code: EError.NOT_FOUND,
                 })
