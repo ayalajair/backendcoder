@@ -1,5 +1,8 @@
 const EventEmitter = require('events');
-const {productModel} = require('./models/product.model')
+const {productModel} = require('./models/product.model');
+const CustomError = require('../../utils/CustomError/CustomError');
+const { getProductsInfo, createProductErrorInfo, findProductErrorInfo, productExistErrorInfo, productUpdateErrorInfo } = require('../../utils/CustomError/info');
+const { EError } = require('../../utils/CustomError/EErrors');
 
 class ProductManagerMongo {
     constructor() {
@@ -22,11 +25,11 @@ class ProductManagerMongo {
             console.log('products', products)
             //Validamos haya productos
             if(products.totalDocs === 0) {
-                return {
-                    status: 'error',
-                    message: 'No se encontraron productos',
-                    success: false
-                }
+                CustomError.createError({
+                    name: 'NoProductsFound',
+                    cause: getProductsInfo(),
+                    code: EError.NOT_FOUND
+                })
             }
             const {docs, totalPages, prevPage, nextPage, hasPrevPage, hasNextPage, totalDocs} = products
 
@@ -74,7 +77,15 @@ class ProductManagerMongo {
 //--------------GET PRODUCT BY ID-------------
     async getById(id){
         try {
-            return await productModel.findById(id)
+            const product = await productModel.findById(id)
+            if(!product){
+                CustomError.createError({
+                    name: 'ProductNotFound',
+                    cause: findProductErrorInfo(id),
+                    code: EError.NOT_FOUND
+                })
+            }
+            return product
         } catch (error) {
             return new Error(error)
         }
@@ -90,11 +101,11 @@ class ProductManagerMongo {
             !product.hasOwnProperty('price') ||
             !product.hasOwnProperty('stock') ||
             !product.hasOwnProperty('category')) {
-            const respuesta = {
-                status: 'error',
-                message: 'El producto no tiene todas las propiedades requeridas',
-                success: false};
-            return respuesta
+                CustomError.createError({
+                    name: 'Product creation error',
+                    cause: createProductErrorInfo(product),
+                    code: EError.INVALID_TYPE_ERROR,
+                })
             }
             // Validamos el tipo de cada propiedad
             if (typeof product.title !== 'string' ||
@@ -105,19 +116,19 @@ class ProductManagerMongo {
             typeof product.category !== 'string'
             //||!Array.isArray(product.thumbnails)
             ) {
-            const respuesta = {
-            status: 'error',
-            message: 'El producto tiene una o más propiedades con un tipo incorrecto',
-            succes:false}
-            return respuesta
+                CustomError.createError({
+                    name: 'Product creation error',
+                    cause: createProductErrorInfo(product),
+                    code: EError.INVALID_TYPE_ERROR,
+                })
             }
             //Validamos que el producto no exista
             if (await productModel.exists({code: product.code})) {
-            const respuesta = {
-                status: 'error',
-                message: 'Ya se ha ingresado un producto con ese código',
-                success: false};
-            return respuesta
+                CustomError.createError({
+                    name: 'Product creation error',
+                    cause: productExistErrorInfo(product),
+                    code: EError.INVALID_TYPE_ERROR,
+                })
             }
             this.events.emit('addProduct', product).setMaxListeners()
             return await productModel.create(product)
@@ -128,7 +139,15 @@ class ProductManagerMongo {
 //-------------UPDATE PRODUCT-------------
     async  update(id, product){
         try {
-            return await productModel.findOneAndUpdate({_id: id}, product)
+            const productUpdated = await productModel.findOneAndUpdate({_id: id}, product)
+            if(!productUpdated){
+                CustomError.createError({
+                    name: 'Update product error',
+                    cause: productUpdateErrorInfo(id, product),
+                    code: EError.NOT_FOUND
+                })
+            }
+            return productUpdated
         }catch (error) {
             return new Error(error)
         }
@@ -138,6 +157,13 @@ class ProductManagerMongo {
     async delete(id){
         try {
             deletedProduct = await productModel.findOneAndDelete({_id: id})
+            if(!deletedProduct){
+                CustomError.createError({
+                    name: 'Delete product error',
+                    cause: findProductErrorInfo(id),
+                    code: EError.NOT_FOUND
+                })
+            }
             this.events.emit('deleteProduct', id).setMaxListeners()
             return deletedProduct
         }catch (error) {

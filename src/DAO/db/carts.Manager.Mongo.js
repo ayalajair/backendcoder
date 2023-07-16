@@ -1,6 +1,6 @@
 const CustomError = require('../../utils/CustomError/CustomError')
 const { EError } = require('../../utils/CustomError/EErrors')
-const { findCartErrorInfo, findCartsErrorInfo, findProductErrorInfo } = require('../../utils/CustomError/info')
+const { findCartErrorInfo, findCartsErrorInfo, findProductErrorInfo, findProductInCartErrorInfo, updateCartErrorInfo } = require('../../utils/CustomError/info')
 const {cartModel} = require ('./models/cart.model')
 const {productModel} = require ('./models/product.model')
 
@@ -11,7 +11,14 @@ class cartsManagerMongo {
     async addCart () {
         try {
             let newCart = await cartModel.create({})
-            console.log(newCart)
+            if(!newCart){
+                CustomError.createError({
+                    name: 'Add cart error',
+                    cause: addCartErrorInfo(),
+                    message: 'Error trying to add Cart',
+                    code: EError.NOT_FOUND,
+                })
+            }
             return newCart._id
         } catch (error) {
             return new Error(error)
@@ -155,11 +162,32 @@ class cartsManagerMongo {
     async deleteFromCart (cartId, productId) {
         try {
             const cart = await cartModel.findOne({_id:cartId})
-            if(!cart){return new Error('No se ha encontrado un carrito con ese ID')}
+            if(!cart){
+                CustomError.createError({
+                    name: 'Find cart error',
+                    cause: findCartErrorInfo(cartId),
+                    message: 'Error trying to find Cart',
+                    code: EError.NOT_FOUND,
+                })
+            }
             const product = await productModel.findOne({_id:productId})
-            if(!product){return new Error('No se ha encontrado un producto con ese ID')}
+            if(!product){
+                CustomError.createError({
+                    name: 'Find product error',
+                    cause: findProductErrorInfo(productId),
+                    message: 'Error trying to find Product',
+                    code: EError.NOT_FOUND,
+                })
+            }
             const toDeleteProductIndex = cart.products.findIndex((p) => p.product.toString() === productId.toString())
-            if (toDeleteProductIndex === -1) {return new Error('No se ha encontrado ese producto en el carrito')}
+            if (toDeleteProductIndex === -1) {
+                CustomError.createError({
+                    name: 'Delete product error',
+                    cause: findProductInCartErrorInfo(productId),
+                    message: 'Error trying to delete Product',
+                    code: EError.NOT_FOUND,
+                })
+            }
             cart.products.splice(toDeleteProductIndex,1)
             await cart.save()
             const respuesta = {
@@ -178,14 +206,23 @@ class cartsManagerMongo {
 
     async updateCart (id, cart) {
         try {
+            const { cid, products } = cart
+            if(!cid||!products){
+                CustomError.createError({
+                    name: 'Update cart error',
+                    cause: updateCartErrorInfo(id, cart),
+                    message: 'Error trying to update Cart',
+                    code: EError.INVALID_TYPE_ERROR,
+                })
+            }
             const updateCart = await cartModel.findByIdAndUpdate({_id:id}, cart)
             if(!updateCart){
-                const respuesta = {
-                    status:'not found',
-                    message:'No se ha encontrado un carrito con ese ID',
-                    success: false
-                }
-                return respuesta
+                CustomError.createError({
+                    name: 'Update cart error',
+                    cause: findCartErrorInfo(id),
+                    message: 'Error trying to update Cart',
+                    code: EError.NOT_FOUND,
+                })
             }
             const respuesta = {
                 status: 'succes',
@@ -204,13 +241,34 @@ class cartsManagerMongo {
         try {
             //Validamos que el carrito exista
             const cart = await cartModel.findOne({_id:cartId})
-            if(!cart) {return new Error('No se ha encontrado un carrito con ese ID')}
+            if(!cart) {
+                CustomError.createError({
+                    name: 'Update cart product error',
+                    cause: findCartErrorInfo(cartId),
+                    message: 'Error trying to update Cart Product',
+                    code: EError.NOT_FOUND,
+                })
+            }
             //Validamos que el producto exista
             const product = await productModel.findOne({_id:productId})
-            if(!product){return new Error('No se ha encontrado un producto con ese ID')}
+            if(!product){
+                CustomError.createError({
+                    name: 'Update cart product error',
+                    cause: findProductErrorInfo(productId),
+                    message: 'Error trying to update Cart Product',
+                    code: EError.NOT_FOUND,
+                })
+            }
             //Validamos que el producto este en el carrito
             const toUpdateProductIndex = cart.products.findIndex((p) => p.product.toString() === productId.toString())
-            if (toUpdateProductIndex === -1) {return new Error('No se ha encontrado ese producto en el carrito')}
+            if (toUpdateProductIndex === -1) {
+                CustomError.createError({
+                    name: 'Update cart product error',
+                    cause: findProductInCartErrorInfo(productId),
+                    message: 'Error trying to update Cart Product',
+                    code: EError.NOT_FOUND,
+                })
+            }
             cart.products[toUpdateProductIndex].quantity = quantity
             await cart.save()
             const respuesta = {

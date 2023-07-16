@@ -1,4 +1,4 @@
-const {faker} = require('faker');
+const {faker} = require('@faker-js/faker')
 
 const generateProducts= (count)=>{
     const products = []
@@ -10,9 +10,9 @@ const generateProducts= (count)=>{
             category: faker.commerce.department(),
             price: faker.commerce.price(),
             image: faker.image.url(),
-            stock: faker.random.numeric(),
-            code: faker.random.numeric(),
-            status: faker.random.boolean()
+            stock: faker.datatype.numeric(),
+            code: faker.datatype.numeric(),
+            status: faker.datatype.boolean()
         }
         products.push(product)
     }

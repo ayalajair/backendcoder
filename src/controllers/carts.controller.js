@@ -21,26 +21,28 @@ class CartsController {
         }
     }
 
-    addCart = async (req,res)=>{
+    addCart = async (req,res,next)=>{
         try{
             const cart = await cartsService.addCart() 
             res.send({status: 'Success', payload: cart})
         } catch(error){
-            res.status(400).send({status:'Router error',error})
+            next (error)
+        
         }
     }
 
-    addToCart = async (req,res)=>{
+    addToCart = async (req,res, next)=>{
         try{
             const {cid,pid} = req.params 
             const updatedCart = await cartsService.addToCart(cid, pid, 1)
             res.send(updatedCart)
         }catch (error){
-            res.status(400).send({status:'Router',error})
+            next (error)
+        
         }
     }
 
-    updateCart = async (req,res)=>{
+    updateCart = async (req,res,next)=>{
         try {
             const {cid} = req.params
             const cart = req.body
@@ -48,11 +50,12 @@ class CartsController {
             if(!updatedCart.succes) return res.status(404).send(updatedCart)
             res.status(200).send(updatedCart)
         } catch (error) {
-            res.status(400).send({status:'Router',error})
+            next (error)
+        
         }
     }
 
-    updateCartProduct = async (req,res)=>{
+    updateCartProduct = async (req,res,next)=>{
         try {
             const {cid,pid} = req.params
             const {quantity} = req.body
@@ -63,11 +66,11 @@ class CartsController {
             if(!updatedCart.succes) return res.status(404).send(updatedCart)
             res.status(200).send(updatedCart)
         } catch (error) {
-            res.status(400).send({status:'Router',error})
+            next (error)
         }
     }
 
-    deleteCart = async (req,res)=>{
+    deleteCart = async (req,res,next)=>{
         try {
             const {cid} = req.params
             const deletedCart = await cartsService.deleteCart(cid)
@@ -75,21 +78,22 @@ class CartsController {
             res.status(200).send(deletedCart)
         }
         catch (error) {
-            res.status(400).send({status:'Router',error})
+            next (error)
+        
         }
     }
 
-    deleteFromCart = async (req,res)=>{
+    deleteFromCart = async (req,res,next)=>{
         try {
             const {cid,pid} = req.params
             const deletedProduct = await cartsService.deleteFromCart(cid,pid)
             res.status(200).send(deletedProduct)
         } catch (error) {
-            res.status(400).send({status:'Router',error})
+            next (error)
         }
     }
 
-    purchase = async (req,res)=>{
+    purchase = async (req,res, next)=>{
         try {
             const {cid} = req.params
             
@@ -138,7 +142,7 @@ class CartsController {
             console.log('carrito nuevo',updatedCart)
             res.status(200).send({status:'Success',payload:{ticket, updatedCart}})
         } catch (error) {
-            res.status(400).send({status:'Router',error})
+            next (error)
         }
     }
 }

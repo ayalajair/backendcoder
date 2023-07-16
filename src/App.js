@@ -61,6 +61,7 @@ socketChat(io)
 //Llamada a las rutas
 app.use(router)
 
+//Llamada al middleware de error
 app.use(errorHandler)
 
 //Middlewares
