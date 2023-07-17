@@ -17,6 +17,7 @@ const {
     initPassportJwt 
 } = require('./config/configPassport')
 const { errorHandler } = require('./middlewares/error.middleware')
+const addLogger = require('./middlewares/addLogger.middleware')
 
 
 
@@ -66,5 +67,6 @@ app.use(errorHandler)
 
 //Middlewares
 app.use(logger('dev'))
+//app.use(addLogger)
 
 

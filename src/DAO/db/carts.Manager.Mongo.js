@@ -49,7 +49,7 @@ class cartsManagerMongo {
         try {
             const cart = await cartModel.findById(id).populate('products.product').lean()
             if(!cart){
-                CustomError.createError({
+                throw CustomError.createError({
                     name: 'Find cart error',
                     cause: findCartErrorInfo(id),
                     message: 'Error trying to find Cart',
@@ -65,7 +65,7 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
-            return new Error(error)
+            return error
         }
     }
 //------------- ADD  PRODUCT TO CART--------------
