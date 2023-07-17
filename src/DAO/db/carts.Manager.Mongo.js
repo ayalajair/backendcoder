@@ -12,7 +12,7 @@ class cartsManagerMongo {
         try {
             let newCart = await cartModel.create({})
             if(!newCart){
-                CustomError.createError({
+                throw CustomError.createError({
                     name: 'Add cart error',
                     cause: addCartErrorInfo(),
                     message: 'Error trying to add Cart',
@@ -21,7 +21,7 @@ class cartsManagerMongo {
             }
             return newCart._id
         } catch (error) {
-            return new Error(error)
+            return error
             
         }
     }
@@ -41,7 +41,7 @@ class cartsManagerMongo {
             }
             return 
         } catch (error) {
-            return new Error(error)
+            return error
         }
     }
 //-------------GET CART BY ID--------------
@@ -49,7 +49,7 @@ class cartsManagerMongo {
         try {
             const cart = await cartModel.findById(id).populate('products.product').lean()
             if(!cart){
-                throw CustomError.createError({
+                CustomError.createError({
                     name: 'Find cart error',
                     cause: findCartErrorInfo(id),
                     message: 'Error trying to find Cart',
@@ -129,7 +129,7 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
-            throw new Error(error)
+            return error
         }
     }
 //-------------DELETE CART--------------
@@ -154,7 +154,7 @@ class cartsManagerMongo {
             return respuesta
 
         } catch (error) {
-            return new Error(error)
+            return error
         }
     }
 //-------------DELETE PRODUCT--------------
@@ -198,7 +198,7 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
-            return new Error(error)
+            return error
         }
     }
 
@@ -231,7 +231,7 @@ class cartsManagerMongo {
                 success: true}
             return respuesta
         } catch (error) {
-            return new Error(error)
+            return error
         }
     
     }
@@ -280,7 +280,7 @@ class cartsManagerMongo {
             return respuesta    
 
         } catch (error) {
-            return new Error(error)
+            return error
         }
     }
 }
