@@ -12,7 +12,7 @@ class cartsManagerMongo {
         try {
             let newCart = await cartModel.create({})
             if(!newCart){
-                throw CustomError.createError({
+                CustomError.createError({
                     name: 'Add cart error',
                     cause: addCartErrorInfo(),
                     message: 'Error trying to add Cart',
@@ -154,6 +154,8 @@ class cartsManagerMongo {
             return respuesta
 
         } catch (error) {
+            console.log(error)
+            
             return error
         }
     }
