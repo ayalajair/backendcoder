@@ -71,7 +71,7 @@ class ProductManagerMongo {
             return respuesta
 
         } catch (error) {
-            return error
+            throw error
         }
     }
 //--------------GET PRODUCT BY ID-------------
@@ -87,7 +87,7 @@ class ProductManagerMongo {
             }
             return product
         } catch (error) {
-            return error
+            throw error
         }
     }
 
@@ -133,7 +133,7 @@ class ProductManagerMongo {
             this.events.emit('addProduct', product).setMaxListeners()
             return await productModel.create(product)
         } catch (error) {
-            return error
+            throw error
         }
     }
 //-------------UPDATE PRODUCT-------------
@@ -149,7 +149,7 @@ class ProductManagerMongo {
             }
             return productUpdated
         }catch (error) {
-            return error
+            throw error
         }
     }
 
@@ -167,7 +167,7 @@ class ProductManagerMongo {
             this.events.emit('deleteProduct', id).setMaxListeners()
             return deletedProduct
         }catch (error) {
-            return error
+            throw error
         }
     }
 

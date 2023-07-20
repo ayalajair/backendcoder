@@ -38,7 +38,7 @@ class UsersManagerMongo {
             return newUser
         } catch (error) {
 
-            return error
+            throw error
         }
     }
 
@@ -56,7 +56,7 @@ class UsersManagerMongo {
 
         }
         catch (error) {
-            return error
+            throw error
         }
     } 
 

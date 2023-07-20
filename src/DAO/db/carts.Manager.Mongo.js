@@ -21,7 +21,7 @@ class cartsManagerMongo {
             }
             return newCart._id
         } catch (error) {
-            return error
+            throw error
             
         }
     }
@@ -41,7 +41,7 @@ class cartsManagerMongo {
             }
             return 
         } catch (error) {
-            return error
+            throw error
         }
     }
 //-------------GET CART BY ID--------------
@@ -65,7 +65,7 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
-            return error
+            throw error
         }
     }
 //------------- ADD  PRODUCT TO CART--------------
@@ -129,7 +129,7 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
-            return error
+            throw error
         }
     }
 //-------------DELETE CART--------------
@@ -156,7 +156,7 @@ class cartsManagerMongo {
         } catch (error) {
             console.log(error)
             
-            return error
+            throw error
         }
     }
 //-------------DELETE PRODUCT--------------
@@ -200,7 +200,7 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
-            return error
+            throw error
         }
     }
 
@@ -233,7 +233,7 @@ class cartsManagerMongo {
                 success: true}
             return respuesta
         } catch (error) {
-            return error
+            throw error
         }
     
     }
@@ -282,7 +282,7 @@ class cartsManagerMongo {
             return respuesta    
 
         } catch (error) {
-            return error
+            throw error
         }
     }
 }
