@@ -1,5 +1,5 @@
 
-exports.getProductsInfo = () =>{
+exports.getProductsErrorInfo = () =>{
     return 'Cannot find any products'
 }
 
