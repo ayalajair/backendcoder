@@ -1,11 +1,15 @@
 const {cartsService, productsService, ticketsService} = require('../service/index')
+const CustomError = require('../utils/CustomError/CustomError')
+const { EError } = require('../utils/CustomError/EErrors')
+const { updateQuantityErrorInfo } = require('../utils/CustomError/info')
+
 
 class CartsController {
 
     getCarts = async (req,res,next)=>{
         try {
             const allCarts = await cartsService.getCarts()
-            res.send({status:'Success',payload:allCarts})
+            res.status(200).send({status:'Success',payload:allCarts})
         } catch (error) {
             next (error)
         }
@@ -24,7 +28,7 @@ class CartsController {
     addCart = async (req,res,next)=>{
         try{
             const cart = await cartsService.addCart() 
-            res.send({status: 'Success', payload: cart})
+            res.statussend({status: 'Success', payload: cart})
         } catch(error){
             next (error)
         
@@ -35,7 +39,7 @@ class CartsController {
         try{
             const {cid,pid} = req.params 
             const updatedCart = await cartsService.addToCart(cid, pid, 1)
-            res.send(updatedCart)
+            res.status(200).send(updatedCart)
         }catch (error){
             next (error)
         
@@ -47,7 +51,6 @@ class CartsController {
             const {cid} = req.params
             const cart = req.body
             const updatedCart = await cartsService.updateCart(cid, cart)
-            if(!updatedCart.succes) return res.status(404).send(updatedCart)
             res.status(200).send(updatedCart)
         } catch (error) {
             next (error)
@@ -59,11 +62,17 @@ class CartsController {
         try {
             const {cid,pid} = req.params
             const {quantity} = req.body
-            if(!quantity) return res.status(400).send({status:'Router',error:'No quantity'})
+            if(!quantity) {
+                CustomError.createError({
+                    name: 'No quantity provided',
+                    cause: updateQuantityErrorInfo(quantity),
+                    message: 'No quantity provided',
+                    code: EError.INVALID_TYPE_ERROR
+                })
+            }
             const cart = await cartsService.getCartById(cid)
             if(!cart.succes) return res.status(404).send(cart)
             const updatedCart = await cartsService.updateCartProduct(cid,pid,quantity)
-            if(!updatedCart.succes) return res.status(404).send(updatedCart)
             res.status(200).send(updatedCart)
         } catch (error) {
             next (error)

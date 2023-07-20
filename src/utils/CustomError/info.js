@@ -36,6 +36,11 @@ exports.updateCartErrorInfo = (id, products) =>{
     return 'One or more properties of the cart are missing or invalid. Properties recived: Id: {$id}, Products: {$products}'
 }
 
+exports.updateQuantityErrorInfo = (quantity)=>{
+    return `The quantity must to be a number, recived: ${quantity}`
+
+}
+
 exports.createUserErrorInfo = (user) =>{
     return `One or more properties of the user are missing or invalid. Properties recived: *name: must to be string, recived: ${user.first_name}, *lastName: must to be string, recived: ${user.last_name}, *email: must to be string, recived: ${user.email},*age: must to be number, recived: ${user.age}, *password: must to be string, recived: ${user.password}`
 }
