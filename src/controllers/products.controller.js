@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const { productsService } = require('../service/index');
 const CustomError = require('../utils/CustomError/CustomError');
-const { getProductsErrorInfo, findProductErrorInfo, createProductErrorInfo, productUpdateErrorInfo } = require('../utils/CustomError/info');
+const { getProductsErrorInfo, findProductErrorInfo, createProductErrorInfo, productUpdateErrorInfo, productdeleteErrorInfo } = require('../utils/CustomError/info');
 const { EError } = require('../utils/CustomError/EErrors');
 
 
@@ -112,34 +112,47 @@ class ProductController {
     }
 
     update = async (req , res, next)=>{
-        const {pid} = req.params
-        const toChangeProduct = req.body
-    
-        const updatedProduct = await productsService.update(pid, toChangeProduct)
-    
-        //Sí devuelve falso, hay algún problema con la actualización
-        if(!updatedProduct.success) {
-            CustomError.createError({
-                name: 'Product not updated',
-                cause: productUpdateErrorInfo(pid, toChangeProduct),
-                message: 'There is an error updating the product',
-                code: EError.INVALID_TYPE_ERROR
-            })
+        try {           
+            const {pid} = req.params
+            const toChangeProduct = req.body
+        
+            const updatedProduct = await productsService.update(pid, toChangeProduct)
+        
+            //Sí devuelve falso, hay algún problema con la actualización
+            if(!updatedProduct.success) {
+                CustomError.createError({
+                    name: 'Product not updated',
+                    cause: productUpdateErrorInfo(pid, toChangeProduct),
+                    message: 'There is an error updating the product',
+                    code: EError.INVALID_TYPE_ERROR
+                })
+            }
+            //Si devuelve verdadero, quiere decir que se hizo la actualización
+            res.status(200).send(updatedProduct)
+        } catch (error) {
+            next(error)
         }
-        //Si devuelve verdadero, quiere decir que se hizo la actualización
-        res.status(200).send(updatedProduct)
     
     }
 
     deleteProduct = async (req,res)=>{
-        const {pid} = req.params
-        const deletedProduct = await productsService.delete(pid)
-        //Sí devuelve falso, hay algún problema con el borrado
-        if(!deletedProduct.success){
-            return res.status(400).send(deletedProduct)
+        try {
+            const {pid} = req.params
+            const deletedProduct = await productsService.delete(pid)
+            //Sí devuelve falso, hay algún problema con el borrado
+            if(!deletedProduct.success){
+                CustomError.createError({
+                    name: 'Product not deleted',
+                    cause: productdeleteErrorInfo(pid),
+                    message: 'There is an error deleting the product',
+                    code: EError.NOT_FOUND
+                })
+            }
+            //Si devuelve verdadero, quiere decir que se borró el producto
+            res.status(200).send(deletedProduct) 
+        } catch (error) {
+            next (error)
         }
-        //Si devuelve verdadero, quiere decir que se borró el producto
-        res.status(200).send(deletedProduct)
     }
 
 }
