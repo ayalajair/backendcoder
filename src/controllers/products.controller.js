@@ -135,7 +135,7 @@ class ProductController {
     
     }
 
-    deleteProduct = async (req,res)=>{
+    deleteProduct = async (req,res,next)=>{
         try {
             const {pid} = req.params
             const deletedProduct = await productsService.delete(pid)
