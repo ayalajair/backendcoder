@@ -23,7 +23,9 @@ const consoleColors = {
 
 // Se crea el formato del mensaje
 const logFormat = format.combine(
-    format.colorize({ all: true }), // Colorea los mensajes para consola en modo desarrollo
+    format.colorize({ 
+      all: true
+      colors: consoleColors, }), // Colorea los mensajes para consola en modo desarrollo
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Agrega el timestamp al mensaje
     format.printf(({ timestamp, level, message }) => {
       return `[${timestamp}] ${level}: ${message}`;
@@ -38,7 +40,9 @@ const developmentLogger = createLogger({
       new transports.Console({
         level: 'debug', // Loggea a partir del nivel debug en modo desarrollo
         format: format.combine(
-          format.colorize({ all: true }),
+          format.colorize({ 
+            all: true,
+            colors: consoleColors, }),
           format.printf(({ timestamp, level, message }) => {
             return `[${timestamp}] ${level}: ${message}`;
           })
