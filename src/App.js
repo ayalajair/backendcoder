@@ -3,11 +3,12 @@ const express = require('express')
 const handlebars = require('express-handlebars')
 const cookieParser = require('cookie-parser')
 const { Server } = require('socket.io')
-const logger = require('morgan')
+const {logger} = require('./config/logger')
 const { connectDB } = require('./config/configServer')
 const passport = require('passport')
 require('dotenv').config()
 const cors = require('cors')
+
 
 const router = require('./routes/index')
 const { socketProducts } = require('./utils/socketProducts')
@@ -26,11 +27,14 @@ const app = express()
 const PORT = process.env.PORT || 8080
 
 connectDB()
+//Inicio logger
+app.use(addLogger)
 
 //Configuraciones
 const httpServer = app.listen(PORT, () => {
-    console.log('Listening on port 8080')
-})
+    console.log(`Server listening on port ${PORT}`)})
+
+
 
 //Setear motor de plantillas Handlebars
 app.engine('handlebars', handlebars.engine())
@@ -64,9 +68,3 @@ app.use(router)
 
 //Llamada al middleware de error
 app.use(errorHandler)
-
-//Middlewares
-app.use(logger('dev'))
-//app.use(addLogger)
-
-

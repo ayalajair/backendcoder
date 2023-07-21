@@ -73,7 +73,7 @@ class ProductController {
             if(!productList) {
                 CustomError.createError({
                     name: 'Product not found',
-                    cause: findProductErrorInfo(pid)
+                    cause: findProductErrorInfo(pid),
                     message: 'There is no product found with this id',
                     code: EError.NOT_FOUND
                 })

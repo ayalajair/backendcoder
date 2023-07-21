@@ -24,7 +24,7 @@ const consoleColors = {
 // Se crea el formato del mensaje
 const logFormat = format.combine(
     format.colorize({ 
-      all: true
+      all: true,
       colors: consoleColors, }), // Colorea los mensajes para consola en modo desarrollo
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Agrega el timestamp al mensaje
     format.printf(({ timestamp, level, message }) => {
@@ -33,7 +33,7 @@ const logFormat = format.combine(
   )
 
 // Configuración del logger para desarrollo
-const developmentLogger = createLogger({
+const devLogger = createLogger({
     levels,
     format: logFormat,
     transports: [
@@ -52,7 +52,7 @@ const developmentLogger = createLogger({
   })
 
   // Configuración del logger para producción
-const productionLogger = createLogger({
+const prodLogger = createLogger({
     levels,
     format: logFormat,
     transports: [
@@ -62,7 +62,7 @@ const productionLogger = createLogger({
   })
 
 // Determina qué logger usar según el entorno (desarrollo o producción)
-const logger = process.env.NODE_ENV === 'production' ? productionLogger : developmentLogger
+const logger = process.env.NODE_ENV === 'production' ? prodLogger : devLogger
 
 
 
