@@ -3,7 +3,7 @@ const {logger} = require ('../config/logger')
 
 const addLogger = (req, res, next) => {
     req.logger = logger
-    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
+    req.logger.info(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
     next()
 }
 
