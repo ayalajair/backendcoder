@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 8080
 
 connectDB()
 //Inicio logger
-app.use(addLogger)
+//app.use(addLogger)
 
 //Configuraciones
 const httpServer = app.listen(PORT, () => {
@@ -65,6 +65,7 @@ socketChat(io)
 
 //Llamada a las rutas
 app.use(router)
+
 
 //Llamada al middleware de error
 app.use(errorHandler)
