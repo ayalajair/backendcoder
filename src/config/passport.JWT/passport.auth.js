@@ -7,8 +7,6 @@ const passportAuth = (strategy, options) => {
                 return next(err)
             }
 
-            console.log(user)
-
             if (!user) {
                 return res.status(401).send({
                     status: 'error',
@@ -16,7 +14,6 @@ const passportAuth = (strategy, options) => {
                 })
             }
             
-
             req.user = user
             next()
         

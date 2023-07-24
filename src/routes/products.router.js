@@ -1,7 +1,8 @@
 const { Router} =  require('express')
 const { query } = require('express-validator');
 const { getAll, getById, create, update, deleteProduct  } = require('../controllers/products.controller');
-const { authorization } = require('../config/passport.JWT/passport.authorization')
+const { authorization } = require('../config/passport.JWT/passport.authorization');
+const { passportAuth } = require('../config/passport.JWT/passport.auth');
 
 
 
@@ -21,18 +22,21 @@ router.get('/',[
 router.get('/:pid', getById)
 
 //---------------------POST----------------------------------------------
-router.post('/',
+router.post('/', 
+    passportAuth('jwt', {session: false}),
     authorization('admin'),
     create
     )
 //----------------------PUT--------------------------------------
 router.put('/:pid',
+    passportAuth('jwt', {session: false}),
     authorization('admin'),
     update,
     )
 
 //---------------------DELETE-----------------------------------------
-router.delete('/:pid', 
+router.delete('/:pid',
+    passportAuth('jwt', {session: false}), 
     authorization('admin'),
     deleteProduct,
     

@@ -156,7 +156,9 @@ class ProductManagerMongo {
 //-------------DELETE PRODUCT-------------
     async delete(id){
         try {
+            console.log('id',id)
             deletedProduct = await productModel.findOneAndDelete({_id: id})
+            console.log('deletedProduct', deletedProduct)
             if(!deletedProduct){
                 CustomError.createError({
                     name: 'Delete product error',
