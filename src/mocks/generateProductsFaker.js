@@ -10,8 +10,8 @@ const generateProducts= (count)=>{
             category: faker.commerce.department(),
             price: faker.commerce.price(),
             image: faker.image.url(),
-            stock: faker.datatype.number(),
-            code: faker.datatype.number(),
+            stock: faker.number.int(),
+            code: faker.number.int(),
             status: faker.datatype.boolean()
         }
         products.push(product)
