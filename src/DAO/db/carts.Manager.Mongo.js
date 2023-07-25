@@ -4,6 +4,8 @@ const { EError } = require('../../utils/CustomError/EErrors')
 const { findCartErrorInfo, findCartsErrorInfo, findProductErrorInfo, findProductInCartErrorInfo, updateCartErrorInfo } = require('../../utils/CustomError/info')
 const {cartModel} = require ('./models/cart.model')
 const {productModel} = require ('./models/product.model')
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
 
 class cartsManagerMongo {
     constructor() {}
@@ -48,7 +50,8 @@ class cartsManagerMongo {
 //-------------GET CART BY ID--------------
     async getCartById (id) {
         try {
-            const cart = await cartModel.findById(id).populate('products.product').lean()
+            const objectId = ObjectId.isValid(id) ? new ObjectId(id) : null
+            const cart = await cartModel.findById(objectId).populate('products.product').lean()
             console.log("cart",cart)
             if(!cart){
                 CustomError.createError({
@@ -138,7 +141,8 @@ class cartsManagerMongo {
 
     async deleteCart (id) {
         try {
-            const deleteCart = await cartModel.findByIdAndDelete(id)
+            const objectId = ObjectId.isValid(id) ? new ObjectId(id) : null
+            const deleteCart = await cartModel.findByIdAndDelete(objectId)
             if(!deleteCart){
                 CustomError.createError({
                     name: 'Delete cart error',

@@ -1,4 +1,4 @@
-const CustomError = require('../../utils/CustomError/CustomError')
+const { CustomError } = require('../../utils/CustomError/CustomError')
 const { EError } = require('../../utils/CustomError/EErrors')
 const { createUserErrorInfo, credentialsErrorInfo, findUserErrorInfo } = require('../../utils/CustomError/info')
 const {userModel} = require('./models/user.model')
@@ -14,6 +14,7 @@ class UsersManagerMongo {
                 CustomError.createError({
                     name: 'Create User Error',
                     cause: createUserErrorInfo(user),
+                    message: 'check your user object',
                     code: EError.INVALID_TYPE_ERROR
                 })
             } 
@@ -25,6 +26,7 @@ class UsersManagerMongo {
                     CustomError.createError({
                         name: 'Credentials Error',
                         cause: credentialsErrorInfo(),
+                        message: 'Check your credentials',
                         code: EError.UNAUTHORIZED
                     })
                 }
@@ -49,6 +51,7 @@ class UsersManagerMongo {
                 CustomError.createError({
                     name: 'User not found',
                     cause: findUserErrorInfo(email),
+                    message: 'There is no user with that email',
                     code: EError.NOT_FOUND
                 })
             }
