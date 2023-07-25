@@ -65,11 +65,11 @@ router.get(
 
 //------Forgot password-------
 
-router.post('forgot-password', forgotPassword)
+router.post('/forgot-password', forgotPassword)
 
 //------Reset password-------
 
-router.post('reset-password/:token',  resetPassword)
+router.post('/reset-password/:token',  resetPassword)
 
 
 module.exports = router

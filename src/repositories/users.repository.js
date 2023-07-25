@@ -11,6 +11,10 @@ class UserRepository {
     getUserByEmail = async (email)=>{
         return this.dao.getUserByEmail(email)
     }
+
+    updateUser = async (email, user)=>{
+        return this.dao.updateUser(email, user)
+    }
 }
 
 module.exports = UserRepository

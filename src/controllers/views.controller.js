@@ -94,7 +94,17 @@ class ViewsController {
         res.render('forgotPassword',{
             style: 'home.css'
         })
-    
+    }
+
+    showResetPassword = async (req, res) => {
+        let {token} = req.params
+        console.log(token)
+        let data = {
+            token: token,
+            style: 'home.css',
+        }
+        res.render('resetPassword', data)
+
     }
 }
 

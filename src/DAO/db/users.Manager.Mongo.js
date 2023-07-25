@@ -63,6 +63,22 @@ class UsersManagerMongo {
         }
     } 
 
+    async updateUser (email, user) {
+        try {
+            const updatedUser = await userModel.findOneAndUpdate({email: email}, user, {new: true})
+            if (!updatedUser) {
+                CustomError.createError({
+                    name: 'User not found',
+                    cause: findUserErrorInfo(email),
+                    message: 'There is no user with that email',
+                    code: EError.NOT_FOUND
+                })
+            }
+        }catch (error) {
+            throw error
+        }
+    }
+
     
 }
 
