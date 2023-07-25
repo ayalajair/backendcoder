@@ -1,23 +1,27 @@
-const {connect} = require('mongoose')
+const mongoose = require('mongoose')
+const { logger } = require('./logger')
 require('dotenv').config()
 
 class MongoSingleton {
-    static #intance
-    constructor (){
-        connect(process.env.MONGO_URL,{
-            useNewUrlParser:true,
-            useUnifiedTopology:true
+    static #instance 
+    constructor(){
+        mongoose.connect(process.env.MONGO_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
         })
     }
     static getInstance(){
         if (this.#instance) {
-            console.log('Base de datos ya creada') 
-            return this.#instance
+           logger.info('Database already created') 
+           return this.#instance
         }
         this.#instance = new MongoSingleton()
-        console.log('Base de datos creada.')
+        logger.info('Database created')
         return this.#instance
+        
     }
+
+
 }
 
 module.exports = {

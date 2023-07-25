@@ -28,6 +28,6 @@ router.use('/uploads', uploadsRouter)
 router.use('/mockingproducts', mockingProductsRouter)
 
 // 
-router.use('/loggerTest', loggerTestRouter )
+router.use('/logger-test', loggerTestRouter )
 
 module.exports = router
