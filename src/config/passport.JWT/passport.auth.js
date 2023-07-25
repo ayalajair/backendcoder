@@ -1,4 +1,5 @@
 const passport = require('passport')
+const { loggers } = require('winston')
 
 const passportAuth = (strategy, options) => {
     return async (req, res, next) => {
@@ -13,7 +14,6 @@ const passportAuth = (strategy, options) => {
                     error: info.message ?  info.message : info.toString(),
                 })
             }
-            
             req.user = user
             next()
         
