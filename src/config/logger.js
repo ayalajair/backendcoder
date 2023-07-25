@@ -56,7 +56,16 @@ const prodLogger = createLogger({
     levels,
     format: logFormat,
     transports: [
-      new transports.Console({ level: 'info' }), // Loggea a partir del nivel info en modo producción
+      new transports.Console({ level: 'info',
+      format: format.combine(
+        format.colorize({ 
+          all: true,
+          colors: consoleColors, }),
+        format.printf(({ timestamp, level, message }) => {
+          return `[${timestamp}] ${level}: ${message}`;
+        })
+      ),
+    }), // Loggea a partir del nivel info en modo producción
       new transports.File({ filename: 'errors.log', level: 'error' }), // Envía los logs de error a un archivo
     ],
   })
@@ -66,4 +75,4 @@ const logger = process.env.NODE_ENV === 'production' ? prodLogger : devLogger
 
 
 
-exports.module = {logger}
+module.exports = {logger}

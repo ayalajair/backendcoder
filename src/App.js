@@ -28,14 +28,13 @@ const PORT = process.env.PORT || 8080
 
 connectDB()
 //Inicio logger
-//app.use(addLogger)
+app.use(addLogger)
 
 //Configuraciones
 const httpServer = app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`)})
+    logger.info(`Server listening on port ${PORT}`)})
 
-//Llamada al middleware de error
-app.use(errorHandler)
+
 
 //Setear motor de plantillas Handlebars
 app.engine('handlebars', handlebars.engine())
@@ -67,4 +66,6 @@ socketChat(io)
 //Llamada a las rutas
 app.use(router)
 
+//Llamada al middleware de error
+app.use(errorHandler)
 
