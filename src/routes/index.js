@@ -27,7 +27,9 @@ router.use('/uploads', uploadsRouter)
 // http://localhost:8080/mockingproducts
 router.use('/mockingproducts', mockingProductsRouter)
 
-// 
+// http://localhost:8080/logger-test
 router.use('/logger-test', loggerTestRouter )
+
+
 
 module.exports = router

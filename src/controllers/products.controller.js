@@ -91,7 +91,10 @@ class ProductController {
     create = async (req, res, next)=> {
         try{
             const toAddProduct = req.body
-            
+            const user = req.user
+            if(user.role === 'premium') {
+                toAddProduct.owner = user.id
+            }
             const respuesta = await productsService.create(toAddProduct)
             
             //Si devuelve falso, hay algún problema con el producto

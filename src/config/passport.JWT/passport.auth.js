@@ -1,5 +1,4 @@
 const passport = require('passport')
-const { loggers } = require('winston')
 
 const passportAuth = (strategy, options) => {
     return async (req, res, next) => {

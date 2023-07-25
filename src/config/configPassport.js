@@ -7,7 +7,6 @@ const { userModel } = require('../DAO/db/models/user.model')
 const { createHash, isValidPassword } = require('../utils/bcryptHash')
 const { privateKey } = require('../config/configServer')
 const { usersService, cartsService } = require('../service/index');
-const { logger } = require('./logger');
 const localStrategy = local.Strategy
 
 //Inicializamos passport-Jwt

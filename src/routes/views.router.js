@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { query } = require('express-validator');
 const { passportAuth } = require('../config/passport.JWT/passport.auth')
-const { showProducts, showCart, showRealTime, showChat, showLogin, showRegister } = require('../controllers/views.controller');
+const { showProducts, showCart, showRealTime, showChat, showLogin, showRegister, showForgotPassword } = require('../controllers/views.controller');
 const { authorization } = require('../config/passport.JWT/passport.authorization');
 
 
@@ -67,6 +67,24 @@ router.get(
     '/register',
     showRegister)
 
+//Vista forgotPassword
+router.get(
+    '/forgotPassword',
+    showForgotPassword)
 
+//Vista resetPassword
+router.get(
+    '/resetPassword',
+    showLogin)
+
+//Vista changePassword
+router.get(
+    '/changePassword',
+    showLogin)
+
+//Vista profile
+router.get(
+    '/profile',
+    passportAuth('jwt', { session: false }))
 
 module.exports = router;

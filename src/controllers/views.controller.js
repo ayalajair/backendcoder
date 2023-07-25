@@ -89,6 +89,13 @@ class ViewsController {
             style: 'home.css'
         })
     }
+
+    showForgotPassword = async (req, res) => {
+        res.render('forgotPassword',{
+            style: 'home.css'
+        })
+    
+    }
 }
 
 module.exports = new ViewsController()
