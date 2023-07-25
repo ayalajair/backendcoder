@@ -1,4 +1,5 @@
-const UserDTO = require('../DTO/user.dto')
+const UserDTO = require('../DTO/user.dto');
+const { logger } = require('../config/logger');
 const { usersService } = require("../service");
 const { generateToken } = require('../utils/generateTokenJWT')
 
@@ -33,7 +34,7 @@ class  SessionController {
                 httpOnly: true,
         })
     }
-        console.log('Login exitoso')
+        logger.info('Login exitoso')
         res.redirect('/products')
     }
 
@@ -43,19 +44,18 @@ class  SessionController {
     }
 
     failLogin = async (req, res) => {
-        console.log('Login fallido')
+        logger.error('Login fallido')
         res.send({ status: 'error', error: 'Login fallido' })
     }
 
     failRegister = async (req, res) => {
-        console.log('Registro fallido')
+        logger.error('Registro fallido')
         res.send({status: 'error', error: 'Registro fallido'})
     }
 
     toUser = async (req, res) => {
         let user = await usersService.findUserByEmail(req.user.email)
         const userDTO = new UserDTO(user)
-        console.log('userDTO', userDTO)
         let toUser = userDTO.toUser()
         res.send(toUser)
     }
