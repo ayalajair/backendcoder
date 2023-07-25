@@ -4,6 +4,7 @@ const CustomError = require('../../utils/CustomError/CustomError');
 const { getProductsInfo, createProductErrorInfo, findProductErrorInfo, productExistErrorInfo, productUpdateErrorInfo } = require('../../utils/CustomError/info');
 const { EError } = require('../../utils/CustomError/EErrors');
 
+
 class ProductManagerMongo {
     constructor() {
         this.events = new EventEmitter
@@ -163,10 +164,11 @@ class ProductManagerMongo {
                 CustomError.createError({
                     name: 'Delete product error',
                     cause: findProductErrorInfo(id),
+                    message: 'Cant delete product',
                     code: EError.NOT_FOUND
                 })
             }
-            this.events.emit('deleteProduct', id).setMaxListeners()
+            this.events.emit('deletedProduct', id).setMaxListeners()
             return deletedProduct
         }catch (error) {
             throw error

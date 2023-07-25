@@ -34,7 +34,8 @@ connectDB()
 const httpServer = app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`)})
 
-
+//Llamada al middleware de error
+app.use(errorHandler)
 
 //Setear motor de plantillas Handlebars
 app.engine('handlebars', handlebars.engine())
@@ -67,5 +68,3 @@ socketChat(io)
 app.use(router)
 
 
-//Llamada al middleware de error
-app.use(errorHandler)

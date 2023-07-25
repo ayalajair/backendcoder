@@ -1,4 +1,5 @@
-const CustomError = require('../../utils/CustomError/CustomError')
+
+const { CustomError } = require('../../utils/CustomError/CustomError')
 const { EError } = require('../../utils/CustomError/EErrors')
 const { findCartErrorInfo, findCartsErrorInfo, findProductErrorInfo, findProductInCartErrorInfo, updateCartErrorInfo } = require('../../utils/CustomError/info')
 const {cartModel} = require ('./models/cart.model')
@@ -48,6 +49,7 @@ class cartsManagerMongo {
     async getCartById (id) {
         try {
             const cart = await cartModel.findById(id).populate('products.product').lean()
+            console.log("cart",cart)
             if(!cart){
                 CustomError.createError({
                     name: 'Find cart error',
