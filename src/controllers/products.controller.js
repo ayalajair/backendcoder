@@ -3,6 +3,7 @@ const { productsService } = require('../service/index');
 const CustomError = require('../utils/CustomError/CustomError');
 const { getProductsErrorInfo, findProductErrorInfo, createProductErrorInfo, productUpdateErrorInfo, productdeleteErrorInfo } = require('../utils/CustomError/info');
 const { EError } = require('../utils/CustomError/EErrors');
+const { logger } = require('../config/logger');
 
 
 
@@ -79,6 +80,7 @@ class ProductController {
                 })
             }
             //Si devuelve verdadero, se ha encontrado el producto
+            logger.info('Product found')
             res.status(200).send ({status:'success', payload:productList})
             
         } catch(error){
@@ -103,6 +105,7 @@ class ProductController {
             }
     
             //Si devuelve verdadero, se ha creado el nuevo producto
+            logger.info('Product created')
             res.status(200).send(respuesta)
     
         } catch (error) {
@@ -128,6 +131,7 @@ class ProductController {
                 })
             }
             //Si devuelve verdadero, quiere decir que se hizo la actualización
+            logger.info('Product updated')
             res.status(200).send(updatedProduct)
         } catch (error) {
             next(error)
@@ -149,6 +153,7 @@ class ProductController {
                 })
             }
             //Si devuelve verdadero, quiere decir que se borró el producto
+            logger.info('Product deleted')
             res.status(200).send(deletedProduct) 
         } catch (error) {
             next (error)

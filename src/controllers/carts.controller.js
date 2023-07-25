@@ -1,3 +1,4 @@
+const { logger } = require('../config/logger')
 const {cartsService, productsService, ticketsService} = require('../service/index')
 const CustomError = require('../utils/CustomError/CustomError')
 const { EError } = require('../utils/CustomError/EErrors')
@@ -19,6 +20,7 @@ class CartsController {
         try{
             const {cid} = req.params
             const cart = await cartsService.getCartById(cid)
+            logger.info('Cart found')
             res.status(200).send(cart)
         }catch(error){
             next (error)
@@ -28,7 +30,9 @@ class CartsController {
     addCart = async (req,res,next)=>{
         try{
             const cart = await cartsService.addCart() 
-            res.statussend({status: 'Success', payload: cart})
+            logger.info('Cart created')
+            res.status(200).send({status: 'Success', payload: cart})
+        
         } catch(error){
             next (error)
         
@@ -39,6 +43,7 @@ class CartsController {
         try{
             const {cid,pid} = req.params 
             const updatedCart = await cartsService.addToCart(cid, pid, 1)
+            logger.info('Product added to cart')
             res.status(200).send(updatedCart)
         }catch (error){
             next (error)
@@ -51,6 +56,7 @@ class CartsController {
             const {cid} = req.params
             const cart = req.body
             const updatedCart = await cartsService.updateCart(cid, cart)
+            logger.info('Cart updated')
             res.status(200).send(updatedCart)
         } catch (error) {
             next (error)
@@ -70,9 +76,8 @@ class CartsController {
                     code: EError.INVALID_TYPE_ERROR
                 })
             }
-            const cart = await cartsService.getCartById(cid)
-            if(!cart.succes) return res.status(404).send(cart)
             const updatedCart = await cartsService.updateCartProduct(cid,pid,quantity)
+            logger.info('Product updated')
             res.status(200).send(updatedCart)
         } catch (error) {
             next (error)
@@ -83,7 +88,7 @@ class CartsController {
         try {
             const {cid} = req.params
             const deletedCart = await cartsService.deleteCart(cid)
-            if(!deletedCart.succes) return res.status(404).send(deletedCart)
+            logger.info('Cart deleted')
             res.status(200).send(deletedCart)
         }
         catch (error) {
@@ -96,6 +101,7 @@ class CartsController {
         try {
             const {cid,pid} = req.params
             const deletedProduct = await cartsService.deleteFromCart(cid,pid)
+            logger.info('Product deleted from cart')
             res.status(200).send(deletedProduct)
         } catch (error) {
             next (error)
@@ -136,9 +142,9 @@ class CartsController {
                         product: product})
                     }
             }
-            console.log('carrito antes de actualizar',cart)
-            console.log('productos no vendidos',productsNotPurchased)
-            console.log('productos vendidos',productsPurchased)
+            logger.info(`carrito antes de actualizar: ${cart}`)
+            logger.info(`productos no vendidos: ${productsNotPurchased}`)
+            logger.info(`productos vendidos',${productsPurchased}`)
             const ticket = await ticketsService.createTicket(productsPurchased,user.email)
             const updatedCart = {
                 ...cart.payload,
@@ -148,7 +154,7 @@ class CartsController {
                 }))
             };
             await cartsService.updateCart(cart.payload._id, updatedCart)
-            console.log('carrito nuevo',updatedCart)
+            logger.info(`Carrito nuevo: ${updatedCart}`)
             res.status(200).send({status:'Success',payload:{ticket, updatedCart}})
         } catch (error) {
             next (error)
