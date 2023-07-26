@@ -68,9 +68,7 @@ class CartsController {
     updateCartProduct = async (req,res,next)=>{
         try {
             const {cid,pid} = req.params
-            console.log('pid',pid)
             const {quantity} = req.body
-            console.log('quantity',quantity)
             if(!quantity|| quantity < 1 || isNaN(quantity)) {
                 CustomError.createError({
                     name: 'No quantity provided',
@@ -83,7 +81,6 @@ class CartsController {
             logger.info('Product updated')
             res.status(200).send(updatedCart)
         } catch (error) {
-            console.log('error',error)
             next (error)
         }
     }
