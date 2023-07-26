@@ -68,9 +68,7 @@ class  SessionController {
     forgotPassword = async (req, res) => {
         try {
             const { email } = req.body
-            console.log("email:", email)
             const user = await usersService.getUserByEmail(email)
-            console.log("user email", user.email)
             // Generar el token de restablecimiento de contraseña
             const token = generateResetToken(user)
             // Enviar el correo con el enlace de restablecimiento de contraseña
@@ -108,10 +106,9 @@ class  SessionController {
     resetPassword = async (req, res) => {
         try {
             const { token } = req.params
-            console.log("token:", token)
             
             const { password } = req.body
-            console.log("password:", password)
+        
             
             const decodedToken = jwt.verify(token, privateKey)
             //Buscamos el usuario por email en la base de datos
@@ -132,7 +129,13 @@ class  SessionController {
         res.status(200).send({ message: 'Contraseña restablecida con éxito' })
             
         }catch (error) {
-            throw error
+            if (error.name === 'TokenExpiredError') {
+                // El token ha expirado
+                logger.error('El token ha expirado')
+                res.redirect('http://localhost:8080/forgotPassword')
+            } else {
+                throw error
+            }
         }
     }
 
