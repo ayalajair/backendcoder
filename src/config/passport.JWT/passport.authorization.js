@@ -1,14 +1,18 @@
 const { logger } = require("../logger");
 
 
-const authorization = role => {
+const authorization = roles => {
     return (req, res, next) => {
         if (!req.user) {
             return res.status(401).send({status: 'error', error: 'User not authenticated'})
             }
-        if (req.user.role !== role) {
-            return res.status(403).send({status: 'error',error: 'User not authorized'});
+        const userRole = req.user.role;
+        const allowedRoles = Array.isArray(roles) ? roles : [roles];
+        
+        if (!allowedRoles.includes(userRole)) {
+            return res.status(403).send({ status: 'error', error: 'User not authorized' });
         }
+        
         logger.info('User authorized')
         next();
     

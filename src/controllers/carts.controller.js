@@ -2,7 +2,7 @@ const { logger } = require('../config/logger')
 const {cartsService, productsService, ticketsService} = require('../service/index')
 const CustomError = require('../utils/CustomError/CustomError')
 const { EError } = require('../utils/CustomError/EErrors')
-const { updateQuantityErrorInfo } = require('../utils/CustomError/info')
+const { updateQuantityErrorInfo, addProductToCartErrorInfo } = require('../utils/CustomError/info')
 
 
 class CartsController {
@@ -41,7 +41,18 @@ class CartsController {
 
     addToCart = async (req,res, next)=>{
         try{
-            const {cid,pid} = req.params 
+            const {cid,pid} = req.params
+            if(req.user.role === 'premium') {
+                const product = await productsService.getProductById(pid)
+                if(product.owner === req.user._id) {
+                    CustomError.createError({
+                        name: 'Product owner',
+                        cause: addProductToCartErrorInfo(product._id),
+                        message: 'Product owner cannot add to cart his/her own product',
+                        code: EError.INVALID_TYPE_ERROR
+                    })
+                }    
+            }
             const updatedCart = await cartsService.addToCart(cid, pid, 1)
             logger.info('Product added to cart')
             res.status(200).send(updatedCart)

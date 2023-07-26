@@ -36,6 +36,10 @@ exports.findCartErrorInfo = (id) =>{
     return 'Cannot find any cart with the Id: {$id}'
 }
 
+exports.addProductToCartErrorInfo = (id) =>{
+    return 'Cannot add product to cart with the Id: {$id}'
+}
+
 exports.findProductInCartErrorInfo = (id) =>{
     return 'Cannot find any product in cart with the Id: {$id}'
 }

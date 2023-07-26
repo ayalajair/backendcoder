@@ -3,6 +3,7 @@ const { query } = require('express-validator');
 const { getAll, getById, create, update, deleteProduct  } = require('../controllers/products.controller');
 const { authorization } = require('../config/passport.JWT/passport.authorization');
 const { passportAuth } = require('../config/passport.JWT/passport.auth');
+const { checkProductOwnerOrAdmin } = require('../middlewares/checkProductOwnerOrAdmin.middleware.js')
 
 
 
@@ -24,7 +25,8 @@ router.get('/:pid', getById)
 //---------------------POST----------------------------------------------
 router.post('/', 
     passportAuth('jwt', {session: false}),
-    authorization('admin'),
+    authorization(['admin','premium']),
+    checkProductOwnerOrAdmin,
     create
     )
 //----------------------PUT--------------------------------------
