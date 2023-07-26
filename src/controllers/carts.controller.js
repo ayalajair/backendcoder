@@ -1,6 +1,7 @@
 const { logger } = require('../config/logger')
 const {cartsService, productsService, ticketsService} = require('../service/index')
-const CustomError = require('../utils/CustomError/CustomError')
+const { CustomError } = require('../utils/CustomError/CustomError')
+
 const { EError } = require('../utils/CustomError/EErrors')
 const { updateQuantityErrorInfo } = require('../utils/CustomError/info')
 
@@ -67,8 +68,10 @@ class CartsController {
     updateCartProduct = async (req,res,next)=>{
         try {
             const {cid,pid} = req.params
+            console.log('pid',pid)
             const {quantity} = req.body
-            if(!quantity) {
+            console.log('quantity',quantity)
+            if(!quantity|| quantity < 1 || isNaN(quantity)) {
                 CustomError.createError({
                     name: 'No quantity provided',
                     cause: updateQuantityErrorInfo(quantity),
@@ -80,6 +83,7 @@ class CartsController {
             logger.info('Product updated')
             res.status(200).send(updatedCart)
         } catch (error) {
+            console.log('error',error)
             next (error)
         }
     }
