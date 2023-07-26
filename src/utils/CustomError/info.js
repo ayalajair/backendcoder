@@ -24,6 +24,10 @@ exports.productdeleteErrorInfo = (id) =>{
     return `There is no product with the Id: ${id}`
 }
 
+exports.productDeleteRoleErrorInfo = () =>{
+    return `The product is not yours`
+}
+
 exports.findCartsErrorInfo = () =>{
 return 'Cannot find any carts'
 }
