@@ -17,7 +17,7 @@ exports.productExistErrorInfo = (product) =>{
 }
 
 exports.productUpdateErrorInfo = (id, product) =>{
-    return `There is no product with the Id: ${id} or one or more properties of the product to updated are invalid, Properties recived: *title: must to be string, recived: ${product.title}, *description: must to be string, recived: ${product.description}, *category: must to be string, recived: ${product.category}, *price: must to be number, recived: ${product.price}, *thumbnail: must to be string, recived: ${product.thumbnail}, *stock: must to be number, recived: ${product.stock}, *code: must to be string, recived: ${product.code},`
+    return `There is no product with the Id: ${id} or one or more properties of the product to updated are invalid, product recived: ${product}`
 }
 
 exports.productdeleteErrorInfo = (id) =>{
@@ -33,7 +33,7 @@ return 'Cannot find any carts'
 }
 
 exports.findCartErrorInfo = (id) =>{
-    return 'Cannot find any cart with the Id: {$id}'
+    return `Cannot find any cart with the Id: ${id}`
 }
 
 exports.addProductToCartErrorInfo = (id) =>{
@@ -41,11 +41,11 @@ exports.addProductToCartErrorInfo = (id) =>{
 }
 
 exports.findProductInCartErrorInfo = (id) =>{
-    return 'Cannot find any product in cart with the Id: {$id}'
+    return `Cannot find any product in cart with the Id: ${id}`
 }
 
 exports.updateCartErrorInfo = (id, products) =>{
-    return 'One or more properties of the cart are missing or invalid. Properties recived: Id: {$id}, Products: {$products}'
+    return `One or more properties of the cart are missing or invalid. Properties recived: Id: ${id}, Products: ${products}`
 }
 
 exports.updateQuantityErrorInfo = (quantity)=>{

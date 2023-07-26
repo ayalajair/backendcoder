@@ -110,6 +110,7 @@ class ProductManagerMongo {
                 CustomError.createError({
                     name: 'Product creation error',
                     cause: createProductErrorInfo(product),
+                    message: 'There is an issue with the properties',
                     code: EError.INVALID_TYPE_ERROR,
                 })
             }
@@ -147,7 +148,9 @@ class ProductManagerMongo {
 //-------------UPDATE PRODUCT-------------
     async  update(id, product){
         try {
-            const productUpdated = await productModel.findOneAndUpdate({_id: id}, product)
+            const objectId = ObjectId.isValid(id) ? new ObjectId(id) : null
+            const productUpdated = await productModel.findOneAndUpdate({_id: objectId}, product)
+            console.log('productUpdated', productUpdated)
             if(!productUpdated){
                 CustomError.createError({
                     name: 'Update product error',
@@ -158,6 +161,7 @@ class ProductManagerMongo {
             }
             return productUpdated
         }catch (error) {
+            console.log('llegó')
             throw error
         }
     }
@@ -165,7 +169,8 @@ class ProductManagerMongo {
 //-------------DELETE PRODUCT-------------
     async delete(id){
         try {
-            const deletedProduct = await productModel.findOneAndDelete({_id: id})
+            const objectId = ObjectId.isValid(id) ? new ObjectId(id) : null
+            const deletedProduct = await productModel.findOneAndDelete({_id: objectId})
             if(!deletedProduct){
                 CustomError.createError({
                     name: 'Delete product error',
@@ -177,6 +182,10 @@ class ProductManagerMongo {
             this.events.emit('deletedProduct', id).setMaxListeners()
             return deletedProduct
         }catch (error) {
+            console.error(error.name)
+            console.error(error.message)
+            console.error(error.code)
+            console.error(error.cause)
             throw error
         }
     }

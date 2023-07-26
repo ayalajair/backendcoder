@@ -76,17 +76,20 @@ class cartsManagerMongo {
 //------------- ADD  PRODUCT TO CART--------------
     async addToCart (cartId, productId,quantity) {
         try {
-            const cart = await cartModel.findOne({_id:cartId}).populate('products.product')
+
+            const objectCartId = ObjectId.isValid(cartId) ? new ObjectId(cartId) : null
+            const cart = await cartModel.findOne({_id:objectCartId}).populate('products.product')
             
             if(!cart){ 
                 CustomError.createError({
                     name: 'Find cart error',
-                    cause: findCartErrorInfo(id),
+                    cause: findCartErrorInfo(cartId),
                     message: 'Error trying to find Cart',
                     code: EError.NOT_FOUND,
                 })
             }
-            const product = await productModel.findOne({_id:productId})
+            const objectProductId = ObjectId.isValid(productId) ? new ObjectId(productId) : null
+            const product = await productModel.findOne({_id: objectProductId})
             
             if(!product){
                 CustomError.createError({
@@ -134,6 +137,9 @@ class cartsManagerMongo {
             return respuesta
         }
         catch (error) {
+            console.log(error)
+            
+            
             throw error
         }
     }
@@ -160,8 +166,6 @@ class cartsManagerMongo {
             return respuesta
 
         } catch (error) {
-            console.log(error)
-            
             throw error
         }
     }
@@ -169,7 +173,8 @@ class cartsManagerMongo {
 
     async deleteFromCart (cartId, productId) {
         try {
-            const cart = await cartModel.findOne({_id:cartId})
+            const objectCartId = ObjectId.isValid(cartId) ? new ObjectId(cartId) : null
+            const cart = await cartModel.findOne({_id:objectCartId})
             if(!cart){
                 CustomError.createError({
                     name: 'Find cart error',
@@ -178,7 +183,8 @@ class cartsManagerMongo {
                     code: EError.NOT_FOUND,
                 })
             }
-            const product = await productModel.findOne({_id:productId})
+            const objectProductId = ObjectId.isValid(productId) ? new ObjectId(productId) : null
+            const product = await productModel.findOne({_id:objectCartId})
             if(!product){
                 CustomError.createError({
                     name: 'Find product error',
@@ -214,6 +220,7 @@ class cartsManagerMongo {
 
     async updateCart (id, cart) {
         try {
+            console.log(id, cart)
             const { cid, products } = cart
             if(!cid||!products){
                 CustomError.createError({
@@ -223,7 +230,8 @@ class cartsManagerMongo {
                     code: EError.INVALID_TYPE_ERROR,
                 })
             }
-            const updateCart = await cartModel.findByIdAndUpdate({_id:id}, cart)
+            const objectId = ObjectId.isValid(id) ? new ObjectId(id) : null
+            const updateCart = await cartModel.findOneAndUpdate({_id:objectId}, cart)
             if(!updateCart){
                 CustomError.createError({
                     name: 'Update cart error',
@@ -247,8 +255,10 @@ class cartsManagerMongo {
     //-----------UPDATE CART PRODUCT-------------
     async updateCartProduct (cartId, productId, quantity) {
         try {
+            console.log(cartId, productId, quantity)
             //Validamos que el carrito exista
-            const cart = await cartModel.findOne({_id:cartId})
+            const objectCartId = ObjectId.isValid(cartId) ? new ObjectId(cartId) : null
+            const cart = await cartModel.findOne({_id: objectCartId})
             if(!cart) {
                 CustomError.createError({
                     name: 'Update cart product error',
@@ -258,7 +268,8 @@ class cartsManagerMongo {
                 })
             }
             //Validamos que el producto exista
-            const product = await productModel.findOne({_id:productId})
+            const objectProductId = ObjectId.isValid(productId) ? new ObjectId(productId) : null
+            const product = await productModel.findOne({_id: objectProductId})
             if(!product){
                 CustomError.createError({
                     name: 'Update cart product error',
@@ -288,6 +299,7 @@ class cartsManagerMongo {
             return respuesta    
 
         } catch (error) {
+            console.log(error)
             throw error
         }
     }

@@ -107,9 +107,11 @@ class ProductController {
                 })
             }
     
+            
+            const productadded = await productsService.create(toAddProduct)   
             //Si devuelve verdadero, se ha creado el nuevo producto
             logger.info('Product created')
-            res.status(200).send(respuesta)
+            res.status(200).send(productadded)
     
         } catch (error) {
             next(error)
@@ -123,16 +125,6 @@ class ProductController {
             const toChangeProduct = req.body
         
             const updatedProduct = await productsService.update(pid, toChangeProduct)
-        
-            //Sí devuelve falso, hay algún problema con la actualización
-            if(!updatedProduct.success) {
-                CustomError.createError({
-                    name: 'Product not updated',
-                    cause: productUpdateErrorInfo(pid, toChangeProduct),
-                    message: 'There is an error updating the product',
-                    code: EError.INVALID_TYPE_ERROR
-                })
-            }
             //Si devuelve verdadero, quiere decir que se hizo la actualización
             logger.info('Product updated')
             res.status(200).send(updatedProduct)
@@ -146,15 +138,6 @@ class ProductController {
         try {
             const {pid} = req.params
             const deletedProduct = await productsService.delete(pid)
-            //Sí devuelve falso, hay algún problema con el borrado
-            if(!deletedProduct.success){
-                CustomError.createError({
-                    name: 'Product not deleted',
-                    cause: productdeleteErrorInfo(pid),
-                    message: 'There is an error deleting the product',
-                    code: EError.NOT_FOUND
-                })
-            }
             //Si devuelve verdadero, quiere decir que se borró el producto
             logger.info('Product deleted')
             res.status(200).send(deletedProduct) 
