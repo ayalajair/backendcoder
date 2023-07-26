@@ -95,10 +95,10 @@ class ProductController {
             if(user.role === 'premium') {
                 toAddProduct.owner = user._id
             }
-            const respuesta = await productsService.create(toAddProduct)
+            const productAdded = await productsService.create(toAddProduct)
             
             //Si devuelve falso, hay algún problema con el producto
-            if(!respuesta.success) {
+            if(!productAdded) {
                 CustomError.createError({
                     name: 'Product not created',
                     cause: createProductErrorInfo(toAddProduct),
@@ -106,12 +106,9 @@ class ProductController {
                     code: EError.INVALID_TYPE_ERROR
                 })
             }
-    
-            
-            const productadded = await productsService.create(toAddProduct)   
             //Si devuelve verdadero, se ha creado el nuevo producto
             logger.info('Product created')
-            res.status(200).send(productadded)
+            res.status(200).send(productAdded)
     
         } catch (error) {
             next(error)
