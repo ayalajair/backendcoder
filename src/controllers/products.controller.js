@@ -93,7 +93,7 @@ class ProductController {
             const toAddProduct = req.body
             const user = req.user
             if(user.role === 'premium') {
-                toAddProduct.owner = user.id
+                toAddProduct.owner = user._id
             }
             const respuesta = await productsService.create(toAddProduct)
             
