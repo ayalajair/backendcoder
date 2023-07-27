@@ -65,3 +65,7 @@ exports.findUserErrorInfo = (email) =>{
     return `Cannot find any user with the email: ${email}`
 }
 
+exports.findUserIdErrorInfo= (id) =>{
+    return `Cannot find any user with the Id: ${id}`
+}
+

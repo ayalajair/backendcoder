@@ -1,6 +1,6 @@
 const { CustomError } = require('../../utils/CustomError/CustomError')
 const { EError } = require('../../utils/CustomError/EErrors')
-const { createUserErrorInfo, credentialsErrorInfo, findUserErrorInfo } = require('../../utils/CustomError/info')
+const { createUserErrorInfo, credentialsErrorInfo, findUserErrorInfo, findUserIdErrorInfo } = require('../../utils/CustomError/info')
 const {userModel} = require('./models/user.model')
 
 class UsersManagerMongo {
@@ -56,12 +56,29 @@ class UsersManagerMongo {
                 })
             }
             return user
-
         }
         catch (error) {
             throw error
         }
-    } 
+    }
+
+    async getUserById (id) {
+        try {
+            const userId = ObjectId.isValid(id) ? new ObjectId(id) : null
+            const user = await userModel.findOne({_id: ObjectId}).lean()
+            if (!user) {
+                CustomError.createError({
+                    name: 'User not found',
+                    cause: findUserIdErrorInfo(id),
+                    message: 'There is no user with that id',
+                    code: EError.NOT_FOUND
+                })
+            }
+            return user
+        } catch (error) {
+            throw error
+        }
+    }
 
     async updateUser (email, user) {
         try {
@@ -74,6 +91,7 @@ class UsersManagerMongo {
                     code: EError.NOT_FOUND
                 })
             }
+            return updatedUser
         }catch (error) {
             throw error
         }
