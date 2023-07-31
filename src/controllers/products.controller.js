@@ -91,8 +91,9 @@ class ProductController {
     create = async (req, res, next)=> {
         try{
             const toAddProduct = req.body
+            const productadded = await productsService.create(toAddProduct) 
+            console.log('productadded',productadded)
             
-            const productadded = await productsService.create(toAddProduct)   
             //Si devuelve verdadero, se ha creado el nuevo producto
             logger.info('Product created')
             res.status(200).send(productadded)

@@ -139,7 +139,8 @@ class ProductManagerMongo {
                     code: EError.INVALID_TYPE_ERROR,
                 })
             }
-            this.events.emit('addProduct', product).setMaxListeners()
+            this.events.emit('addProduct', product)
+            console.log('product',product)
             return await productModel.create(product)
         } catch (error) {
             throw error
