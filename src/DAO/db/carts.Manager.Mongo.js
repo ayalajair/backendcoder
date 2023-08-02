@@ -40,9 +40,8 @@ class cartsManagerMongo {
                     message: 'Error trying to find Carts',
                     code: EError.NOT_FOUND,
                 })
-            
             }
-            return 
+            return  carts
         } catch (error) {
             throw error
         }

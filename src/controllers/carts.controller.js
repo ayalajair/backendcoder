@@ -11,7 +11,7 @@ class CartsController {
     getCarts = async (req,res,next)=>{
         try {
             const allCarts = await cartsService.getCarts()
-            res.status(200).send({status:'Success',payload:allCarts})
+            res.status(200).send(allCarts)
         } catch (error) {
             next (error)
         }
