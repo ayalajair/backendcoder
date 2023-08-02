@@ -9,6 +9,11 @@ const passport = require('passport')
 require('dotenv').config()
 const cors = require('cors')
 
+// swagger
+const swaggerJsDoc = require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
+
+
 
 const router = require('./routes/index')
 const { socketProducts } = require('./utils/socketProducts')
@@ -44,6 +49,22 @@ app.set('view engine', 'handlebars')
 //Setear body parser
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación del proyecto',
+            description: 'Esta es la documentación del proyecto'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJsDoc(swaggerOptions)
+app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
 
 //Setear cors
 app.use(cors())
