@@ -4,3 +4,8 @@ path:
       summary: Obtiene todos los carritos
       tags:
         - Carts
+      responses:
+        "200":
+          description: Lista de Carritos
+
+

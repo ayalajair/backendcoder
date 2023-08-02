@@ -4,3 +4,6 @@ path:
       summary: Obtiene todos los productos
       tags:
         - Products
+      responses:
+        "200":
+          description: Lista de Productos

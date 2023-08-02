@@ -50,6 +50,8 @@ app.set('view engine', 'handlebars')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+//Setear cors
+app.use(cors())
 
 const swaggerOptions = {
     definition: {
@@ -66,8 +68,6 @@ const specs = swaggerJsDoc(swaggerOptions)
 app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 
-//Setear cors
-app.use(cors())
 
 //Setear static
 app.use('/static', express.static(__dirname + '/public'))
