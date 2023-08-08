@@ -1,0 +1,55 @@
+path:
+  /api/sessions/login:
+    post:
+      tags:
+        - Auth
+      summary: Logs in and return the athentication cookie
+      requestBody:
+        required: true
+        description: A JSON object containing the email and password
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      security: []
+      responses:
+        "200":
+          description: >
+            Successfully authenticated.
+            The session ID is returned in a cookie named 'cookieToken' 
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: cookieToken = abdcdef12345; Path=/; HttpOnly
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: adminCoder@coder.com
+        password:
+          type: string
+          example: yourPassword
+  securitySchemes: 
+    cookieAuth: 
+      type: apiKey
+      in: cookie
+      name: cookieToken
+  responses:
+    UnauthorizedError:
+      description: Authentication information is missin or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: ERROR
+              error:
+                type: string
+                example: No auth Token

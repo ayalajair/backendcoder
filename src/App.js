@@ -24,6 +24,7 @@ const {
 } = require('./config/configPassport')
 const { errorHandler } = require('./middlewares/error.middleware')
 const addLogger = require('./middlewares/addLogger.middleware')
+const { swaggerOptions } = require('./docs/swagger')
 
 
 
@@ -52,17 +53,6 @@ app.use(express.urlencoded({ extended: true }))
 
 //Setear cors
 app.use(cors())
-
-const swaggerOptions = {
-    definition: {
-        openapi: '3.0.1',
-        info: {
-            title: 'Documentación del proyecto',
-            description: 'Esta es la documentación del proyecto'
-        }
-    },
-    apis: [`${__dirname}/docs/**/*.yaml`]
-}
 
 const specs = swaggerJsDoc(swaggerOptions)
 app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))

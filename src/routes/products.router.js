@@ -26,13 +26,13 @@ router.get('/:pid', getById)
 router.post('/', 
     passportAuth('jwt', {session: false}),
     authorization(['admin','premium']),
-    checkProductOwnerOrAdmin,
     create
     )
 //----------------------PUT--------------------------------------
 router.put('/:pid',
     passportAuth('jwt', {session: false}),
     authorization('admin'),
+    checkProductOwnerOrAdmin,
     update,
     )
 
@@ -40,6 +40,7 @@ router.put('/:pid',
 router.delete('/:pid',
     passportAuth('jwt', {session: false}), 
     authorization('admin'),
+    checkProductOwnerOrAdmin,
     deleteProduct,
     
     )

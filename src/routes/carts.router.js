@@ -6,15 +6,23 @@ const router = Router();
 
 
 //--------------------GET-----------------------------
-router.get('/', getCarts)
+router.get('/',
+    passportAuth('jwt', {session: false}),
+    getCarts)
 
-router.get('/:cid', getCartById)
+router.get('/:cid',
+    passportAuth('jwt', {session: false}),
+    getCartById)
 
 //--------------------POST----------------------------
 
-router.post('/', addCart)
+router.post('/',
+    passportAuth('jwt', {session: false}),
+    addCart)
 
-router.post('/:cid/product/:pid', addToCart)
+router.post('/:cid/product/:pid',
+    passportAuth('jwt', {session: false}),
+    addToCart)
 
 router.post('/:cid/purchase',
     passportAuth('jwt', {session: false}),
@@ -22,14 +30,22 @@ router.post('/:cid/purchase',
 
 //----------------PUT-------------------------------
 
-router.put('/:cid', updateCart)
+router.put('/:cid',
+    passportAuth('jwt', {session: false}),
+    updateCart)
 
-router.put('/:cid/product/:pid', updateCartProduct)
+router.put('/:cid/product/:pid',
+    passportAuth('jwt', {session: false}),
+    updateCartProduct)
 
 //----------------DELETE-------------------------------
 
-router.delete('/:cid', deleteCart)
+router.delete('/:cid', 
+    passportAuth('jwt', {session: false}),
+    deleteCart)
 
-router.delete('/:cid/product/:pid', deleteFromCart)
+router.delete('/:cid/product/:pid', 
+    passportAuth('jwt', {session: false}),
+    deleteFromCart)
 
 module.exports = router
