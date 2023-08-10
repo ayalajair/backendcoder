@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/App.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/Products.test.js",
     "start:dev": "set NODE_ENV=development && nodemon src/App.js",
     "start": "set NODE_ENV=production&& node src/App.js"
   },
@@ -48,5 +48,8 @@
     "swagger-ui-express": "^5.0.0",
     "uuidv4": "^6.2.13",
     "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0"
   }
 }
