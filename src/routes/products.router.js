@@ -31,7 +31,7 @@ router.post('/',
 //----------------------PUT--------------------------------------
 router.put('/:pid',
     passportAuth('jwt', {session: false}),
-    authorization('admin'),
+    authorization(['admin','premium']),
     checkProductOwnerOrAdmin,
     update,
     )
@@ -39,7 +39,7 @@ router.put('/:pid',
 //---------------------DELETE-----------------------------------------
 router.delete('/:pid',
     passportAuth('jwt', {session: false}), 
-    authorization('admin'),
+    authorization(['admin','premium']),
     checkProductOwnerOrAdmin,
     deleteProduct,
     
