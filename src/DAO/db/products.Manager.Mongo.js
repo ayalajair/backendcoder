@@ -161,7 +161,6 @@ class ProductManagerMongo {
             }
             return productUpdated
         }catch (error) {
-            console.log('llegó')
             throw error
         }
     }

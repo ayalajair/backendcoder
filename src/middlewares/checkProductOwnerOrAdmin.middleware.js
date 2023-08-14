@@ -16,7 +16,7 @@ const checkProductOwnerOrAdmin =  async (req, res, next)=>{
         }
 
         // Verificar si el usuario es premium y es el propietario del producto
-        if (req.user.role === 'premium' && product.owner.equals(req.user._id)) {
+        if (req.user.role === 'premium' && product.owner===req.user._id) {
             return next();
         }
 
