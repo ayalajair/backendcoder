@@ -116,7 +116,24 @@ paths:
                   $ref: '#components/schemas/Product'
         "404":
           description: Not Found
-        
+    delete:     
+      summary: Delete a product
+      tags:
+        - Products
+      parameters:    
+        - name: pid
+          in: path
+          required: true
+          description: the pid is the product Id we are looking for
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Product Deleted
+        "404":
+          description: Not found
+
+
 
 components:
   schemas:
