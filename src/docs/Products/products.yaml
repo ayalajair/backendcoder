@@ -1,9 +1,99 @@
-path:
+paths:
   /api/products:
     get:
-      summary: Obtiene todos los productos
+      summary: Gets all products
       tags:
         - Products
       responses:
         "200":
-          description: Lista de Productos
+          description: Product list
+        "404":
+          description: Did not find any Product
+        "401":
+          description: Unauthorized
+    post:
+      summary: Create a product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/newProduct'
+      responses:
+        "200":
+          description: Product created
+          content: 
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+
+
+
+components:
+  schemas:
+    newProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Product name
+        description:
+          type: string
+          description: Product description
+        category:
+          type: string
+          description: Product Category
+        price:
+          type: number
+          description: Product price
+        thumbnail: 
+          type: array
+          description: Product thumbnail
+          items:
+            type: string
+        stock:
+          type: integer
+          description: Product stock
+      example:
+        title: Producto12434
+        description: Descripcion del producto
+        category: Categoria 10
+        price: 178
+        thumbnail: [link1, link2, link3]
+        stock: 10
+        code: asdqwf2323
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Product ID
+        title:
+          type: string
+          description: Product name
+        category:
+          type: string
+          description: Product Category
+        price:
+          type: number
+          description: Product price
+        thumbnail: 
+          type: array
+          description: Product thumbnail
+          items:
+            type: string
+        stock:
+          type: integer
+          description: Product stock
+        code:
+          type: string
+          description: Product code
+        status:
+          type: boolean
+          description: Product status
+        owner:
+          type: string
+          description: Product owner

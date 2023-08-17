@@ -1,11 +1,120 @@
-path:
+paths:
   /api/carts:
     get:
-      summary: Obtiene todos los carritos
+      summary: Get all carts
       tags:
         - Carts
       responses:
         "200":
-          description: Lista de Carritos
+          description: Carts list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+          
+        "404":
+          description: Did not find any Cart
+        "401":
+          description: Unauthorized
+    post:
+      summary: Create an empty cart
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Create an empty Cart and return de ID
+        "500":
+          description: Database error
+        "401":
+          description: Unauthorizated
+
+  /api/carts/{cid}:
+    get:
+      summary: Get cart by ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: the cid is the cart Id we are looking for
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Cart founded
+          content: 
+            application/json:
+              schema: 
+                status:
+                  type: string
+                message:
+                  type: string
+                success:
+                  type: boolean
+                payload:
+                  $ref: '#/components/schemas/Cart'
+                    
+        "404":
+          description: Did not found product
+
+components:
+  schemas:
+    CartProduct:
+      type: object
+      properties:
+        product:
+          type: string
+        quantity:
+          type: integer
+          description: Quantity of the product in the cart
+          example: 15
+
+        
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Cart ID
+          example: 432dgrrgo4344fef
+        products:
+          type: array
+          description: Products in Cart
+          items:
+            type: string
+      example:
+            - id: "cart123"
+              products:
+                - product:
+                    id: "product123"
+                    title: "Sample Product 1"
+                    category: "Electronics"
+                    price: 499.99
+                    thumbnail: ["thumbnail1.jpg", "thumbnail2.jpg"]
+                    stock: 50
+                    code: "PROD123"
+                    status: true
+                    owner: "user123"
+                  quantity: 2
+                - product:
+                    id: "product456"
+                    title: "Sample Product 2"
+                    category: "Clothing"
+                    price: 29.99
+                    thumbnail: ["thumbnail3.jpg", "thumbnail4.jpg"]
+                    stock: 25
+                    code: "PROD456"
+                    status: true
+                    owner: "user456"
+                  quantity: 1
+
+
+
+
+        
+
 
 

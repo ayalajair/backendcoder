@@ -19,10 +19,10 @@ class cartsManagerMongo {
                     name: 'Add cart error',
                     cause: addCartErrorInfo(),
                     message: 'Error trying to add Cart',
-                    code: EError.NOT_FOUND,
+                    code: EError.DATABASE_ERROR,
                 })
             }
-            return newCart._id
+            return newCart
         } catch (error) {
             throw error
             

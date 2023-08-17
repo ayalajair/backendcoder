@@ -32,7 +32,7 @@ class CartsController {
         try{
             const cart = await cartsService.addCart() 
             logger.info('Cart created')
-            res.status(200).send({status: 'Success', payload: cart})
+            res.status(200).send({cart})
         
         } catch(error){
             next (error)
