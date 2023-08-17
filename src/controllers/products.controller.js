@@ -81,7 +81,7 @@ class ProductController {
             }
             //Si devuelve verdadero, se ha encontrado el producto
             logger.info('Product found')
-            res.status(200).send ({status:'success', payload:productList})
+            res.status(200).send (productList)
             
         } catch(error){
             next(error)

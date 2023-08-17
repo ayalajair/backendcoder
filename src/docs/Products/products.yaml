@@ -7,6 +7,45 @@ paths:
       responses:
         "200":
           description: Product list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success 
+                  payload: 
+                    type: array
+                    items:
+                      $ref: '#components/schemas/Product'
+                  totalPages:
+                    type: integer
+                    example: 40
+                  prevPage: 
+                    type: integer
+                    example: 2
+                  nextPage:
+                    type: integer
+                    example: 4
+                  hasPrevPage: 
+                    type: boolean
+                    example: true
+                  hasNextPage: 
+                    type: boolean
+                    example: true
+                  prevLink: 
+                    type: string
+                    example: http://localhost:8080/sddasgdsh
+                  nextLink: 
+                    type: string
+                    example: http://localhost:8080/sddasgdssagasg
+                  totalDocs: 
+                    type: integer
+                    example: 120
+                  success:
+                    type: boolean
+                    example: true
         "404":
           description: Did not find any Product
         "401":
@@ -28,16 +67,56 @@ paths:
             application/json:
               schema:
                 $ref: '#components/schemas/Product'
+
   /api/products/{pid}:
     get:
       summary: Get a product
       tags:
         - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: the pid is the product Id we are looking for
+          schema: 
+            type: string
       responses:
         "200":
           description: Product Found
-        ""
+          content:
+            application/json:
+                schema:
+                  $ref: '#components/schemas/Product'
 
+        "404":
+          description: Not Found
+    put:
+      summary: Update a product
+      tags:
+        - Products
+      parameters:    
+        - name: pid
+          in: path
+          required: true
+          description: the pid is the product Id we are looking for
+          schema: 
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/Product'
+      responses:
+        "200":
+          description: Product Updated
+          content:
+            application/json:
+                schema:
+                  $ref: '#components/schemas/Product'
+        "404":
+          description: Not Found
+        
 
 components:
   schemas:
