@@ -28,7 +28,15 @@ paths:
             application/json:
               schema:
                 $ref: '#components/schemas/Product'
-
+  /api/products/{pid}:
+    get:
+      summary: Get a product
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Product Found
+        ""
 
 
 components:

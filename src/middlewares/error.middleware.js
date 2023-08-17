@@ -20,7 +20,11 @@ const errorHandler = (error, req, res, next) => {
             break
         case EError.VALIDATION_ERROR:
             return res.status(400).send ({status: '400', error: error.name, cause: error.cause, message: error.message})
-            break
+            
+        case EError.CONFLICT:
+            return res.status(409).send ({status: '409', error: error.name, cause: error.cause, message: error.message})
+            
+        
         default: 
             return res.status(500).send ({status: '500', error: 'Unhandled error'})
             break

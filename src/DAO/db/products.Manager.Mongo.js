@@ -136,7 +136,7 @@ class ProductManagerMongo {
                     name: 'Product creation error',
                     cause: productExistErrorInfo(product),
                     message: 'There is a product with this code',
-                    code: EError.INVALID_TYPE_ERROR,
+                    code: EError.CONFLICT,
                 })
             }
             this.events.emit('addProduct', product)

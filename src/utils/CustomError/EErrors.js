@@ -5,6 +5,7 @@ const EError = {
     INVALID_TYPE_ERROR: 4,
     UNAUTHORIZED: 5,
     VALIDATION_ERROR: 6,
+    CONFLICT: 7,
 
 }
 
