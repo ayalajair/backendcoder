@@ -178,7 +178,7 @@ class ProductManagerMongo {
                     code: EError.NOT_FOUND
                 })
             }
-            this.events.emit('deletedProduct', id).setMaxListeners()
+            this.events.emit('deletedProduct', id)
             return deletedProduct
         }catch (error) {
             console.error(error.name)

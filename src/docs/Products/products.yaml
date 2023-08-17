@@ -129,9 +129,15 @@ paths:
             type: string
       responses:
         "200":
-          description: Product Deleted
+          description: if success, send the deleted product
+          content:
+            application/json:
+                schema:
+                  $ref: '#components/schemas/Product'
         "404":
           description: Not found
+        "401":
+          description: Not authorized
 
 
 
