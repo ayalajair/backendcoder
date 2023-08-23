@@ -209,11 +209,32 @@ paths:
         required: true
         content:
           application/json:
-            schema: 
-              type: integer
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  example: 2
       responses:
         "200":
           description: Product modified
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: success
+                    message:
+                      type: string
+                      example: Producto actualizado
+                    payload:
+                      $ref: '#/components/schemas/Cart'
+                    success:
+                      type: boolean
+                      example: true
+
         "400":
           description: Ivalid type error
         "404": 
