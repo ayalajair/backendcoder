@@ -43,6 +43,7 @@ class CartsController {
     addToCart = async (req,res, next)=>{
         try{
             const {cid,pid} = req.params
+            console.log(req.user)
             if(req.user.role === 'premium') {
                 const product = await productsService.getProductById(pid)
                 if(product.owner === req.user._id) {
@@ -54,6 +55,7 @@ class CartsController {
                     })
                 }    
             }
+            console.log(cid , pid)
             const updatedCart = await cartsService.addToCart(cid, pid, 1)
             logger.info('Product added to cart')
             res.status(200).send(updatedCart)

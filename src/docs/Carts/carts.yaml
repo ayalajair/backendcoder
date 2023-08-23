@@ -47,18 +47,131 @@ paths:
           description: Cart found
           content: 
             application/json:
-              schema: 
-                status:
-                  type: string
-                message:
-                  type: string
-                success:
-                  type: boolean
-                payload:
-                  $ref: '#/components/schemas/Cart'
+              schema:
+                type: object
+                properties: 
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+                  payload:
+                    $ref: '#/components/schemas/Cart'
                     
         "404":
           description: Did not found product
+    put:
+      summary: Update products in Cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: the cid is the cart Id we want to update
+          schema: 
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: array
+              items:
+                type: object
+                properties:
+                  product:
+                    type: string
+                    example: 64614d656a2006995b576ae6
+                  quantity:
+                    type: integer
+                    example: 15
+      responses:
+        "200":
+          description: Cart updated
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Carrito actualizado
+                  payload:
+                    $ref: '#/components/schemas/Cart'
+                  succes:
+                    type: boolean
+                    example: true
+
+        "404":
+          description: Not found
+        "400":
+          description: Ivalid type error
+        "401":
+          description: Unauthorized
+    
+    delete:
+      summary: Delete cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: the cid is the cart Id we want to delete
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Cart deleted
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: success
+                    message:
+                      type: string
+                      example: Carrito eliminado
+                    payload:
+                      $ref: '#/components/schemas/Cart'
+
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+          
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: add Product tu cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: the cid is the cart Id where we want to add a product
+          schema: 
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: the pid is the product we want to add to cart
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Product Added
+        "404":
+          description: Can´t find any Cart or Products 
+        "401": 
+          description: Unauthorized
 
 components:
   schemas:
@@ -86,30 +199,30 @@ components:
           items:
             type: string
       example:
-            - id: "cart123"
-              products:
-                - product:
-                    id: "product123"
-                    title: "Sample Product 1"
-                    category: "Electronics"
-                    price: 499.99
-                    thumbnail: ["thumbnail1.jpg", "thumbnail2.jpg"]
-                    stock: 50
-                    code: "PROD123"
-                    status: true
-                    owner: "user123"
-                  quantity: 2
-                - product:
-                    id: "product456"
-                    title: "Sample Product 2"
-                    category: "Clothing"
-                    price: 29.99
-                    thumbnail: ["thumbnail3.jpg", "thumbnail4.jpg"]
-                    stock: 25
-                    code: "PROD456"
-                    status: true
-                    owner: "user456"
-                  quantity: 1
+            id: "cart123"
+            products:
+              - product:
+                  id: "product123"
+                  title: "Sample Product 1"
+                  category: "Electronics"
+                  price: 499.99
+                  thumbnail: ["thumbnail1.jpg", "thumbnail2.jpg"]
+                  stock: 50
+                  code: "PROD123"
+                  status: true
+                  owner: "user123"
+                quantity: 2
+              - product:
+                  id: "product456"
+                  title: "Sample Product 2"
+                  category: "Clothing"
+                  price: 29.99
+                  thumbnail: ["thumbnail3.jpg", "thumbnail4.jpg"]
+                  stock: 25
+                  code: "PROD456"
+                  status: true
+                  owner: "user456"
+                quantity: 1
 
 
 

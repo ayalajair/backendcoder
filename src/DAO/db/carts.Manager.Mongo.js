@@ -89,6 +89,7 @@ class cartsManagerMongo {
             }
             const objectProductId = ObjectId.isValid(productId) ? new ObjectId(productId) : null
             const product = await productModel.findOne({_id: objectProductId})
+            console.log(product)
             
             if(!product){
                 CustomError.createError({
@@ -219,9 +220,7 @@ class cartsManagerMongo {
 
     async updateCart (id, cart) {
         try {
-            console.log(id, cart)
-            const { cid, products } = cart
-            if(!cid||!products){
+            if(!cart){
                 CustomError.createError({
                     name: 'Update cart error',
                     cause: updateCartErrorInfo(id, cart),
@@ -230,7 +229,12 @@ class cartsManagerMongo {
                 })
             }
             const objectId = ObjectId.isValid(id) ? new ObjectId(id) : null
-            const updateCart = await cartModel.findOneAndUpdate({_id:objectId}, cart)
+            const newCart = {
+                id: id,
+                products: cart
+            }
+            const updateCart = await cartModel.findOneAndUpdate({_id:objectId}, newCart)
+            console.log(updateCart)
             if(!updateCart){
                 CustomError.createError({
                     name: 'Update cart error',
