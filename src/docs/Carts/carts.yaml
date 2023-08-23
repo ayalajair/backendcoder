@@ -242,6 +242,24 @@ paths:
         "401": 
           description: Unauthorized
 
+    delete:
+      summary: Delete a Product
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: the cid is the cart Id where is the product we want to delete
+          schema: 
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: the pid is the product we want to delete of the cart
+          schema: 
+            type: string
+      
 components:
   schemas:
     CartProduct:
