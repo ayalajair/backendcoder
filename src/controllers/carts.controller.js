@@ -115,6 +115,7 @@ class CartsController {
         try {
             const {cid,pid} = req.params
             const deletedProduct = await cartsService.deleteFromCart(cid,pid)
+            console.log(deletedProduct)
             logger.info('Product deleted from cart')
             res.status(200).send(deletedProduct)
         } catch (error) {

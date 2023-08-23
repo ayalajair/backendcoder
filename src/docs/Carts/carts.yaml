@@ -185,7 +185,7 @@ paths:
                     payload:
                       $ref: '#/components/schemas/Cart'
         "404":
-          description: Can´t find any Cart or Products 
+          description: Cant find any Cart or Products 
         "401": 
           description: Unauthorized
     put: 
@@ -259,6 +259,81 @@ paths:
           description: the pid is the product we want to delete of the cart
           schema: 
             type: string
+      responses:
+        "200":
+          description: Product Deleted from cart
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: success
+                    message:
+                      type: string
+                      example: Producto eliminado
+                    payload:
+                      $ref: '#/components/schemas/Cart'
+                    success:
+                      type: boolean
+                      example: true
+        "404":
+          description: Product or Cart not found
+        "401":
+          description: Unauthorized
+  
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Purchase a cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: the cid is the cart Id we want to purchase
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Cart Purchased
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Succes
+                  payload:
+                    type: object
+                    properties:
+                      ticket:
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            example: 16decd41-c550-4ef8-881d-bef5a5b1f385
+                          amount:
+                            type: number
+                            example: 111
+                          purchaser:
+                            type: string
+                            example: adminCoder@coder.com
+                          _id:
+                            type: string
+                            example: 64e68a52705e7c3ec28bc307
+                          purchase_datetime:
+                            type: string
+                            example: 2023-08-23T22:38:10.805Z
+                      updatedCart:
+                        $ref: '#/components/schemas/Cart'
+        "404":
+          description: Cart or Product not found
+        "401":
+          description: Unauthorized              
+
       
 components:
   schemas:

@@ -173,8 +173,10 @@ class cartsManagerMongo {
 
     async deleteFromCart (cartId, productId) {
         try {
+            
             const objectCartId = ObjectId.isValid(cartId) ? new ObjectId(cartId) : null
             const cart = await cartModel.findOne({_id:objectCartId})
+            console.log(cart)
             if(!cart){
                 CustomError.createError({
                     name: 'Find cart error',
@@ -184,7 +186,9 @@ class cartsManagerMongo {
                 })
             }
             const objectProductId = ObjectId.isValid(productId) ? new ObjectId(productId) : null
-            const product = await productModel.findOne({_id:objectCartId})
+            console.log(objectProductId)
+            const product = await productModel.findOne({_id:objectProductId})
+            console.log(product)
             if(!product){
                 CustomError.createError({
                     name: 'Find product error',
@@ -202,6 +206,7 @@ class cartsManagerMongo {
                     code: EError.NOT_FOUND,
                 })
             }
+            console.log(cart, toDeleteProductIndex)
             cart.products.splice(toDeleteProductIndex,1)
             await cart.save()
             const respuesta = {
