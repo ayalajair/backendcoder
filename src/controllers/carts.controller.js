@@ -82,7 +82,6 @@ class CartsController {
         try {
             const {cid,pid} = req.params
             const {quantity} = req.body
-            console.log(cid,pid,quantity)
             if(!quantity|| quantity < 1 || isNaN(quantity)) {
                 CustomError.createError({
                     name: 'No quantity provided',
