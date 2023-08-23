@@ -146,7 +146,7 @@ paths:
           description: Not found
         "401":
           description: Unauthorized
-          
+
   /api/carts/{cid}/product/{pid}:
     post:
       summary: add Product tu cart
@@ -168,8 +168,56 @@ paths:
       responses:
         "200":
           description: Product Added
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: success
+                    message:
+                      type: string
+                      example: Producto agregado al carrito
+                    success:
+                      type: boolean
+                      example: true
+                    payload:
+                      $ref: '#/components/schemas/Cart'
         "404":
           description: Can´t find any Cart or Products 
+        "401": 
+          description: Unauthorized
+    put: 
+      summary: Modify a product in the cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: the cid is the cart Id where we want to add a product
+          schema: 
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: the pid is the product we want to add to cart
+          schema: 
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: integer
+      responses:
+        "200":
+          description: Product modified
+        "400":
+          description: Ivalid type error
+        "404": 
+          description: Cart or product not found
         "401": 
           description: Unauthorized
 
